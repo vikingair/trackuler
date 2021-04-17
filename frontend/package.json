@@ -11,6 +11,7 @@
   },
   "scripts": {
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
+    "build:docs": "rm -rf ../docs && pnpm build && mv build ../docs",
     "test": "react-scripts test --color",
     "start": "react-scripts start",
     "eslint": "eslint --cache --cache-location 'misc/.eslintcache' --ext .ts,.tsx src/",
