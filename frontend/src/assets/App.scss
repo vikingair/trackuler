@@ -1,0 +1,40 @@
+.App {
+    padding: 0 1em;
+}
+
+button.icon-button {
+    height: min-content;
+    cursor: pointer;
+    border-radius: 1em;
+    border: none;
+    padding: 0.25em 0.5em;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+main {
+    display: grid;
+    grid-template-columns: min-content auto max-content min-content;
+    grid-row-gap: 1em;
+    align-items: center;
+
+    .track {
+        &__description {
+            padding: 0 1em;
+        }
+
+        &__diff {
+            padding: 0 1em;
+        }
+    }
+}
+
+svg.icon {
+    width: 1em;
+    height: 1em;
+    padding-top: 0.125em;
+}

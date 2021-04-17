@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100">
+    <defs>
+        <path id="tooth" d="M10 0l80 0 q0 20,-10 30q-2-20,-5-20l-8 8l-8-8l-9 8l-9-8l-8 8l-8-8q-3 0,-5 20q-10 -10,-10-28z" />
+    </defs>
+    <g stroke="white" stroke-width="3" fill="none">
+        <path d="M20 20l20 25q3 5,0 10l-20 25" />
+        <path d="M80 20l-20 25q-3 5,0 10l20 25" />
+    </g>
+    <g stroke="white" stroke-width="3" fill="white">
+        <use xlink:href="#tooth" />
+        <use xlink:href="#tooth" transform="rotate(180 50 50)" />
+    </g>
+</svg>
