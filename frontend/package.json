@@ -2,6 +2,7 @@
   "name": "Trackula-Frontend",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://fdc-viktor-luft.github.io/trackuler/",
   "proxy": "http://localhost:7777",
   "dependencies": {
     "persistore": "^1.8.1",
