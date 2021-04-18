@@ -13,3 +13,4 @@ export const IconDelete = (props?: IconProps) => _Icon('DELETE', props, 448);
 export const IconSearch = (props?: IconProps) => _Icon('SEARCH', props, 512);
 export const IconSettings = (props?: IconProps) => _Icon('SETTINGS', props);
 export const IconSpinner = (props?: IconProps) => _Icon('SPINNER', props);
+export const IconTimes = (props?: IconProps) => _Icon('TIMES', props, 352);

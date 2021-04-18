@@ -18,11 +18,25 @@ header {
 
 main {
     display: grid;
-    grid-template-columns: min-content auto max-content min-content;
+    grid-template-columns: min-content auto min-content max-content min-content;
     grid-row-gap: 1em;
     align-items: center;
 
     .track {
+        &__rate svg {
+            width: 2em;
+        }
+
+        &__time {
+            display: flex;
+            align-items: center;
+
+            svg {
+                margin-right: 0.5em;
+                width: 2em;
+            }
+        }
+
         &__description {
             padding: 0 1em;
         }
@@ -30,6 +44,28 @@ main {
         &__diff {
             padding: 0 1em;
         }
+    }
+}
+
+.settings {
+    position: fixed;
+    top: 0;
+    left: -110vw;
+    height: 100%;
+    width: 100%;
+    background-color: $colorBg;
+    padding: 0 1em;
+    transition: left 0.5s ease-out;
+    box-shadow: black 0 4px 4px 2px;
+
+    &__close {
+        position: absolute;
+        top: 1em;
+        right: 1em;
+    }
+
+    &--open {
+        left: 0;
     }
 }
 

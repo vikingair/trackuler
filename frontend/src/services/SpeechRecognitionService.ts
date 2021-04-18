@@ -1,10 +1,13 @@
 window.SpeechRecognition = window.SpeechRecognition || (window as any).webkitSpeechRecognition;
-const state = { running: false };
+const getLocale = () =>
+    navigator.languages && navigator.languages.length ? navigator.languages[0] : navigator.language;
+
+const state = { running: false, locale: getLocale() };
 
 const init = (): SpeechRecognition => {
     const recognition = new SpeechRecognition();
     recognition.continuous = false;
-    recognition.lang = 'de-DE';
+    recognition.lang = state.locale;
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
 
@@ -37,4 +40,4 @@ const onResult = (cb: (v: string) => void): void => {
     };
 };
 
-export const SpeechRecognitionService = { onResult };
+export const SpeechRecognitionService = { onResult, locale: state.locale };

@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/trackuler/static/css/main.f35a6bf0.chunk.css",
-    "main.js": "/trackuler/static/js/main.a9921588.chunk.js",
+    "main.css": "/trackuler/static/css/main.bb7fcb7f.chunk.css",
+    "main.js": "/trackuler/static/js/main.19226ac5.chunk.js",
     "runtime-main.js": "/trackuler/static/js/runtime-main.cf0d9fe0.js",
-    "static/js/2.888cc431.chunk.js": "/trackuler/static/js/2.888cc431.chunk.js",
+    "static/js/2.2ea5ed57.chunk.js": "/trackuler/static/js/2.2ea5ed57.chunk.js",
     "index.html": "/trackuler/index.html",
-    "static/js/2.888cc431.chunk.js.LICENSE.txt": "/trackuler/static/js/2.888cc431.chunk.js.LICENSE.txt"
+    "static/js/2.2ea5ed57.chunk.js.LICENSE.txt": "/trackuler/static/js/2.2ea5ed57.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.cf0d9fe0.js",
-    "static/js/2.888cc431.chunk.js",
-    "static/css/main.f35a6bf0.chunk.css",
-    "static/js/main.a9921588.chunk.js"
+    "static/js/2.2ea5ed57.chunk.js",
+    "static/css/main.bb7fcb7f.chunk.css",
+    "static/js/main.19226ac5.chunk.js"
   ]
 }
