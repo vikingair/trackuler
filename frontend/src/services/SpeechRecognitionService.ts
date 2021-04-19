@@ -2,7 +2,16 @@ window.SpeechRecognition = window.SpeechRecognition || (window as any).webkitSpe
 const getLocale = () =>
     navigator.languages && navigator.languages.length ? navigator.languages[0] : navigator.language;
 
-const state = { running: false, locale: getLocale() };
+const state = { running: false, locale: getLocale(), start: () => {} };
+
+const startFocusListener = () => {
+    state.start();
+    window.addEventListener('focus', state.start);
+};
+
+const removeFocusListener = () => {
+    window.removeEventListener('focus', state.start);
+};
 
 const init = (): SpeechRecognition => {
     const recognition = new SpeechRecognition();
@@ -11,7 +20,7 @@ const init = (): SpeechRecognition => {
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
 
-    window.onfocus = () => {
+    state.start = () => {
         if (!state.running) {
             recognition.start();
             state.running = true;
@@ -40,4 +49,4 @@ const onResult = (cb: (v: string) => void): void => {
     };
 };
 
-export const SpeechRecognitionService = { onResult, locale: state.locale };
+export const SpeechRecognitionService = { onResult, locale: state.locale, startFocusListener, removeFocusListener };

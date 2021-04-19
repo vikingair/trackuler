@@ -1,7 +1,10 @@
 import { Track } from './Types';
 import { Utils } from './utils';
 
-const get = (): Promise<Track[]> =>
+const getLatest = (): Promise<Track[][]> =>
+    fetch('/api/tracks/latest').then((r) => (r.ok ? r.json().then((r) => r.map(Utils.convertAPITracks)) : []));
+
+const current = (): Promise<Track[]> =>
     fetch('/api/tracks').then((r) => (r.ok ? r.json().then(Utils.convertAPITracks) : []));
 
 const create = ({ ID, description, time }: Track): Promise<void> =>
@@ -22,4 +25,4 @@ const remove = (ID: string): Promise<void> =>
         if (!r.ok) throw new Error('Deletion failed');
     });
 
-export const APIService = { get, create, remove };
+export const APIService = { current, create, remove, getLatest };

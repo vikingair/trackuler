@@ -26,5 +26,13 @@ export const Settings: React.VFC<SettingsProps> = ({ open, onClose }) => (
             <strong>Speech Recognition Trigger: </strong>
             Tab Focus <em>(not yet configurable)</em>
         </p>
+        <p>
+            <strong>Pause Command: </strong>
+            "Pause" [#165180] <em>(not yet configurable)</em>
+        </p>
+        <p>
+            <strong>End Command: </strong>
+            "End" [#165180] <em>(not yet configurable)</em>
+        </p>
     </div>
 );

@@ -23,6 +23,10 @@ const init = (app) => {
         res.send(getCurrentContent(new Date()).tracks);
     });
 
+    app.get('/api/tracks/latest', (req, res) => {
+        res.status(404).send("not yet implemented");
+    });
+
     app.post('/api/track', (req, res) => {
         const { ID, description, time } = req.body;
         const { tracks, pathToday } = getCurrentContent(new Date(time));

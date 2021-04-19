@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { IconSettings } from '../icons/icon';
 import { Main } from './Main';
 import { Settings } from './Settings';
+import { Aside } from './Aside';
 
 export const App: React.VFC = () => {
     const [open, setOpen] = useState(false);
@@ -18,7 +19,10 @@ export const App: React.VFC = () => {
                 </button>
             </header>
             <Settings open={open} onClose={onClose} />
-            <Main />
+            <div className="content">
+                <Main />
+                <Aside />
+            </div>
         </div>
     );
 };
