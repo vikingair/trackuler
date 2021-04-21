@@ -1,2 +1,4 @@
 $colorBg: #34363b;
 $colorText: #fff;
+$colorText-2: darken(#fff, 10%);
+$colorText-3: darken($colorText-2, 10%);

@@ -5,7 +5,7 @@ export enum KnownCategory {
 }
 
 type Category = { code: KnownCategory | string; pattern: string; color: string };
-type CategoryWithColor = Pick<Category, 'code' | 'color'>;
+export type CategoryWithColor = Pick<Category, 'code' | 'color'>;
 
 const getWithColor = (description: string): CategoryWithColor => {
     const firstWord = description.split(' ')[0].toLowerCase();

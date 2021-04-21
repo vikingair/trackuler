@@ -1,7 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { Track } from '../services/Types';
 import { TrackService } from '../services/TrackService';
-import { Tracks } from './Tracks';
+import { Tracks, useTracks } from './Tracks';
+
+type AsideItemProps = { tracks: Track[] };
+
+const AsideItem: React.VFC<AsideItemProps> = ({ tracks }) => {
+    const extendedTracks = useTracks(tracks);
+    const { totalTimeMs } = extendedTracks;
+
+    return (
+        <details>
+            <summary>
+                <span className={'summary-title'}>
+                    <span>{tracks[0].time.toLocaleDateString()}</span>
+                    {totalTimeMs && (
+                        <span className={'summary-subtitle'}>
+                            Total: {TrackService.toReadableTimeDiff(totalTimeMs)}
+                        </span>
+                    )}
+                </span>
+            </summary>
+            <Tracks extendedTracks={extendedTracks} />
+        </details>
+    );
+};
 
 export const Aside: React.VFC = () => {
     const [tracksList, setTracksList] = useState<Track[][]>([]);
@@ -13,10 +36,7 @@ export const Aside: React.VFC = () => {
     return (
         <aside>
             {tracksList.map((tracks, i) => (
-                <details key={i}>
-                    <summary>{tracks[0].time.toLocaleDateString()}</summary>
-                    <Tracks tracks={tracks} />
-                </details>
+                <AsideItem key={i} tracks={tracks} />
             ))}
         </aside>
     );

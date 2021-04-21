@@ -2,69 +2,73 @@ import React, { useCallback, useMemo } from 'react';
 import { ClockAmountIcon, ClockIcon } from '../icons/ClockIcon';
 import { IconDelete } from '../icons/icon';
 import { Track } from '../services/Types';
-import { CategoryService, KnownCategory } from '../services/CategoryService';
+import { CategoryService, CategoryWithColor, KnownCategory } from '../services/CategoryService';
+import { TrackService } from '../services/TrackService';
 
-const getTimeDiff = (a: Date, b: Date): string => {
-    const s = Math.floor((+b - +a) / 1_000);
-    const m = Math.floor(s / 60);
-    const h = Math.floor(m / 60);
-
-    const mm = m % 60;
-    const sm = s % 60;
-
-    const r = [];
-    if (h) r.push(h + 'h');
-    if (mm) r.push(mm + 'm');
-    if (sm) r.push(sm + 's');
-    return r.join(' ');
+type ExtendedTracks = {
+    tracks: Track[];
+    categories: CategoryWithColor[];
+    trackDiffs: Array<number | undefined>;
+    totalTimeMs: number | undefined;
+    trackRates: Array<number | undefined>;
 };
 
-// TODO(VL): Make amount configurable
-const hours8 = 28_800_000;
+export const useTracks = (tracks: Track[]): ExtendedTracks =>
+    useMemo(() => {
+        const trackDiffs = tracks.map(({ ID, time, description }, i) => {
+            const nextTime = tracks[i + 1]?.time;
+            return nextTime ? +nextTime - +time : undefined;
+        });
 
-const getRate = (diffMS: number): number => diffMS / hours8;
+        const categories = tracks.map(({ description }) => CategoryService.getWithColor(description));
 
-type TracksProps = { tracks: Track[]; onDelete?: (ID: string) => void };
+        const totalPauseMs = tracks.reduce((cur, red, i) => {
+            const nextTime = tracks[i + 1]?.time;
+            if (categories[i].code === KnownCategory.PAUSE && nextTime) {
+                return cur + (+nextTime - +red.time);
+            }
+            return cur;
+        }, 0);
 
-export const Tracks: React.VFC<TracksProps> = ({ tracks, onDelete }) => {
+        const totalTimeMs =
+            tracks.length > 1 ? +tracks[tracks.length - 1].time - +tracks[0].time - totalPauseMs : undefined;
+
+        let totalPause = 0;
+        const pauseTime = tracks.map(({ time }, i) => {
+            const nextTime = tracks[i + 1]?.time;
+            if (categories[i].code === KnownCategory.PAUSE && nextTime) {
+                totalPause += +nextTime - +time;
+            }
+            return totalPause;
+        });
+        const trackRates = tracks.map(({ ID, time, description }, i) => {
+            if (categories[i].code === KnownCategory.PAUSE) return undefined;
+            const firstTime = tracks[0].time;
+            const nextTime = tracks[i + 1]?.time;
+            return nextTime ? TrackService.toRate(+nextTime - +firstTime - +pauseTime[i]) : undefined;
+        });
+
+        return { tracks, trackDiffs, categories, totalTimeMs, trackRates };
+    }, [tracks]);
+
+type TracksProps = { extendedTracks: ExtendedTracks; onDelete?: (ID: string) => void };
+
+export const Tracks: React.VFC<TracksProps> = ({
+    extendedTracks: { tracks, trackDiffs, trackRates, categories },
+    onDelete,
+}) => {
     const onDeleteHandler = useCallback(
         (ID: string) => () => {
             onDelete?.(ID);
         },
         [onDelete]
     );
-    const trackDiffs = useMemo(
-        () =>
-            tracks.map(({ ID, time, description }, i) => {
-                const nextTime = tracks[i + 1]?.time;
-                return nextTime ? getTimeDiff(time, nextTime) : undefined;
-            }),
-        [tracks]
-    );
-    const categories = useMemo(() => tracks.map(({ description }) => CategoryService.getWithColor(description)), [
-        tracks,
-    ]);
-    const trackRates = useMemo(() => {
-        let totalPause = 0;
-        const pauseTime = tracks.map(({ time }, i) => {
-            const nextTime = tracks[i + 1]?.time;
-            if (categories[i].code === KnownCategory.PAUSE && nextTime) {
-                totalPause += +time - +nextTime;
-            }
-            return totalPause;
-        });
-        return tracks.map(({ ID, time, description }, i) => {
-            if (categories[i].code === KnownCategory.PAUSE) return undefined;
-            const firstTime = tracks[0].time;
-            const nextTime = tracks[i + 1]?.time;
-            return nextTime ? getRate(+nextTime - +firstTime + +pauseTime[i]) : undefined;
-        });
-    }, [tracks, categories]);
 
     return (
         <div className={'tracks'}>
             {tracks.map(({ ID, time, description }, i) => {
                 const rate = trackRates[i];
+                const diff = trackDiffs[i];
                 return (
                     <React.Fragment key={ID}>
                         <strong className={'track__time'}>
@@ -75,7 +79,7 @@ export const Tracks: React.VFC<TracksProps> = ({ tracks, onDelete }) => {
                             {description}
                         </em>
                         <div className={'track__rate'}>{rate && <ClockAmountIcon rate={rate} />}</div>
-                        <div className={'track__diff'}>{trackDiffs[i]}</div>
+                        <div className={'track__diff'}>{diff && TrackService.toReadableTimeDiff(diff)}</div>
                         <div className={'track__actions'}>
                             {onDelete && (
                                 <button onClick={onDeleteHandler(ID)} className={'icon-button'} title={'delete'}>

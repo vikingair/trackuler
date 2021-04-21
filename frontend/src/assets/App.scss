@@ -31,15 +31,27 @@ header {
     }
 }
 
-main .microphone {
-    text-align: center;
+main {
+    h2 {
+        display: flex;
+        justify-content: space-between;
 
-    button {
-        font-size: 2em;
+        .subtitle {
+            color: $colorText-3;
+        }
+    }
+
+    .microphone {
+        text-align: center;
+
+        button {
+            font-size: 2em;
+        }
     }
 }
 
 .tracks {
+    margin: 2.5em 0;
     display: grid;
     grid-template-columns: min-content auto min-content max-content min-content;
     grid-row-gap: 1em;
@@ -82,10 +94,24 @@ aside {
         }
 
         summary {
+            position: relative;
             padding: 0.5em;
             margin: 0.5em 0;
             background-color: lighten($colorBg, 10%);
             border-radius: 0.5em;
+
+            .summary-title {
+                position: absolute;
+                width: calc(100% - 3em);
+                top: 0.5em;
+                left: 1.5em;
+                display: flex;
+                justify-content: space-between;
+            }
+
+            .summary-subtitle {
+                color: $colorText-3;
+            }
         }
     }
 }

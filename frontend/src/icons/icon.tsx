@@ -11,6 +11,7 @@ const _Icon = (symbol: keyof typeof Icons, { className }: IconProps = {}, width:
 
 export const IconDelete = (props?: IconProps) => _Icon('DELETE', props, 448);
 export const IconMicrophone = (props?: IconProps) => _Icon('MICROPHONE', props, 352);
+export const IconMicrophoneSlash = (props?: IconProps) => _Icon('MICROPHONE_SLASH', props, 640);
 export const IconSearch = (props?: IconProps) => _Icon('SEARCH', props, 512);
 export const IconSettings = (props?: IconProps) => _Icon('SETTINGS', props);
 export const IconSpinner = (props?: IconProps) => _Icon('SPINNER', props);
