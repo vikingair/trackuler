@@ -9,21 +9,25 @@ specifiers:
   '@types/react-dom': ^17.0.3
   eslint-config-prettier: ^8.1.0
   eslint-plugin-prettier: ^3.3.1
+  idb-keyval: ^5.0.5
   madge: ^4.0.2
   persistore: ^1.8.1
   prettier: ^2.2.1
   react: ^17.0.2
   react-dom: ^17.0.2
   react-scripts: ^4.0.3
+  react-use-sub: ^2.0.0
   sass: ^1.32.8
   spy4js: ^3.1.1
   typescript: 4.2.3
 
 dependencies:
+  idb-keyval: 5.0.5
   persistore: 1.8.1
   react: 17.0.2
   react-dom: 17.0.2_react@17.0.2
   react-scripts: 4.0.3_2b5e9e42ed7846af7a4b3a7e5671621f
+  react-use-sub: 2.0.0_react-dom@17.0.2+react@17.0.2
 
 devDependencies:
   '@testing-library/jest-dom': 5.11.9
@@ -6115,6 +6119,10 @@ packages:
       postcss: 7.0.35
     dev: false
 
+  /idb-keyval/5.0.5:
+    resolution: {integrity: sha512-cqi65rrjhgPExI9vmSU7VcYEbHCUfIBY+9YUWxyr0PyGizptFgGFnvZQ0w+tqOXk1lUcGCZGVLfabf7QnR2S0g==}
+    dev: false
+
   /identity-obj-proxy/3.0.0:
     resolution: {integrity: sha1-lNK9qWCERT7zb7xarsN+D3nx/BQ=}
     engines: {node: '>=4'}
@@ -9712,6 +9720,17 @@ packages:
       - webpack-command
       - webpack-hot-middleware
       - webpack-plugin-serve
+    dev: false
+
+  /react-use-sub/2.0.0_react-dom@17.0.2+react@17.0.2:
+    resolution: {integrity: sha512-VwrEqjXlsaJJ/MRDTaR6bP2+k7zmEo9Dhxnd2TeGPo2YViX9MribY174oNTQRcWh6RAoCdCfy//EqXNRPb2GTA==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      react: ^16.8.0
+      react-dom: ^16.8.0
+    dependencies:
+      react: 17.0.2
+      react-dom: 17.0.2_react@17.0.2
     dev: false
 
   /react/17.0.2:

@@ -7,3 +7,9 @@ export type TrackInterface = {
     create: (track: Track) => Promise<void>;
     remove: (ID: string) => Promise<void>;
 };
+
+export enum TrackServiceType {
+    LOCAL = 'local',
+    API = 'API',
+    FILE_SYSTEM = 'files',
+}

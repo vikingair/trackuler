@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 80 80">
+    <defs>
+        <path id="tooth" d="M0 0l80 0 q0 20,-10 30q-2-20,-5-20l-8 8l-8-8l-9 8l-9-8l-8 8l-8-8q-3 0,-5 20q-10 -10,-10-28z" />
+    </defs>
+    <g stroke-width="3" fill="#fff1">
+        <use xlink:href="#tooth" />
+    </g>
+</svg>

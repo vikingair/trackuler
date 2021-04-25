@@ -13,4 +13,9 @@ const _withLeadingZero = (num: number) => ('0' + num).slice(-2);
 const toApiString = (date: Date) =>
     `${date.getFullYear()}-${_withLeadingZero(date.getMonth() + 1)}-${_withLeadingZero(date.getDate())}`;
 
-export const Utils = { uuid, convertAPITracks, convertTracks, toApiString, convertTrack };
+const getKeyForDate = (date: Date = new Date()) => 'trackuler-' + Utils.toApiString(date);
+
+const classNamesFilter = (arg: any) => !!arg && typeof arg === 'string';
+const classNames = (...classes: any[]): string | undefined => classes.filter(classNamesFilter).join(' ') || undefined;
+
+export const Utils = { uuid, convertAPITracks, convertTracks, toApiString, convertTrack, getKeyForDate, classNames };

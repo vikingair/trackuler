@@ -82,7 +82,7 @@ export const Tracks: React.VFC<TracksProps> = ({
                         <div className={'track__diff'}>{diff && TrackService.toReadableTimeDiff(diff)}</div>
                         <div className={'track__actions'}>
                             {onDelete && (
-                                <button onClick={onDeleteHandler(ID)} className={'icon-button'} title={'delete'}>
+                                <button onClick={onDeleteHandler(ID)} className={'icon-button delete'} title={'delete'}>
                                     <IconDelete />
                                 </button>
                             )}

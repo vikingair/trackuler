@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Track } from '../services/Types';
 import { Utils } from '../services/utils';
 import { TrackService } from '../services/TrackService';
@@ -10,12 +10,23 @@ import { IconMicrophone, IconMicrophoneSlash } from '../icons/icon';
 export const Main: React.VFC = () => {
     const [tracks, setTracks] = useState<Track[]>([]);
     const [started, setStarted] = useState(false);
+    const [recording, setRecording] = useState(false);
+    const recordingTimeout = useRef(0);
     const now = useMemo(() => new Date().toLocaleDateString(), []);
+
+    const startTempRecording = useCallback(() => {
+        window.clearTimeout(recordingTimeout.current);
+        setRecording(true);
+        recordingTimeout.current = window.setTimeout(() => {
+            setRecording(false);
+        }, 5000);
+    }, []);
 
     const onStart = useCallback(() => {
         setStarted(true);
+        startTempRecording();
         SpeechRecognitionService.startFocusListener();
-    }, []);
+    }, [startTempRecording]);
 
     const onStop = useCallback(() => {
         setStarted(false);
@@ -31,6 +42,7 @@ export const Main: React.VFC = () => {
                 .create(next)
                 .then(() => {
                     setTracks((c) => c.concat(next));
+                    setRecording(false);
                     if (CategoryService.getWithColor(description).code === KnownCategory.END) onStop();
                 });
         },
@@ -41,13 +53,13 @@ export const Main: React.VFC = () => {
     }, [addNewContent]);
 
     useEffect(() => {
-        TrackService.current()
-            .current()
-            .then((tracks) => {
-                setTracks(tracks);
-                if (tracks.length) onStart();
-            });
+        TrackService.current().current().then(setTracks);
     }, [onStart]);
+
+    useEffect(() => {
+        window.addEventListener('focus', startTempRecording);
+        return () => window.removeEventListener('focus', startTempRecording);
+    }, [startTempRecording]);
 
     const onDelete = useCallback((ID: string) => {
         TrackService.current()
@@ -68,14 +80,14 @@ export const Main: React.VFC = () => {
             </h2>
             <Tracks extendedTracks={extendedTracks} onDelete={onDelete} />
             {started ? (
-                <div className="microphone">
+                <div className={Utils.classNames('microphone microphone--stop', recording && 'microphone--recording')}>
                     <p>Stop automatically starting recordings.</p>
                     <button className={'icon-button'} onClick={onStop}>
                         <IconMicrophoneSlash />
                     </button>
                 </div>
             ) : (
-                <div className="microphone">
+                <div className="microphone microphone--start">
                     <p>{tracks.length ? 'Continue' : 'Start a new'} session by clicking on the Microphone.</p>
                     <button className={'icon-button'} onClick={onStart}>
                         <IconMicrophone />

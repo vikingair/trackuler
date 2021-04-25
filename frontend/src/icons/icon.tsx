@@ -10,6 +10,7 @@ const _Icon = (symbol: keyof typeof Icons, { className }: IconProps = {}, width:
 );
 
 export const IconDelete = (props?: IconProps) => _Icon('DELETE', props, 448);
+export const IconFolderOpen = (props?: IconProps) => _Icon('FOLDER_OPEN', props, 576);
 export const IconMicrophone = (props?: IconProps) => _Icon('MICROPHONE', props, 352);
 export const IconMicrophoneSlash = (props?: IconProps) => _Icon('MICROPHONE_SLASH', props, 640);
 export const IconSearch = (props?: IconProps) => _Icon('SEARCH', props, 512);
