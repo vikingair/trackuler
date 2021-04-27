@@ -1,4 +1,12 @@
-$colorBg: #34363b;
-$colorText: #fff;
-$colorText-2: darken(#fff, 10%);
-$colorText-3: darken($colorText-2, 10%);
+$colorBg: hsl(0 0% 0%);
+$colorBg-2: hsl(0 0% 15%);
+$colorBg-3: hsl(0 0% 30%);
+$colorBg-4: hsl(0 0% 45%);
+$colorText: hsl(0 0% 100%);
+$colorText-1: hsl(0 0% 90%);
+$colorText-2: hsl(0 0% 80%);
+$colorText-3: hsl(0 0% 70%);
+
+$color-delete: lightcoral;
+$color-open-workdir: lightblue;
+$color-start-recording: lightgreen;

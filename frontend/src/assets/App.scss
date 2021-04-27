@@ -33,6 +33,9 @@ header {
 
         img {
             height: 0.75em;
+            // TODO animate on track submit
+            //transition: transform 0.5s linear;
+            //transform: rotate(180deg);
         }
     }
 }
@@ -71,12 +74,11 @@ main {
         }
 
         &--start button {
-            background-color: lightgreen;
+            background-color: $color-start-recording;
         }
 
         &--recording button::after {
             content: ' ';
-            background-color: #ff0000aa;
             height: 100%;
             width: 100%;
             top: 0;
@@ -90,13 +92,13 @@ main {
 }
 @keyframes blink {
     0% {
-        background-color: #ff000011;
+        background-color: hsl(0 100% 50% / 10%);
     }
     50% {
-        background-color: #ff0000aa;
+        background-color: hsl(0 100% 50% / 50%);;
     }
     100% {
-        background-color: #ff000011;
+        background-color: hsl(0 100% 50% / 10%);
     }
 }
 
@@ -134,13 +136,13 @@ main {
     }
 
     .delete {
-        background-color: lightcoral;
+        background-color: $color-delete;
     }
 }
 
 aside {
     details {
-        background-color: lighten($colorBg, 15%);
+        background-color: $colorBg-4;
         border-radius: 0.5em;
 
         .tracks {
@@ -149,10 +151,11 @@ aside {
         }
 
         summary {
+            cursor: pointer;
             position: relative;
             padding: 0.5em;
             margin: 0.5em 0;
-            background-color: lighten($colorBg, 10%);
+            background-color: $colorBg-3;
             border-radius: 0.5em;
 
             .summary-title {
@@ -178,7 +181,7 @@ aside {
     left: -110vw;
     height: 100%;
     width: 100%;
-    background-color: $colorBg;
+    background-color: $colorBg-2;
     padding: 0 1em;
     transition: left 0.5s ease-out;
     box-shadow: black 0 4px 4px 2px;
@@ -205,6 +208,6 @@ svg.icon {
 
     button {
         font-size: 2em;
-        background-color: lightblue;
+        background-color: $color-open-workdir;
     }
 }

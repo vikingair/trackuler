@@ -5,6 +5,10 @@
   box-sizing: border-box;
 }
 
+html {
+  min-height: 100%;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -13,7 +17,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: $colorBg;
+  background: linear-gradient(70deg, $colorBg, $colorBg-2);
   color: $colorText;
 }
 
