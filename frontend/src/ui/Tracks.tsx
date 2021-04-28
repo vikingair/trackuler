@@ -1,9 +1,8 @@
-import React, { useCallback, useMemo } from 'react';
-import { ClockAmountIcon, ClockIcon } from '../icons/ClockIcon';
-import { IconDelete } from '../icons/icon';
+import React, { useMemo } from 'react';
 import { Track } from '../services/Types';
 import { CategoryService, CategoryWithColor, KnownCategory } from '../services/CategoryService';
 import { TrackService } from '../services/TrackService';
+import { TrackEntry } from './TrackEntry';
 
 type ExtendedTracks = {
     tracks: Track[];
@@ -13,8 +12,10 @@ type ExtendedTracks = {
     trackRates: Array<number | undefined>;
 };
 
-export const useTracks = (tracks: Track[]): ExtendedTracks =>
+export const useTracks = (unsortedTracks: Track[]): ExtendedTracks =>
     useMemo(() => {
+        const tracks = unsortedTracks.sort((a, b) => +a.time - +b.time);
+
         const trackDiffs = tracks.map(({ ID, time, description }, i) => {
             const nextTime = tracks[i + 1]?.time;
             return nextTime ? +nextTime - +time : undefined;
@@ -49,47 +50,30 @@ export const useTracks = (tracks: Track[]): ExtendedTracks =>
         });
 
         return { tracks, trackDiffs, categories, totalTimeMs, trackRates };
-    }, [tracks]);
+    }, [unsortedTracks]);
 
-type TracksProps = { extendedTracks: ExtendedTracks; onDelete?: (ID: string) => void };
+type TracksProps = {
+    extendedTracks: ExtendedTracks;
+    onDelete?: (ID: string) => void;
+    onChange?: (track: Track) => void;
+};
 
 export const Tracks: React.VFC<TracksProps> = ({
     extendedTracks: { tracks, trackDiffs, trackRates, categories },
     onDelete,
-}) => {
-    const onDeleteHandler = useCallback(
-        (ID: string) => () => {
-            onDelete?.(ID);
-        },
-        [onDelete]
-    );
-
-    return (
-        <div className={'tracks'}>
-            {tracks.map(({ ID, time, description }, i) => {
-                const rate = trackRates[i];
-                const diff = trackDiffs[i];
-                return (
-                    <React.Fragment key={ID}>
-                        <strong className={'track__time'}>
-                            <ClockIcon date={time} />
-                            {time.toLocaleTimeString()}
-                        </strong>
-                        <em className={'track__description'} style={{ backgroundColor: categories[i].color }}>
-                            {description}
-                        </em>
-                        <div className={'track__rate'}>{rate && <ClockAmountIcon rate={rate} />}</div>
-                        <div className={'track__diff'}>{diff && TrackService.toReadableTimeDiff(diff)}</div>
-                        <div className={'track__actions'}>
-                            {onDelete && (
-                                <button onClick={onDeleteHandler(ID)} className={'icon-button delete'} title={'delete'}>
-                                    <IconDelete />
-                                </button>
-                            )}
-                        </div>
-                    </React.Fragment>
-                );
-            })}
-        </div>
-    );
-};
+    onChange,
+}) => (
+    <div className={'tracks'}>
+        {tracks.map((track, i) => (
+            <TrackEntry
+                track={track}
+                category={categories[i]}
+                key={track.ID}
+                rate={trackRates[i]}
+                diff={trackDiffs[i]}
+                onDelete={onDelete}
+                onChange={onChange}
+            />
+        ))}
+    </div>
+);

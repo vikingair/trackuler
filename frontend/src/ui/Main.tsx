@@ -39,7 +39,7 @@ export const Main: React.VFC = () => {
             const time = new Date();
             const next = { ID, description, time };
             TrackService.current()
-                .create(next)
+                .createOrUpdate(next)
                 .then(() => {
                     setTracks((c) => c.concat(next));
                     setRecording(false);
@@ -67,6 +67,12 @@ export const Main: React.VFC = () => {
             .then(() => setTracks((tracks) => tracks.filter((track) => track.ID !== ID)));
     }, []);
 
+    const onChange = useCallback((track: Track) => {
+        TrackService.current()
+            .createOrUpdate(track)
+            .then(() => setTracks((tracks) => tracks.map((t) => (t.ID === track.ID ? track : t))));
+    }, []);
+
     const extendedTracks = useTracks(tracks);
     const { totalTimeMs } = extendedTracks;
 
@@ -78,7 +84,7 @@ export const Main: React.VFC = () => {
                     <span className={'subtitle'}>Total: {TrackService.toReadableTimeDiff(totalTimeMs)}</span>
                 )}
             </h2>
-            <Tracks extendedTracks={extendedTracks} onDelete={onDelete} />
+            <Tracks extendedTracks={extendedTracks} onDelete={onDelete} onChange={onChange} />
             {started ? (
                 <div className={Utils.classNames('microphone microphone--stop', recording && 'microphone--recording')}>
                     <p>Stop automatically starting recordings.</p>

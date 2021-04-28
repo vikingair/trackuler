@@ -1,0 +1,56 @@
+main {
+  h2 {
+    display: flex;
+    justify-content: space-between;
+
+    .subtitle {
+      color: $colorText-3;
+    }
+  }
+
+  .microphone {
+    text-align: center;
+
+    button {
+      font-size: 2em;
+      position: relative;
+    }
+
+    &--start button {
+      background-color: $color-start-recording;
+    }
+
+    &--recording button::after {
+      content: ' ';
+      height: 100%;
+      width: 100%;
+      top: 0;
+      left: 0;
+      border-radius: 1em;
+      position: absolute;
+      animation: blink 1.5s ease-in-out infinite;
+      pointer-events: none;
+    }
+  }
+}
+
+@keyframes blink {
+  0% {
+    background-color: hsl(0 100% 50% / 10%);
+  }
+  50% {
+    background-color: hsl(0 100% 50% / 50%);;
+  }
+  100% {
+    background-color: hsl(0 100% 50% / 10%);
+  }
+}
+
+.workdir-access {
+  text-align: center;
+
+  button {
+    font-size: 2em;
+    background-color: $color-open-workdir;
+  }
+}

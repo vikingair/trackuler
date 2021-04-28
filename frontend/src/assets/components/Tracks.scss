@@ -1,0 +1,37 @@
+.tracks {
+  margin: 2.5em 0;
+  display: grid;
+  grid-template-columns: min-content auto min-content max-content min-content;
+  grid-row-gap: 1em;
+  align-items: center;
+
+  .track {
+    &__rate svg {
+      width: 2em;
+    }
+
+    &__time {
+      display: flex;
+      align-items: center;
+
+      svg {
+        margin-right: 0.5em;
+        width: 2em;
+      }
+    }
+
+    &__description {
+      margin: 0 1em;
+      padding: 0.5em 1em;
+      border-radius: 0.5em;
+    }
+
+    &__diff {
+      padding: 0 1em;
+    }
+  }
+
+  .delete {
+    background-color: $color-delete;
+  }
+}

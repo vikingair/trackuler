@@ -102,10 +102,16 @@ const getLatest = async (): Promise<Track[][]> => {
     return result.sort((a, b) => b.entry.name.localeCompare(a.entry.name)).map(({ tracks }) => tracks);
 };
 
-const create = async (track: Track): Promise<void> => {
+const createOrUpdate = async (track: Track): Promise<void> => {
     const { tracks, fileHandle } = await _current();
-    tracks.push(track);
-    await _write(fileHandle, tracks);
+    let isCreate = true;
+    const nextTracks = tracks.map((t) => {
+        if (t.ID !== track.ID) return t;
+        isCreate = false;
+        return track;
+    });
+    isCreate && nextTracks.push(track);
+    await _write(fileHandle, nextTracks);
 };
 
 const remove = async (ID: string): Promise<void> => {
@@ -118,4 +124,13 @@ const remove = async (ID: string): Promise<void> => {
 
 const getWorkdir = (): Promise<undefined | string> => IDBService.getWorkdir().then((handle) => handle?.name);
 
-export const WorkdirService = { init, getWorkdir, current, create, remove, getLatest, pickWorkdir, unlinkWorkdir };
+export const WorkdirService = {
+    init,
+    getWorkdir,
+    current,
+    createOrUpdate,
+    remove,
+    getLatest,
+    pickWorkdir,
+    unlinkWorkdir,
+};

@@ -29,9 +29,16 @@ const init = (app) => {
 
     app.post('/api/track', (req, res) => {
         const { ID, description, time } = req.body;
+        const track = { ID, description, time};
         const { tracks, pathToday } = getCurrentContent(new Date(time));
-        tracks.push({ ID, description, time});
-        fs.writeFileSync(pathToday, JSON.stringify(tracks));
+        let isCreate = true;
+        const nextTracks = tracks.map((t) => {
+            if (t.ID !== track.ID) return t;
+            isCreate = false;
+            return track;
+        });
+        isCreate && nextTracks.push(track);
+        fs.writeFileSync(pathToday, JSON.stringify(nextTracks));
         res.send({ time });
     });
 

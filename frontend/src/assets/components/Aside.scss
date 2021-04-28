@@ -1,0 +1,33 @@
+aside {
+  details {
+    background-color: $colorBg-4;
+    border-radius: 0.5em;
+
+    .tracks {
+      padding: 0.5em;
+      margin: 0;
+    }
+
+    summary {
+      cursor: pointer;
+      position: relative;
+      padding: 0.5em;
+      margin: 0.5em 0;
+      background-color: $colorBg-3;
+      border-radius: 0.5em;
+
+      .summary-title {
+        position: absolute;
+        width: calc(100% - 3em);
+        top: 0.5em;
+        left: 1.5em;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .summary-subtitle {
+        color: $colorText-3;
+      }
+    }
+  }
+}

@@ -27,10 +27,17 @@ const getLatest = (): Promise<Track[][]> => {
     );
 };
 
-const create = async (track: Track): Promise<void> => {
+const createOrUpdate = async (track: Track): Promise<void> => {
+    const convertedTrack = Utils.convertTrack(track);
     const tracks = await _current();
-    tracks.push(Utils.convertTrack(track));
-    Persistore.set(Utils.getKeyForDate(track.time), JSON.stringify(tracks));
+    let isCreate = true;
+    const nextTracks = tracks.map((t) => {
+        if (t.ID !== track.ID) return t;
+        isCreate = false;
+        return convertedTrack;
+    });
+    isCreate && nextTracks.push(convertedTrack);
+    Persistore.set(Utils.getKeyForDate(track.time), JSON.stringify(nextTracks));
 };
 
 const remove = async (ID: string): Promise<void> => {
@@ -38,4 +45,4 @@ const remove = async (ID: string): Promise<void> => {
     Persistore.set(Utils.getKeyForDate(), JSON.stringify(tracks.filter((track) => track.ID !== ID)));
 };
 
-export const LocalService = { current, create, remove, getLatest };
+export const LocalService = { current, createOrUpdate, remove, getLatest };

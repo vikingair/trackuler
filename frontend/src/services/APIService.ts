@@ -7,7 +7,7 @@ const getLatest = (): Promise<Track[][]> =>
 const current = (): Promise<Track[]> =>
     fetch('/api/tracks').then((r) => (r.ok ? r.json().then(Utils.convertAPITracks) : []));
 
-const create = ({ ID, description, time }: Track): Promise<void> =>
+const createOrUpdate = ({ ID, description, time }: Track): Promise<void> =>
     fetch('/api/track', {
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
@@ -25,4 +25,4 @@ const remove = (ID: string): Promise<void> =>
         if (!r.ok) throw new Error('Deletion failed');
     });
 
-export const APIService = { current, create, remove, getLatest };
+export const APIService = { current, createOrUpdate, remove, getLatest };

@@ -6,8 +6,7 @@
   "plugins": ["prettier"],
   "rules": {
     "prettier/prettier": "error",
-    "react/sort-comp": 2,
-    "react/jsx-no-bind": 2,
+    "react/jsx-no-bind": "warn",
     "arrow-body-style": ["error", "as-needed"],
     "no-console": "warn",
     "eqeqeq": ["error", "always"],

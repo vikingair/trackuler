@@ -1,0 +1,48 @@
+.App {
+    padding: 0 1em;
+
+    &::before {
+        content: ' ';
+        background-image: url("../images/bg.svg");
+        background-repeat: no-repeat;
+        background-size: 100%;
+        background-blend-mode: color;
+        position: fixed;
+        height: 100%;
+        width: 100%;
+        left: 0;
+        pointer-events: none;
+    }
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h1 {
+        white-space: nowrap;
+
+        img {
+            height: 0.75em;
+            // TODO animate on track submit
+            //transition: transform 0.5s linear;
+            //transform: rotate(180deg);
+        }
+    }
+}
+
+.content {
+    margin-bottom: 1em;
+    display: grid;
+    grid-template-rows: 1fr max-content;
+    grid-row-gap: 1em;
+
+    @media screen and (min-width: 1000px) {
+        grid-template-rows: unset;
+        grid-row-gap: unset;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-column-gap: 1em;
+    }
+}
