@@ -69,7 +69,9 @@ export const TrackEntry: React.VFC<TrackEntryProps> = ({
             <em className={'track__description'} style={{ backgroundColor: color }}>
                 {description}
             </em>
-            <div className={'track__rate'}>{rate && <ClockAmountIcon rate={rate} />}</div>
+            <div className={'track__rate'} title={rate ? Math.floor(rate * 100) + '%' : undefined}>
+                {rate && <ClockAmountIcon rate={rate} />}
+            </div>
             <div className={'track__diff'}>{diff && TrackService.toReadableTimeDiff(diff)}</div>
             <div className={'track__actions'}>
                 {_onDelete && (
