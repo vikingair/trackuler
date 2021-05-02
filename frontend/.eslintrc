@@ -5,11 +5,11 @@
   ],
   "plugins": ["prettier"],
   "rules": {
-    "prettier/prettier": "error",
+    "prettier/prettier": "warn",
     "react/jsx-no-bind": "warn",
-    "arrow-body-style": ["error", "as-needed"],
+    "arrow-body-style": ["warn", "as-needed"],
     "no-console": "warn",
     "eqeqeq": ["error", "always"],
-    "no-duplicate-imports": 2
+    "no-duplicate-imports": "warn"
   }
 }

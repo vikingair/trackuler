@@ -5,7 +5,7 @@ import {
     FileSystemKind,
     IDBService,
 } from './IDBService';
-import { Track } from './Types';
+import { Config, Track } from './Types';
 import { Utils } from './utils';
 import { Store } from '../store';
 
@@ -26,8 +26,12 @@ const writeToFile = async (fileHandle: FileSystemFileHandle, contents: string) =
     await writable.close();
 };
 
-const _write = async (fileHandle: FileSystemFileHandle, tracks: Track[]): Promise<void> => {
-    await writeToFile(fileHandle, JSON.stringify(tracks.map(Utils.convertTrack)));
+const _write = async (fileHandle: FileSystemFileHandle, obj: any): Promise<void> => {
+    await writeToFile(fileHandle, JSON.stringify(obj));
+};
+
+const _writeTracks = async (fileHandle: FileSystemFileHandle, tracks: Track[]): Promise<void> => {
+    await _write(fileHandle, tracks.map(Utils.convertTrack));
 };
 
 // only allowed to call after first user interaction with the site
@@ -60,11 +64,11 @@ const pickWorkdir = (): Promise<string | void> =>
 
 const unlinkWorkdir = (): Promise<void> => IDBService.removeWorkdir();
 
-const _getTracksFromFileHandle = async (fileHandle: FileSystemFileHandle): Promise<Track[]> => {
-    const file = await fileHandle.getFile();
-    const content = await file.text();
-    return Utils.convertAPITracks(JSON.parse(content));
-};
+const _readFile = (fileHandle: FileSystemFileHandle): Promise<string> =>
+    fileHandle.getFile().then((file) => file.text());
+
+const _getTracksFromFileHandle = async (fileHandle: FileSystemFileHandle): Promise<Track[]> =>
+    Utils.convertAPITracks(JSON.parse(await _readFile(fileHandle)));
 
 const _get = async (key: string): Promise<{ tracks: Track[]; fileHandle: FileSystemFileHandle }> => {
     const handle = (await IDBService.getWorkdir())!;
@@ -78,7 +82,7 @@ const _get = async (key: string): Promise<{ tracks: Track[]; fileHandle: FileSys
         }
     }
     const fileHandle = await handle.getFileHandle(key, { create: true });
-    await _write(fileHandle, []);
+    await _writeTracks(fileHandle, []);
     return { tracks: [], fileHandle };
 };
 
@@ -111,18 +115,43 @@ const createOrUpdate = async (track: Track): Promise<void> => {
         return track;
     });
     isCreate && nextTracks.push(track);
-    await _write(fileHandle, nextTracks);
+    await _writeTracks(fileHandle, nextTracks);
 };
 
 const remove = async (ID: string): Promise<void> => {
     const { tracks, fileHandle } = await _current();
-    await _write(
+    await _writeTracks(
         fileHandle,
         tracks.filter((track) => track.ID !== ID)
     );
 };
 
 const getWorkdir = (): Promise<undefined | string> => IDBService.getWorkdir().then((handle) => handle?.name);
+
+const CONFIG_FILENAME = 'trackuler-config.json';
+
+const _getConfig = async (): Promise<{ config: Config; fileHandle: FileSystemFileHandle }> => {
+    const handle = (await IDBService.getWorkdir())!;
+    try {
+        const fileHandle = await handle.getFileHandle(CONFIG_FILENAME);
+        if (fileHandle) return { config: JSON.parse(await _readFile(fileHandle)), fileHandle };
+    } catch (e) {
+        // expected error for every new starting day
+        if (!e.message.includes('could not be found')) {
+            window.console.error(e);
+        }
+    }
+    const fileHandle = await handle.getFileHandle(CONFIG_FILENAME, { create: true });
+    const newConfig = {};
+    await _write(fileHandle, newConfig);
+    return { config: newConfig, fileHandle };
+};
+
+const getConfig = async (): Promise<Config> => _getConfig().then(({ config }) => config);
+const setConfig = async (config: Config) => {
+    const { fileHandle } = await _getConfig();
+    await _write(fileHandle, config);
+};
 
 export const WorkdirService = {
     init,
@@ -133,4 +162,6 @@ export const WorkdirService = {
     getLatest,
     pickWorkdir,
     unlinkWorkdir,
+    getConfig,
+    setConfig,
 };

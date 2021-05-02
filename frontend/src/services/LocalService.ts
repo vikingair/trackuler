@@ -1,4 +1,4 @@
-import { APITrack, Track } from './Types';
+import { APITrack, Config, Track } from './Types';
 import { Utils } from './utils';
 import { Persistore } from 'persistore';
 
@@ -45,4 +45,17 @@ const remove = async (ID: string): Promise<void> => {
     Persistore.set(Utils.getKeyForDate(), JSON.stringify(tracks.filter((track) => track.ID !== ID)));
 };
 
-export const LocalService = { current, createOrUpdate, remove, getLatest };
+const CONFIG_KEY = 'trackuler-config';
+
+const getConfig = async (): Promise<Config> => {
+    const current = Persistore.get(CONFIG_KEY);
+    if (current) {
+        try {
+            return JSON.parse(current);
+        } catch {}
+    }
+    return {};
+};
+const setConfig = async (config: Config) => Persistore.set(CONFIG_KEY, JSON.stringify(config));
+
+export const LocalService = { current, createOrUpdate, remove, getLatest, getConfig, setConfig };

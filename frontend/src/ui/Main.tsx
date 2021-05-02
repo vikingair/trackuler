@@ -14,6 +14,10 @@ export const Main: React.VFC = () => {
     const recordingTimeout = useRef(0);
     const now = useMemo(() => new Date().toLocaleDateString(), []);
 
+    useEffect(() => {
+        TrackService.loadConfig();
+    }, []);
+
     const startTempRecording = useCallback(() => {
         window.clearTimeout(recordingTimeout.current);
         setRecording(true);

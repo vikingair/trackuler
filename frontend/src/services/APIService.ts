@@ -1,4 +1,4 @@
-import { Track } from './Types';
+import { Config, Track } from './Types';
 import { Utils } from './utils';
 
 const getLatest = (): Promise<Track[][]> =>
@@ -25,4 +25,14 @@ const remove = (ID: string): Promise<void> =>
         if (!r.ok) throw new Error('Deletion failed');
     });
 
-export const APIService = { current, createOrUpdate, remove, getLatest };
+const getConfig = (): Promise<Config> => fetch('/api/config').then((r) => (r.ok ? r.json() : {}));
+const setConfig = (config: Config): Promise<void> =>
+    fetch('/api/config', {
+        method: 'post',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(config),
+    }).then((r) => {
+        if (!r.ok) throw new Error('Creation failed');
+    });
+
+export const APIService = { current, createOrUpdate, remove, getLatest, getConfig, setConfig };

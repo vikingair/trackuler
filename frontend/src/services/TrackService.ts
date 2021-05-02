@@ -74,4 +74,15 @@ const hours8 = 28_800_000;
 
 const toRate = (diffMS: number): number => diffMS / hours8;
 
-export const TrackService = { current, change, toReadableTimeDiff, toRate, init };
+const loadConfig = async (): Promise<void> => {
+    const { language } = await current().getConfig();
+    if (language) Store.set({ language });
+};
+
+const setLanguage = async (language: string) => {
+    const config = await current().getConfig();
+    await current().setConfig({ ...config, language });
+    Store.set({ language });
+};
+
+export const TrackService = { current, change, toReadableTimeDiff, toRate, init, loadConfig, setLanguage };

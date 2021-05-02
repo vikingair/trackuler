@@ -1,5 +1,4 @@
-import React from 'react';
-import { SpeechRecognitionService } from '../services/SpeechRecognitionService';
+import React, { useMemo } from 'react';
 import { IconTimes } from '../icons/icon';
 import { Select, SelectOption } from './base/Select';
 import { TrackService } from '../services/TrackService';
@@ -14,7 +13,12 @@ const STORAGE_OPTIONS: SelectOption<TrackServiceType>[] = [
 export type SettingsProps = { open: boolean; onClose: () => void };
 
 export const Settings: React.VFC<SettingsProps> = ({ open, onClose }) => {
-    const trackType = useSub(({ trackType }) => trackType || TrackServiceType.LOCAL);
+    const { trackType, language, needsWorkdirAccess } = useSub(({ trackType, language, workdirAccessGranted }) => ({
+        trackType: trackType || TrackServiceType.LOCAL,
+        language,
+        needsWorkdirAccess: trackType === TrackServiceType.FILE_SYSTEM && !workdirAccessGranted,
+    }));
+    const languageOptions = useMemo(() => navigator.languages.map((lang) => ({ label: lang, value: lang })), []);
     return (
         <div className={'settings' + (open ? ' settings--open' : '')}>
             <h2>Settings</h2>
@@ -22,13 +26,23 @@ export const Settings: React.VFC<SettingsProps> = ({ open, onClose }) => {
                 <IconTimes />
             </button>
             <p>
-                <strong>Language: </strong>
-                {SpeechRecognitionService.locale} <em>(configure your Browser language to change this value)</em>
-            </p>
-            <p>
                 <strong>Storage: </strong>
                 <Select onChange={TrackService.change} options={STORAGE_OPTIONS} value={trackType} />
             </p>
+            {needsWorkdirAccess ? (
+                <p>
+                    You need to grant workdir access in order to change further configurations or choose an alternative
+                    storage option
+                </p>
+            ) : (
+                <>
+                    <p>
+                        <strong>Language: </strong>
+                        <Select onChange={TrackService.setLanguage} options={languageOptions} value={language} />
+                        <em> (you can only select languages configured in your browser)</em>
+                    </p>
+                </>
+            )}
             <p>
                 <strong>Work per day: </strong>
                 8h <em>(not yet configurable)</em>
