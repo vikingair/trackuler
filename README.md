@@ -17,7 +17,6 @@ Trackuler is still WIP, and the following things are planned:
 - Grouping of tracks (later with optional ML enhancement)
 - Configuring special commands like "Pause" and "End"
 - Editing and creating of tracks without speech recognition
-- Configuration of language instead of picking the browser language
 - Configuration of workday amount (default and per day)
 - Time summaries per groups
 - Timeline visualisations with graphs based on configured groups

@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/trackuler/static/css/main.f34d9381.chunk.css",
-    "main.js": "/trackuler/static/js/main.c264b3e4.chunk.js",
-    "runtime-main.js": "/trackuler/static/js/runtime-main.cf0d9fe0.js",
-    "static/js/2.5d87d9b3.chunk.js": "/trackuler/static/js/2.5d87d9b3.chunk.js",
+    "main.css": "/trackuler/static/css/main.502b6307.chunk.css",
+    "main.js": "/trackuler/static/js/main.0998d59e.chunk.js",
+    "runtime-main.js": "/trackuler/static/js/runtime-main.6d35bbd1.js",
+    "static/js/2.1c485d83.chunk.js": "/trackuler/static/js/2.1c485d83.chunk.js",
     "index.html": "/trackuler/index.html",
-    "static/js/2.5d87d9b3.chunk.js.LICENSE.txt": "/trackuler/static/js/2.5d87d9b3.chunk.js.LICENSE.txt",
+    "static/js/2.1c485d83.chunk.js.LICENSE.txt": "/trackuler/static/js/2.1c485d83.chunk.js.LICENSE.txt",
     "static/media/index.scss": "/trackuler/static/media/bg.db23ea1f.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.cf0d9fe0.js",
-    "static/js/2.5d87d9b3.chunk.js",
-    "static/css/main.f34d9381.chunk.css",
-    "static/js/main.c264b3e4.chunk.js"
+    "static/js/runtime-main.6d35bbd1.js",
+    "static/js/2.1c485d83.chunk.js",
+    "static/css/main.502b6307.chunk.css",
+    "static/js/main.0998d59e.chunk.js"
   ]
 }
