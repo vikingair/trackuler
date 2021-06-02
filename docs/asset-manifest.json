@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/trackuler/static/css/main.502b6307.chunk.css",
+    "main.css": "/trackuler/static/css/main.79df8169.chunk.css",
     "main.js": "/trackuler/static/js/main.0998d59e.chunk.js",
     "runtime-main.js": "/trackuler/static/js/runtime-main.6d35bbd1.js",
     "static/js/2.1c485d83.chunk.js": "/trackuler/static/js/2.1c485d83.chunk.js",
@@ -11,7 +11,7 @@
   "entrypoints": [
     "static/js/runtime-main.6d35bbd1.js",
     "static/js/2.1c485d83.chunk.js",
-    "static/css/main.502b6307.chunk.css",
+    "static/css/main.79df8169.chunk.css",
     "static/js/main.0998d59e.chunk.js"
   ]
 }
