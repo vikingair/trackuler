@@ -54,8 +54,8 @@ export const useTracks = (unsortedTracks: Track[]): ExtendedTracks =>
 
 type TracksProps = {
     extendedTracks: ExtendedTracks;
-    onDelete?: (ID: string) => void;
-    onChange?: (track: Track) => void;
+    onDelete?: (ID: string) => Promise<void>;
+    onChange?: (track: Track) => Promise<void>;
 };
 
 export const Tracks: React.VFC<TracksProps> = ({

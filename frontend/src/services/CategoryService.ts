@@ -11,7 +11,7 @@ const getWithColor = (description: string): CategoryWithColor => {
     const firstWord = description.split(' ')[0].toLowerCase();
     if (firstWord === KnownCategory.PAUSE) return { code: KnownCategory.PAUSE, color: '#165180' };
     if (firstWord === KnownCategory.END) return { code: KnownCategory.END, color: '#165180' };
-    else return { code: KnownCategory.UNKNOWN, color: 'none' };
+    else return { code: KnownCategory.UNKNOWN, color: 'unset' };
 };
 
 export const CategoryService = { getWithColor };

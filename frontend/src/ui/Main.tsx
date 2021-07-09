@@ -65,17 +65,21 @@ export const Main: React.VFC = () => {
         return () => window.removeEventListener('focus', startTempRecording);
     }, [startTempRecording]);
 
-    const onDelete = useCallback((ID: string) => {
-        TrackService.current()
-            .remove(ID)
-            .then(() => setTracks((tracks) => tracks.filter((track) => track.ID !== ID)));
-    }, []);
+    const onDelete = useCallback(
+        (ID: string) =>
+            TrackService.current()
+                .remove(ID)
+                .then(() => setTracks((tracks) => tracks.filter((track) => track.ID !== ID))),
+        []
+    );
 
-    const onChange = useCallback((track: Track) => {
-        TrackService.current()
-            .createOrUpdate(track)
-            .then(() => setTracks((tracks) => tracks.map((t) => (t.ID === track.ID ? track : t))));
-    }, []);
+    const onChange = useCallback(
+        (track: Track) =>
+            TrackService.current()
+                .createOrUpdate(track)
+                .then(() => setTracks((tracks) => tracks.map((t) => (t.ID === track.ID ? track : t)))),
+        []
+    );
 
     const extendedTracks = useTracks(tracks);
     const { totalTimeMs } = extendedTracks;

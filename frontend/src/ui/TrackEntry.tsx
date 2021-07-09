@@ -1,17 +1,19 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import { ClockAmountIcon, ClockIcon } from '../icons/ClockIcon';
+import React, { useMemo } from 'react';
+import { ClockAmountIcon } from '../icons/ClockIcon';
 import { IconDelete } from '../icons/icon';
 import { Track } from '../services/Types';
 import { CategoryWithColor } from '../services/CategoryService';
 import { TrackService } from '../services/TrackService';
+import { TrackTime } from './TrackTime';
+import { TrackDescription } from './TrackDescription';
 
 type TrackEntryProps = {
     track: Track;
     rate?: number;
     diff?: number;
     category: CategoryWithColor;
-    onDelete?: (ID: string) => void;
-    onChange?: (track: Track) => void;
+    onDelete?: (ID: string) => Promise<void>;
+    onChange?: (track: Track) => Promise<void>;
 };
 
 export const TrackEntry: React.VFC<TrackEntryProps> = ({
@@ -23,52 +25,20 @@ export const TrackEntry: React.VFC<TrackEntryProps> = ({
     rate,
     diff,
 }) => {
-    const [timeChangeRequested, setTimeChangeRequested] = useState(false);
     const _onDelete = useMemo(() => (onDelete ? () => onDelete(ID) : undefined), [onDelete, ID]);
-    const [onChangeTime, onClickTime] = useMemo(
-        () =>
-            onChange
-                ? [
-                      (event: React.ChangeEvent<HTMLInputElement>) => {
-                          const { time, ...rest } = track;
-                          const timeChunks = event.target.value.split(':').map(Number);
-                          onChange({
-                              ...rest,
-                              time: new Date(time.getFullYear(), time.getMonth(), time.getDate(), ...timeChunks),
-                          });
-                      },
-                      () => setTimeChangeRequested(true),
-                  ]
-                : [undefined, undefined],
+    const onChangeTime = useMemo(
+        () => (onChange ? (time: Date) => onChange({ ...track, time }) : undefined),
         [onChange, track]
     );
-    const onBlurTime = useCallback(() => setTimeChangeRequested(false), []);
+    const onChangeDescription = useMemo(
+        () => (onChange ? (description: string) => onChange({ ...track, description }) : undefined),
+        [onChange, track]
+    );
 
     return (
         <>
-            <strong
-                className={'track__time'}
-                onClick={onClickTime}
-                role={onClickTime && !timeChangeRequested ? 'button' : undefined}>
-                {timeChangeRequested ? (
-                    <input
-                        type={'time'}
-                        autoFocus
-                        step={2}
-                        onChange={onChangeTime}
-                        value={time.toLocaleTimeString()}
-                        onBlur={onBlurTime}
-                    />
-                ) : (
-                    <>
-                        <ClockIcon date={time} />
-                        {time.toLocaleTimeString()}
-                    </>
-                )}
-            </strong>
-            <em className={'track__description'} style={{ backgroundColor: color }}>
-                {description}
-            </em>
+            <TrackTime time={time} onChange={onChangeTime} />
+            <TrackDescription value={description} color={color} onChange={onChangeDescription} />
             <div className={'track__rate'} title={rate ? Math.floor(rate * 100) + '%' : undefined}>
                 {rate && <ClockAmountIcon rate={rate} />}
             </div>
