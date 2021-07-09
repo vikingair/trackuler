@@ -5,7 +5,16 @@ import { TrackService } from '../services/TrackService';
 import { SpeechRecognitionService } from '../services/SpeechRecognitionService';
 import { Tracks, useTracks } from './Tracks';
 import { CategoryService, KnownCategory } from '../services/CategoryService';
-import { IconMicrophone, IconMicrophoneSlash } from '../icons/icon';
+import { IconMicrophone, IconMicrophoneSlash, IconPlus } from '../icons/icon';
+import { DescriptionForm } from './forms/DescriptionForm';
+
+const rotateLogoImg = () => {
+    const img = document.getElementById('logo-img')!;
+    img.classList.add('rotate');
+    window.setTimeout(() => {
+        img.classList.remove('rotate');
+    }, 500);
+};
 
 export const Main: React.VFC = () => {
     const [tracks, setTracks] = useState<Track[]>([]);
@@ -19,6 +28,7 @@ export const Main: React.VFC = () => {
     }, []);
 
     const startTempRecording = useCallback(() => {
+        document.getElementsByTagName('input')[0]?.focus();
         window.clearTimeout(recordingTimeout.current);
         setRecording(true);
         recordingTimeout.current = window.setTimeout(() => {
@@ -42,9 +52,10 @@ export const Main: React.VFC = () => {
             const ID = Utils.uuid();
             const time = new Date();
             const next = { ID, description, time };
-            TrackService.current()
+            return TrackService.current()
                 .createOrUpdate(next)
                 .then(() => {
+                    rotateLogoImg();
                     setTracks((c) => c.concat(next));
                     setRecording(false);
                     if (CategoryService.getWithColor(description).code === KnownCategory.END) onStop();
@@ -93,6 +104,10 @@ export const Main: React.VFC = () => {
                 )}
             </h2>
             <Tracks extendedTracks={extendedTracks} onDelete={onDelete} onChange={onChange} />
+            <div className="add-track">
+                <IconPlus />
+                <DescriptionForm onChange={addNewContent} />
+            </div>
             {started ? (
                 <div className={Utils.classNames('microphone microphone--stop', recording && 'microphone--recording')}>
                     <p>Stop automatically starting recordings.</p>

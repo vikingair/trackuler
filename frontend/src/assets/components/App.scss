@@ -25,9 +25,11 @@ header {
 
         img {
             height: 0.75em;
-            // TODO animate on track submit
-            //transition: transform 0.5s linear;
-            //transform: rotate(180deg);
+
+            &.rotate {
+                transition: transform 0.5s linear;
+                transform: rotate(180deg);
+            }
         }
     }
 }

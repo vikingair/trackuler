@@ -1,6 +1,7 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { FormInput } from '../base/Input';
 import { FormData, Morfi } from 'morfi';
+import { useSafeState } from '../hooks/useSafeState';
 
 type DescriptionFormValues = { description: string };
 type DescriptionFormData = FormData<DescriptionFormValues>;
@@ -10,12 +11,23 @@ const DescriptionValidation = {
     description: { onChange: (value?: string) => (value ? undefined : { id: 'At least one character required' }) },
 };
 
-export type DescriptionFormProps = { description: string; onChange: (description: string) => Promise<void> };
+export type DescriptionFormProps = {
+    description?: string;
+    onChange: (description: string) => Promise<void>;
+    submitOnBlur?: boolean;
+};
 
-export const DescriptionForm: React.VFC<DescriptionFormProps> = ({ description, onChange }) => {
-    const [data, setData] = useState<DescriptionFormData>({ values: { description }, errors: {} });
-    const onSubmit = useCallback(({ description }: DescriptionFormValues) => onChange(description), [onChange]);
-    const onBlur = useCallback((description: string) => description && onChange(description), [onChange]);
+export const DescriptionForm: React.VFC<DescriptionFormProps> = ({ description = '', onChange, submitOnBlur }) => {
+    const initialData = useRef({ values: { description }, errors: {} });
+    const [data, setData] = useSafeState<DescriptionFormData>(initialData.current);
+    const onSubmit = useCallback(
+        ({ description }: DescriptionFormValues) => onChange(description).then(() => setData(initialData.current)),
+        [onChange, setData]
+    );
+    const onBlur = useCallback(
+        (description: string) => submitOnBlur && description && onSubmit({ description }),
+        [onSubmit, submitOnBlur]
+    );
 
     return (
         <Form onChange={setData} data={data} onSubmit={onSubmit} validation={DescriptionValidation}>

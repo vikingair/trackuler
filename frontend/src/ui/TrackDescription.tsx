@@ -18,7 +18,7 @@ export const ChangeableTrackDescription: React.VFC<ChangeableTrackDescriptionPro
     return (
         <div className={'track__description'} style={{ backgroundColor: color }}>
             {isEditing ? (
-                <DescriptionForm description={value} onChange={_onChange} />
+                <DescriptionForm description={value} onChange={_onChange} submitOnBlur />
             ) : (
                 <>
                     <em>{value}</em>

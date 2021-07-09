@@ -29,7 +29,14 @@ export const App: React.VFC = () => {
         <div className="App" key={currentKey}>
             <header>
                 <h1>
-                    <img src={process.env.PUBLIC_URL + '/favicon.svg'} alt={'logo'} height={24} width={24} /> Trackuler
+                    <img
+                        id={'logo-img'}
+                        src={process.env.PUBLIC_URL + '/favicon.svg'}
+                        alt={'logo'}
+                        height={24}
+                        width={24}
+                    />{' '}
+                    Trackuler
                 </h1>
                 <button className={'icon-button'} onClick={onOpen} title={'settings'}>
                     <IconSettings />

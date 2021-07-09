@@ -28,4 +28,10 @@ export const EditableTrackTime: React.VFC<EditableTrackTimeProps> = ({ time, onC
 export type TrackTimeProps = { time: Date; onChange?: (date: Date) => Promise<void> };
 
 export const TrackTime: React.VFC<TrackTimeProps> = ({ time, onChange }) =>
-    onChange ? <EditableTrackTime time={time} onChange={onChange} /> : <TimeView time={time} />;
+    onChange ? (
+        <EditableTrackTime time={time} onChange={onChange} />
+    ) : (
+        <strong className={'track__time'}>
+            <TimeView time={time} />
+        </strong>
+    );
