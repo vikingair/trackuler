@@ -38,7 +38,7 @@ export const App: React.VFC = () => {
                     />{' '}
                     Trackuler
                 </h1>
-                <button className={'icon-button'} onClick={onOpen} title={'settings'}>
+                <button className={'icon-button'} onClick={onOpen} title={'settings'} aria-label={'open settings'}>
                     <IconSettings />
                 </button>
             </header>
@@ -46,7 +46,11 @@ export const App: React.VFC = () => {
             {!trackType ? null : trackType === TrackServiceType.FILE_SYSTEM && !workdirAccessGranted ? (
                 <div className={'workdir-access'}>
                     <p>Grant read & write access to workdir: "{workdirName}"</p>
-                    <button className={'icon-button'} onClick={WorkdirService.init}>
+                    <button
+                        className={'icon-button'}
+                        onClick={WorkdirService.init}
+                        title={'open workdir'}
+                        aria-label={'open workdir'}>
                         <IconFolderOpen />
                     </button>
                 </div>

@@ -1,6 +1,10 @@
 .App {
     padding: 0 1em;
 
+    @media screen and (max-width: 500px) {
+        padding: 0 0.5em;
+    }
+
     &::before {
         content: ' ';
         background-image: url("../images/bg.svg");
@@ -41,9 +45,8 @@ header {
     grid-row-gap: 1em;
 
     @media screen and (min-width: 1000px) {
-        grid-template-rows: unset;
         grid-row-gap: unset;
-        display: grid;
+        grid-template-rows: calc(100vh - 7em);
         grid-template-columns: 1fr 1fr;
         grid-column-gap: 1em;
     }

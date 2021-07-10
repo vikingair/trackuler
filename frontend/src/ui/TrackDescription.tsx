@@ -6,9 +6,15 @@ export type ChangeableTrackDescriptionProps = {
     value: string;
     onChange: (value: string) => Promise<void>;
     color: string;
+    title?: string;
 };
 
-export const ChangeableTrackDescription: React.VFC<ChangeableTrackDescriptionProps> = ({ value, onChange, color }) => {
+export const ChangeableTrackDescription: React.VFC<ChangeableTrackDescriptionProps> = ({
+    value,
+    onChange,
+    color,
+    title,
+}) => {
     const [isEditing, setIsEditing] = useState(false);
     const onEdit = useCallback(() => setIsEditing(true), []);
     const _onChange = useCallback(
@@ -16,13 +22,17 @@ export const ChangeableTrackDescription: React.VFC<ChangeableTrackDescriptionPro
         [onChange]
     );
     return (
-        <div className={'track__description'} style={{ backgroundColor: color }}>
+        <div className={'track__description'} style={{ backgroundColor: color }} title={title}>
             {isEditing ? (
                 <DescriptionForm description={value} onChange={_onChange} submitOnBlur />
             ) : (
                 <>
                     <em>{value}</em>
-                    <button onClick={onEdit} className={'icon-button'} title={'edit'}>
+                    <button
+                        onClick={onEdit}
+                        className={'icon-button'}
+                        title={'edit description'}
+                        aria-label={'edit description'}>
                         <IconEdit />
                     </button>
                 </>
@@ -31,13 +41,18 @@ export const ChangeableTrackDescription: React.VFC<ChangeableTrackDescriptionPro
     );
 };
 
-export type TrackDescriptionProps = { value: string; onChange?: (value: string) => Promise<void>; color: string };
+export type TrackDescriptionProps = {
+    value: string;
+    onChange?: (value: string) => Promise<void>;
+    color: string;
+    title?: string;
+};
 
-export const TrackDescription: React.VFC<TrackDescriptionProps> = ({ value, onChange, color }) =>
+export const TrackDescription: React.VFC<TrackDescriptionProps> = ({ value, onChange, color, title }) =>
     onChange ? (
-        <ChangeableTrackDescription value={value} onChange={onChange} color={color} />
+        <ChangeableTrackDescription value={value} onChange={onChange} color={color} title={title} />
     ) : (
-        <div className={'track__description'} style={{ backgroundColor: color }}>
+        <div className={'track__description'} style={{ backgroundColor: color }} title={title}>
             <em>{value}</em>
         </div>
     );

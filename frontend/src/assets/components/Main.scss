@@ -1,4 +1,12 @@
 main {
+  @media screen and (min-width: 1000px) {
+    height: calc(100vh - 7em);
+  }
+
+  display: grid;
+  grid-template-rows: min-content auto min-content min-content;
+  grid-row-gap: 2em;
+
   h2 {
     display: flex;
     justify-content: space-between;
@@ -34,7 +42,7 @@ main {
   }
 
   .add-track {
-    margin-top: 4em;
+    margin-top: 1em;
     display: flex;
     align-items: center;
     justify-content: center;

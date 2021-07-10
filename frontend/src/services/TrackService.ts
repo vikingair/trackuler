@@ -1,4 +1,4 @@
-import { TrackInterface, TrackServiceType } from './Types';
+import { CategoryConfig, CategoryConfigs, Config, TrackInterface, TrackServiceType } from './Types';
 import { LocalService } from './LocalService';
 import { APIService } from './APIService';
 import { WorkdirService } from './WorkdirService';
@@ -30,6 +30,8 @@ const _change = async (trackType: TrackServiceType) => {
 const init = async (): Promise<void> => {
     const lastCurrentKey = Utils.getKeyForDate();
     window.addEventListener('focus', () => {
+        // focus the input
+        (document.querySelector('.add-track input') as HTMLInputElement | null)?.focus();
         const currentKey = Utils.getKeyForDate();
         if (lastCurrentKey !== currentKey) {
             // this is used as key of the whole App content and will trigger a reloading of all visual states
@@ -74,15 +76,43 @@ const hours8 = 28_800_000;
 
 const toRate = (diffMS: number): number => diffMS / hours8;
 
-const loadConfig = async (): Promise<void> => {
-    const { language } = await current().getConfig();
+const _updateStore = ({ language, categoryConfig }: Config) => {
     if (language) Store.set({ language });
+    if (categoryConfig) {
+        const entries = Object.entries(categoryConfig);
+        Store.set(({ categoryConfig }) => {
+            const copy = { ...categoryConfig };
+            entries.forEach(([name, value]) => {
+                if (value) copy[name as keyof CategoryConfigs] = value;
+            });
+            return { categoryConfig: copy };
+        });
+    }
 };
 
-const setLanguage = async (language: string) => {
+const loadConfig = async (): Promise<void> => {
+    _updateStore(await current().getConfig());
+};
+
+const _updateConfig = async (updates: Partial<Config> | ((config: Config) => Partial<Config>)) => {
     const config = await current().getConfig();
-    await current().setConfig({ ...config, language });
-    Store.set({ language });
+    const _updates = typeof updates === 'function' ? updates(config) : updates;
+    const next = { ...config, ..._updates };
+    await current().setConfig(next);
+    _updateStore(next);
 };
 
-export const TrackService = { current, change, toReadableTimeDiff, toRate, init, loadConfig, setLanguage };
+const setLanguage = async (language: string) => _updateConfig({ language });
+const setCategoryConfig = async (name: 'pause' | 'end', config: CategoryConfig) =>
+    _updateConfig(({ categoryConfig }) => ({ categoryConfig: { ...categoryConfig, [name]: config } }));
+
+export const TrackService = {
+    current,
+    change,
+    toReadableTimeDiff,
+    toRate,
+    init,
+    loadConfig,
+    setLanguage,
+    setCategoryConfig,
+};

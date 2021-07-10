@@ -1,17 +1,14 @@
-export enum KnownCategory {
-    UNKNOWN = 'unknown',
-    PAUSE = 'pause',
-    END = 'end',
-}
+import { CategoryConfigs } from './Types';
 
-type Category = { code: KnownCategory | string; pattern: string; color: string };
-export type CategoryWithColor = Pick<Category, 'code' | 'color'>;
+export type Category = { ID: string; name: string; color: string };
 
-const getWithColor = (description: string): CategoryWithColor => {
-    const firstWord = description.split(' ')[0].toLowerCase();
-    if (firstWord === KnownCategory.PAUSE) return { code: KnownCategory.PAUSE, color: '#165180' };
-    if (firstWord === KnownCategory.END) return { code: KnownCategory.END, color: '#165180' };
-    else return { code: KnownCategory.UNKNOWN, color: 'unset' };
+const getWithColor = (categoryConfig: CategoryConfigs, description: string): Category => {
+    for (const [ID, { name, regex, color }] of Object.entries(categoryConfig)) {
+        if (description.match(new RegExp(regex, 'i'))) {
+            return { ID, name, color };
+        }
+    }
+    return { ID: '', name: '', color: 'unset' };
 };
 
 export const CategoryService = { getWithColor };

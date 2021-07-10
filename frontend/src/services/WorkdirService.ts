@@ -67,8 +67,10 @@ const unlinkWorkdir = (): Promise<void> => IDBService.removeWorkdir();
 const _readFile = (fileHandle: FileSystemFileHandle): Promise<string> =>
     fileHandle.getFile().then((file) => file.text());
 
-const _getTracksFromFileHandle = async (fileHandle: FileSystemFileHandle): Promise<Track[]> =>
-    Utils.convertAPITracks(JSON.parse(await _readFile(fileHandle)));
+const _readJson = (fileHandle: FileSystemFileHandle): Promise<any> => _readFile(fileHandle).then(JSON.parse);
+
+const _getTracksFromFileHandle = (fileHandle: FileSystemFileHandle): Promise<Track[]> =>
+    _readJson(fileHandle).then(Utils.convertAPITracks);
 
 const _get = async (key: string): Promise<{ tracks: Track[]; fileHandle: FileSystemFileHandle }> => {
     const handle = (await IDBService.getWorkdir())!;
@@ -134,7 +136,7 @@ const _getConfig = async (): Promise<{ config: Config; fileHandle: FileSystemFil
     const handle = (await IDBService.getWorkdir())!;
     try {
         const fileHandle = await handle.getFileHandle(CONFIG_FILENAME);
-        if (fileHandle) return { config: JSON.parse(await _readFile(fileHandle)), fileHandle };
+        if (fileHandle) return { config: await _readJson(fileHandle), fileHandle };
     } catch (e) {
         // expected error for every new starting day
         if (!e.message.includes('could not be found')) {

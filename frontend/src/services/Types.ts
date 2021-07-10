@@ -1,6 +1,8 @@
 export type APITrack = { ID: string; description: string; time: string };
 export type Track = { ID: string; description: string; time: Date };
-export type Config = { language?: string };
+export type CategoryConfig = { name: string; regex: string; color: string };
+export type CategoryConfigs = { pause: CategoryConfig; end: CategoryConfig };
+export type Config = { language?: string; categoryConfig?: Partial<CategoryConfigs> };
 
 export type TrackInterface = {
     current: () => Promise<Track[]>;

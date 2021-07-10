@@ -4,6 +4,7 @@ import { Select, SelectOption } from './base/Select';
 import { TrackService } from '../services/TrackService';
 import { TrackServiceType } from '../services/Types';
 import { useSub } from '../store';
+import { SettingsCategory } from './SettingsCategory';
 
 const STORAGE_OPTIONS: SelectOption<TrackServiceType>[] = [
     { label: 'Browser Local Storage', value: TrackServiceType.LOCAL },
@@ -13,16 +14,23 @@ const STORAGE_OPTIONS: SelectOption<TrackServiceType>[] = [
 export type SettingsProps = { open: boolean; onClose: () => void };
 
 export const Settings: React.VFC<SettingsProps> = ({ open, onClose }) => {
-    const { trackType, language, needsWorkdirAccess } = useSub(({ trackType, language, workdirAccessGranted }) => ({
-        trackType: trackType || TrackServiceType.LOCAL,
-        language,
-        needsWorkdirAccess: trackType === TrackServiceType.FILE_SYSTEM && !workdirAccessGranted,
-    }));
+    const { trackType, language, needsWorkdirAccess, categoryConfig } = useSub(
+        ({ trackType, language, workdirAccessGranted, categoryConfig }) => ({
+            trackType: trackType || TrackServiceType.LOCAL,
+            language,
+            needsWorkdirAccess: trackType === TrackServiceType.FILE_SYSTEM && !workdirAccessGranted,
+            categoryConfig,
+        })
+    );
     const languageOptions = useMemo(() => navigator.languages.map((lang) => ({ label: lang, value: lang })), []);
     return (
         <div className={'settings' + (open ? ' settings--open' : '')}>
             <h2>Settings</h2>
-            <button className={'settings__close icon-button'} onClick={onClose} title={'close settings'}>
+            <button
+                className={'settings__close icon-button'}
+                onClick={onClose}
+                title={'close settings'}
+                aria-label={'close settings'}>
                 <IconTimes />
             </button>
             <p>
@@ -51,14 +59,21 @@ export const Settings: React.VFC<SettingsProps> = ({ open, onClose }) => {
                 <strong>Speech Recognition Trigger: </strong>
                 Tab Focus <em>(not yet configurable)</em>
             </p>
-            <p>
-                <strong>Pause Command: </strong>
-                "Pause" [#165180] <em>(not yet configurable)</em>
-            </p>
-            <p>
-                <strong>End Command: </strong>
-                "End" [#165180] <em>(not yet configurable)</em>
-            </p>
+            <h3>Categories</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Color</th>
+                        <th>RegExp</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {Object.entries(categoryConfig).map(([ID, config]) => (
+                        <SettingsCategory config={config} ID={ID} key={ID} />
+                    ))}
+                </tbody>
+            </table>
         </div>
     );
 };

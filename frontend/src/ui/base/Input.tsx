@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { iField } from 'morfi';
 
-type InputType = { type?: 'text' } | { type: 'time'; step: number };
+type InputType = { type?: 'text' | 'color' } | { type: 'time'; step: number };
 
 type CommonInputProps = {
     onBlur?: (v: string) => void;

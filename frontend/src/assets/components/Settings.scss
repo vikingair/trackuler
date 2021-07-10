@@ -19,4 +19,25 @@
   &--open {
     left: 0;
   }
+
+  table {
+    border-collapse: collapse;
+
+    &, th, td {
+      border: 1px solid white;
+    }
+
+    th, td {
+      padding: 0.5em;
+    }
+  }
+
+  &__category-regex input {
+    width: 50vw;
+    max-width: 30em;
+  }
+
+  h3 {
+    margin-top: 2em;
+  }
 }

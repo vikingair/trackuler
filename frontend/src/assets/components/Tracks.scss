@@ -1,6 +1,10 @@
 .tracks {
-  margin: 2.5em 0;
+  @media screen and (min-width: 1000px) {
+    overflow: auto;
+  }
+
   display: grid;
+  grid-auto-rows: min-content;
   grid-template-columns: min-content auto min-content max-content min-content;
   grid-row-gap: 1em;
   align-items: center;
@@ -43,6 +47,28 @@
       }
       .delete {
         background-color: $color-delete;
+      }
+    }
+  }
+
+  @media screen and (max-width: 500px) {
+    .track {
+      &__time {
+        flex-direction: column;
+
+        svg {
+          margin: 0;
+        }
+      }
+
+      &__description {
+        margin: 0 0.25em;
+        padding: 0.5em;
+      }
+
+      &__diff {
+        padding: 0;
+        text-align: center;
       }
     }
   }

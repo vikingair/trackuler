@@ -4,9 +4,10 @@ import { Utils } from '../services/utils';
 import { TrackService } from '../services/TrackService';
 import { SpeechRecognitionService } from '../services/SpeechRecognitionService';
 import { Tracks, useTracks } from './Tracks';
-import { CategoryService, KnownCategory } from '../services/CategoryService';
+import { CategoryService } from '../services/CategoryService';
 import { IconMicrophone, IconMicrophoneSlash, IconPlus } from '../icons/icon';
 import { DescriptionForm } from './forms/DescriptionForm';
+import { Store } from '../store';
 
 const rotateLogoImg = () => {
     const img = document.getElementById('logo-img')!;
@@ -28,7 +29,6 @@ export const Main: React.VFC = () => {
     }, []);
 
     const startTempRecording = useCallback(() => {
-        document.getElementsByTagName('input')[0]?.focus();
         window.clearTimeout(recordingTimeout.current);
         setRecording(true);
         recordingTimeout.current = window.setTimeout(() => {
@@ -58,7 +58,7 @@ export const Main: React.VFC = () => {
                     rotateLogoImg();
                     setTracks((c) => c.concat(next));
                     setRecording(false);
-                    if (CategoryService.getWithColor(description).code === KnownCategory.END) onStop();
+                    if (CategoryService.getWithColor(Store.get().categoryConfig, description).ID === 'end') onStop();
                 });
         },
         [onStop]
@@ -111,14 +111,22 @@ export const Main: React.VFC = () => {
             {started ? (
                 <div className={Utils.classNames('microphone microphone--stop', recording && 'microphone--recording')}>
                     <p>Stop automatically starting recordings.</p>
-                    <button className={'icon-button'} onClick={onStop}>
+                    <button
+                        className={'icon-button'}
+                        onClick={onStop}
+                        title={'stop recording'}
+                        aria-label={'stop recording'}>
                         <IconMicrophoneSlash />
                     </button>
                 </div>
             ) : (
                 <div className="microphone microphone--start">
                     <p>{tracks.length ? 'Continue' : 'Start a new'} session by clicking on the Microphone.</p>
-                    <button className={'icon-button'} onClick={onStart}>
+                    <button
+                        className={'icon-button'}
+                        onClick={onStart}
+                        title={'start recording'}
+                        aria-label={'start recording'}>
                         <IconMicrophone />
                     </button>
                 </div>

@@ -1,4 +1,4 @@
-import { TrackServiceType } from './services/Types';
+import { CategoryConfigs, TrackServiceType } from './services/Types';
 import { createStore } from 'react-use-sub';
 import { Utils } from './services/utils';
 
@@ -11,6 +11,7 @@ type State = {
     workdirName?: string;
     currentKey: string;
     language: string;
+    categoryConfig: CategoryConfigs;
 };
 
 const [useSub, Store] = createStore<State>({
@@ -19,6 +20,10 @@ const [useSub, Store] = createStore<State>({
     trackType: undefined,
     currentKey: Utils.getKeyForDate(),
     language: getLanguage(),
+    categoryConfig: {
+        pause: { name: 'Pause', regex: 'pause', color: '#165180' },
+        end: { name: 'End', regex: 'end', color: '#165180' },
+    },
 });
 
 export { useSub, Store };

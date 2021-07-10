@@ -1,19 +1,21 @@
 import React, { useMemo } from 'react';
 import { Track } from '../services/Types';
-import { CategoryService, CategoryWithColor, KnownCategory } from '../services/CategoryService';
+import { CategoryService, Category } from '../services/CategoryService';
 import { TrackService } from '../services/TrackService';
 import { TrackEntry } from './TrackEntry';
+import { useSub } from '../store';
 
 type ExtendedTracks = {
     tracks: Track[];
-    categories: CategoryWithColor[];
+    categories: Category[];
     trackDiffs: Array<number | undefined>;
     totalTimeMs: number | undefined;
     trackRates: Array<number | undefined>;
 };
 
-export const useTracks = (unsortedTracks: Track[]): ExtendedTracks =>
-    useMemo(() => {
+export const useTracks = (unsortedTracks: Track[]): ExtendedTracks => {
+    const categoryConfig = useSub(({ categoryConfig }) => categoryConfig);
+    return useMemo(() => {
         const tracks = unsortedTracks.sort((a, b) => +a.time - +b.time);
 
         const trackDiffs = tracks.map(({ ID, time, description }, i) => {
@@ -21,11 +23,11 @@ export const useTracks = (unsortedTracks: Track[]): ExtendedTracks =>
             return nextTime ? +nextTime - +time : undefined;
         });
 
-        const categories = tracks.map(({ description }) => CategoryService.getWithColor(description));
+        const categories = tracks.map(({ description }) => CategoryService.getWithColor(categoryConfig, description));
 
         const totalPauseMs = tracks.reduce((cur, red, i) => {
             const nextTime = tracks[i + 1]?.time;
-            if (categories[i].code === KnownCategory.PAUSE && nextTime) {
+            if (categories[i].ID === 'pause' && nextTime) {
                 return cur + (+nextTime - +red.time);
             }
             return cur;
@@ -37,20 +39,21 @@ export const useTracks = (unsortedTracks: Track[]): ExtendedTracks =>
         let totalPause = 0;
         const pauseTime = tracks.map(({ time }, i) => {
             const nextTime = tracks[i + 1]?.time;
-            if (categories[i].code === KnownCategory.PAUSE && nextTime) {
+            if (categories[i].ID === 'pause' && nextTime) {
                 totalPause += +nextTime - +time;
             }
             return totalPause;
         });
         const trackRates = tracks.map(({ ID, time, description }, i) => {
-            if (categories[i].code === KnownCategory.PAUSE) return undefined;
+            if (categories[i].ID === 'pause') return undefined;
             const firstTime = tracks[0].time;
             const nextTime = tracks[i + 1]?.time;
             return nextTime ? TrackService.toRate(+nextTime - +firstTime - +pauseTime[i]) : undefined;
         });
 
         return { tracks, trackDiffs, categories, totalTimeMs, trackRates };
-    }, [unsortedTracks]);
+    }, [unsortedTracks, categoryConfig]);
+};
 
 type TracksProps = {
     extendedTracks: ExtendedTracks;
