@@ -29,7 +29,14 @@ export const App: React.FC = () => {
         <div className="App" key={currentKey}>
             <header>
                 <h1>
-                    <img id={'logo-img'} src={'/favicon.svg'} alt={'logo'} height={24} width={24} /> Trackuler
+                    <img
+                        id={'logo-img'}
+                        src={import.meta.env.BASE_URL + 'favicon.svg'}
+                        alt={'logo'}
+                        height={24}
+                        width={24}
+                    />{' '}
+                    Trackuler
                 </h1>
                 <button className={'icon-button'} onClick={onOpen} title={'settings'} aria-label={'open settings'}>
                     <IconSettings />
