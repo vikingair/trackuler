@@ -31,7 +31,7 @@ export const DescriptionForm: React.VFC<DescriptionFormProps> = ({ description =
 
     return (
         <Form onChange={setData} data={data} onSubmit={onSubmit} validation={DescriptionValidation}>
-            <FormInput autoFocus onBlur={onBlur} Field={Fields.description} />
+            <FormInput name={'track-description'} autoFocus onBlur={onBlur} Field={Fields.description} />
             <button style={{ display: 'none' }} />
         </Form>
     );

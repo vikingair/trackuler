@@ -1,5 +1,5 @@
 {
-  "name": "Trackula-Frontend",
+  "name": "Trackuler-Frontend",
   "version": "0.1.0",
   "private": true,
   "homepage": "https://fdc-viktor-luft.github.io/trackuler/",
@@ -16,10 +16,12 @@
   "scripts": {
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "build:docs": "rm -rf ../docs && pnpm build && mv build ../docs",
-    "test": "react-scripts test --color",
+    "test": "react-scripts test --color --watchAll=false",
     "start": "PORT=7776 react-scripts start",
-    "eslint": "eslint --cache --cache-location 'misc/.eslintcache' --ext .ts,.tsx src/",
-    "circular-check": "madge -c --extensions ts,tsx --ts-config tsconfig.json --no-spinner src/"
+    "lint": "pnpm lint:circular-imports && pnpm lint:es && pnpm lint:ts",
+    "lint:es": "eslint --ext .ts,.tsx src/",
+    "lint:ts": "tsc",
+    "lint:circular-imports": "madge -c --extensions ts,tsx --ts-config tsconfig.json --no-spinner src/"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.14.1",

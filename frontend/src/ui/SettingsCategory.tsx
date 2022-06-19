@@ -26,10 +26,10 @@ export const SettingsCategory: React.VFC<SettingsCategoryProps> = ({ ID, config:
         <tr>
             <td>{name}</td>
             <td>
-                <Input type={'color'} value={color} onChange={onChangeColor} />
+                <Input name={'category-color'} type={'color'} value={color} onChange={onChangeColor} />
             </td>
             <td className={'settings__category-regex'}>
-                <Input value={_regex} onChange={setRegex} onBlur={onBlurRegex} />
+                <Input name={'category-regex'} value={_regex} onChange={setRegex} onBlur={onBlurRegex} />
             </td>
         </tr>
     );
