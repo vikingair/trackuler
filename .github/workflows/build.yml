@@ -7,7 +7,7 @@ on:
   pull_request:
 
 jobs:
-  prepare:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -47,6 +47,6 @@ jobs:
       - name: Check docs updated
         run: |
           pnpm build:docs
-          #if [ "$(git diff --stat)" != "" ]; then echo "Docs were not updated"; exit 1; else echo "Docs are up-to-date"; fi
+          if [ "$(git diff --stat)" != "" ]; then echo "Docs were not updated"; exit 1; else echo "Docs are up-to-date"; fi
         working-directory: frontend
 
