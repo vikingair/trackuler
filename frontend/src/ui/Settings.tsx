@@ -35,7 +35,12 @@ export const Settings: React.VFC<SettingsProps> = ({ open, onClose }) => {
             </button>
             <p>
                 <strong>Storage: </strong>
-                <Select onChange={TrackService.change} options={STORAGE_OPTIONS} value={trackType} />
+                <Select
+                    name={'storage-type'}
+                    onChange={TrackService.change}
+                    options={STORAGE_OPTIONS}
+                    value={trackType}
+                />
             </p>
             {needsWorkdirAccess ? (
                 <p>
@@ -46,7 +51,12 @@ export const Settings: React.VFC<SettingsProps> = ({ open, onClose }) => {
                 <>
                     <p>
                         <strong>Language: </strong>
-                        <Select onChange={TrackService.setLanguage} options={languageOptions} value={language} />
+                        <Select
+                            name={'language'}
+                            onChange={TrackService.setLanguage}
+                            options={languageOptions}
+                            value={language}
+                        />
                         <em> (you can only select languages configured in your browser)</em>
                     </p>
                 </>

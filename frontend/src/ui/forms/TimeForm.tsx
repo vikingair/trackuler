@@ -13,7 +13,7 @@ export const TimeForm: React.VFC<TimeFormProps> = ({ time, onChange }) => {
 
     return (
         <Form onChange={setData} data={data} onSubmit={onSubmit} validation={{}}>
-            <FormTimeInput autoFocus onBlur={onChange} Field={Fields.time} />
+            <FormTimeInput name={'track-time'} autoFocus onBlur={onChange} Field={Fields.time} />
             <button style={{ display: 'none' }} />
         </Form>
     );

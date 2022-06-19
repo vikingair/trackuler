@@ -6,6 +6,7 @@ type InputType = { type?: 'text' | 'color' } | { type: 'time'; step: number };
 type CommonInputProps = {
     onBlur?: (v: string) => void;
     autoFocus?: boolean;
+    name: string;
 };
 
 type InputProps = InputType &
@@ -35,6 +36,7 @@ export const FormInput: React.VFC<FormInputProps> = ({ Field, ...rest }) => (
 );
 
 type CommonTimeInputProps = {
+    name: string;
     onBlur?: (v: Date) => void;
     autoFocus?: boolean;
 };
