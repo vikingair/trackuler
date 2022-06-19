@@ -8,6 +8,9 @@ button.icon-button {
 
 svg.icon {
   width: 1em;
-  height: 1em;
-  padding-top: 0.125em;
+  height: 0.75em;
+
+  &.big {
+    height: 1.25em;
+  }
 }

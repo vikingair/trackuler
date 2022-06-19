@@ -4,7 +4,7 @@
 
 html {
   height: 100%;
-  background-color: $colorBg;
+  background-color: var(--color-bg);
 }
 
 body {
@@ -15,9 +15,9 @@ body {
   sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(70deg, $colorBg, $colorBg-2);
+  background: linear-gradient(70deg, var(--color-bg), var(--color-bg-2));
   min-height: 100%;
-  color: $colorText;
+  color: var(--color-text);
 }
 
 code {
@@ -30,9 +30,9 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 
 input, select {
-  color: $colorText;
-  background-color: $colorBg-2;
-  border-color: $colorBg-3;
+  color: var(--color-text);
+  background-color: var(--color-bg-2);
+  border-color: var(--color-bg-3);
   font-family: inherit;
   outline: none;
 }
@@ -41,10 +41,48 @@ input, button, select {
   outline: none;
 
   &:focus-within {
-    box-shadow: 0 0 4px $colorText-3;
+    box-shadow: 0 0 4px var(--color-text-3);
   }
 }
 
 [role="button"] {
   cursor: pointer;
+}
+
+/*************************
+ * Scrollbar adjustments
+ *************************/
+
+// just for Firefox
+:root {
+  // ATTENTION: On MacOS you can configure to display standard scrollbars only on scroll
+  //            This effect cannot be changed in Firefox.
+  scrollbar-width: thin;
+  /* The color of thumb and track areas */
+  scrollbar-color: var(--color-bg-3) transparent;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 4px; // for vertical scrollbar
+  height: 4px; // for horizontal scrollbar (see e.g. wide tables)
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background: var(--color-bg-3);
+}
+
+::-webkit-calendar-picker-indicator {
+  //filter: invert(1);
+}
+
+input {
+  color-scheme: dark;
 }
