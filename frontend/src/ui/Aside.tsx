@@ -10,19 +10,11 @@ import { History } from './History';
 enum TabOption {
     HISTORY = 'history',
     SETTINGS = 'settings',
-    SETTINGS2 = 'settings2',
-    SETTINGS3 = 'settings3',
-    SETTINGS4 = 'settings4',
-    SETTINGS5 = 'settings5',
 }
 
 const TABS: Record<TabOption, React.ReactNode> = {
     [TabOption.HISTORY]: 'History',
     [TabOption.SETTINGS]: <IconSettings className={'big'} />,
-    [TabOption.SETTINGS2]: 'FOOOOOOOOOOOOOOO',
-    [TabOption.SETTINGS3]: 'FOOOOOOOOOOOOOOO',
-    [TabOption.SETTINGS4]: 'FOOOOOOOOOOOOOOO',
-    [TabOption.SETTINGS5]: 'FOOOOOOOOOOOOOOO',
 };
 
 const ACTIVE_TAB_KEY = 'trackuler-tab';
