@@ -18,7 +18,7 @@ export const useTracks = (unsortedTracks: Track[]): ExtendedTracks => {
     return useMemo(() => {
         const tracks = unsortedTracks.sort((a, b) => +a.time - +b.time);
 
-        const trackDiffs = tracks.map(({ ID, time, description }, i) => {
+        const trackDiffs = tracks.map(({ time }, i) => {
             const nextTime = tracks[i + 1]?.time;
             return nextTime ? +nextTime - +time : undefined;
         });
@@ -44,7 +44,7 @@ export const useTracks = (unsortedTracks: Track[]): ExtendedTracks => {
             }
             return totalPause;
         });
-        const trackRates = tracks.map(({ ID, time, description }, i) => {
+        const trackRates = tracks.map((_, i) => {
             if (categories[i].ID === 'pause') return undefined;
             const firstTime = tracks[0].time;
             const nextTime = tracks[i + 1]?.time;
@@ -61,7 +61,7 @@ type TracksProps = {
     onChange?: (track: Track) => Promise<void>;
 };
 
-export const Tracks: React.VFC<TracksProps> = ({
+export const Tracks: React.FC<TracksProps> = ({
     extendedTracks: { tracks, trackDiffs, trackRates, categories },
     onDelete,
     onChange,

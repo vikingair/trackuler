@@ -4,7 +4,7 @@ export type SelectOption<T> = { label: string; value: T };
 
 type OptionProps = { label: string; value: number };
 
-const Option: React.VFC<OptionProps> = ({ value, label }) => <option value={value}>{label}</option>;
+const Option: React.FC<OptionProps> = ({ value, label }) => <option value={value}>{label}</option>;
 
 type SelectProps<T> = {
     name: string;
@@ -13,7 +13,7 @@ type SelectProps<T> = {
     options: SelectOption<T>[];
 };
 
-export const Select = <T extends any>({ value, onChange, options, name }: SelectProps<T>) => {
+export const Select = <T,>({ value, onChange, options, name }: SelectProps<T>): React.ReactElement => {
     const onChangeWrapped = useCallback(
         (e: React.ChangeEvent<HTMLSelectElement>) => {
             onChange(options[e.target.value as any]?.value);

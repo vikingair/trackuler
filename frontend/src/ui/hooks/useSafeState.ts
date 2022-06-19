@@ -14,7 +14,7 @@ export const useSafeState = <S>(initialState: S | (() => S)): [S, Dispatch<SetSt
         };
     }, []);
 
-    const safeSet = useCallback((arg) => {
+    const safeSet = useCallback<typeof set>((arg) => {
         if (mounted.current) set(arg);
     }, []);
 

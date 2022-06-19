@@ -1,3 +1,6 @@
+[![GitHub license][license-image]][license-url]
+[![GitHub Build][build-image]][build-url]
+
 # Trackuler <img src="https://github.com/fdc-viktor-luft/trackuler/blob/main/frontend/public/favicon.svg" height="25" width="25" />
 Track your schedule. See it in action and use yourself [here](https://fdc-viktor-luft.github.io/trackuler/).
 
@@ -20,3 +23,8 @@ Trackuler is still WIP, and the following things are planned:
 - Configuration of workday amount (default and per day)
 - Time summaries per groups
 - Timeline visualisations with graphs based on configured groups
+
+[license-image]: https://img.shields.io/badge/license-MIT-blue.svg
+[license-url]: https://github.com/fdc-viktor-luft/trackuler/blob/master/LICENSE
+[build-image]: https://github.com/fdc-viktor-luft/trackuler/actions/workflows/build.yml/badge.svg
+[build-url]: https://github.com/fdc-viktor-luft/trackuler/actions/workflows/build.yml

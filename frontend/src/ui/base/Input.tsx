@@ -15,7 +15,7 @@ type InputProps = InputType &
         onChange: (v: string) => void;
     };
 
-export const Input: React.VFC<InputProps> = ({ onChange, onBlur, ...rest }) => {
+export const Input: React.FC<InputProps> = ({ onChange, onBlur, ...rest }) => {
     const _onChange = useCallback(
         (event: React.ChangeEvent<HTMLInputElement>) => onChange(event.target.value),
         [onChange]
@@ -31,7 +31,7 @@ type FormInputProps = CommonInputProps & {
     Field: iField<string>;
 };
 
-export const FormInput: React.VFC<FormInputProps> = ({ Field, ...rest }) => (
+export const FormInput: React.FC<FormInputProps> = ({ Field, ...rest }) => (
     <Field>{({ onChange, value }) => <Input {...{ onChange, value }} {...rest} />}</Field>
 );
 
@@ -51,7 +51,7 @@ type TimeInputProps = CommonTimeInputProps & {
     onChange: (v: Date) => void;
 };
 
-export const TimeInput: React.VFC<TimeInputProps> = ({ value, onChange, onBlur, ...rest }) => {
+export const TimeInput: React.FC<TimeInputProps> = ({ value, onChange, onBlur, ...rest }) => {
     const _onChange = useCallback((v: string) => onChange(getUpdatedTime(v, value)), [onChange, value]);
     const _onBlur = useMemo(
         () => (onBlur ? (v: string) => onBlur(getUpdatedTime(v, value)) : undefined),
@@ -73,6 +73,6 @@ type FormTimeInputProps = CommonTimeInputProps & {
     Field: iField<Date>;
 };
 
-export const FormTimeInput: React.VFC<FormTimeInputProps> = ({ Field, ...rest }) => (
+export const FormTimeInput: React.FC<FormTimeInputProps> = ({ Field, ...rest }) => (
     <Field>{({ onChange, value }) => <TimeInput {...{ onChange, value }} {...rest} />}</Field>
 );

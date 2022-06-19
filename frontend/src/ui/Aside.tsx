@@ -5,7 +5,7 @@ import { Tracks, useTracks } from './Tracks';
 
 type AsideItemProps = { tracks: Track[] };
 
-const AsideItem: React.VFC<AsideItemProps> = ({ tracks }) => {
+const AsideItem: React.FC<AsideItemProps> = ({ tracks }) => {
     const extendedTracks = useTracks(tracks);
     const { totalTimeMs } = extendedTracks;
 
@@ -26,7 +26,7 @@ const AsideItem: React.VFC<AsideItemProps> = ({ tracks }) => {
     );
 };
 
-export const Aside: React.VFC = () => {
+export const Aside: React.FC = () => {
     const [tracksList, setTracksList] = useState<Track[][]>([]);
 
     useEffect(() => {

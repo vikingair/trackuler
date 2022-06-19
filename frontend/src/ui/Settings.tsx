@@ -13,7 +13,7 @@ const STORAGE_OPTIONS: SelectOption<TrackServiceType>[] = [
 
 export type SettingsProps = { open: boolean; onClose: () => void };
 
-export const Settings: React.VFC<SettingsProps> = ({ open, onClose }) => {
+export const Settings: React.FC<SettingsProps> = ({ open, onClose }) => {
     const { trackType, language, needsWorkdirAccess, categoryConfig } = useSub(
         ({ trackType, language, workdirAccessGranted, categoryConfig }) => ({
             trackType: trackType || TrackServiceType.LOCAL,

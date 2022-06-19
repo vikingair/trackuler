@@ -40,13 +40,19 @@ const getWorkdir = async (): Promise<FileSystemDirectoryHandle | undefined> => {
     }
     return state[WORKDIR];
 };
-const setWorkdir = (handle: FileSystemDirectoryHandle) => {
+const forceGetWorkdir = async (): Promise<FileSystemDirectoryHandle> => {
+    const workdir = await getWorkdir();
+    if (!workdir) throw new Error('Could not get expected workdir!');
+    return workdir;
+};
+
+const setWorkdir = (handle: FileSystemDirectoryHandle): Promise<void> => {
     state[WORKDIR] = handle;
     return set(WORKDIR, handle);
 };
-const removeWorkdir = () => {
+const removeWorkdir = (): Promise<void> => {
     state[WORKDIR] = undefined;
     return del(WORKDIR);
 };
 
-export const IDBService = { getWorkdir, setWorkdir, removeWorkdir };
+export const IDBService = { forceGetWorkdir, getWorkdir, setWorkdir, removeWorkdir };
