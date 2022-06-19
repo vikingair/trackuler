@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/trackuler/static/css/main.a7fee461.chunk.css",
-    "main.js": "/trackuler/static/js/main.7ae5631a.chunk.js",
-    "runtime-main.js": "/trackuler/static/js/runtime-main.bf725a55.js",
-    "static/js/2.e5e2063f.chunk.js": "/trackuler/static/js/2.e5e2063f.chunk.js",
+    "main.js": "/trackuler/static/js/main.35abf8fb.chunk.js",
+    "runtime-main.js": "/trackuler/static/js/runtime-main.b7c36cb4.js",
+    "static/js/2.4bcaa074.chunk.js": "/trackuler/static/js/2.4bcaa074.chunk.js",
     "index.html": "/trackuler/index.html",
-    "static/js/2.e5e2063f.chunk.js.LICENSE.txt": "/trackuler/static/js/2.e5e2063f.chunk.js.LICENSE.txt",
+    "static/js/2.4bcaa074.chunk.js.LICENSE.txt": "/trackuler/static/js/2.4bcaa074.chunk.js.LICENSE.txt",
     "static/media/index.scss": "/trackuler/static/media/bg.db23ea1f.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.bf725a55.js",
-    "static/js/2.e5e2063f.chunk.js",
+    "static/js/runtime-main.b7c36cb4.js",
+    "static/js/2.4bcaa074.chunk.js",
     "static/css/main.a7fee461.chunk.css",
-    "static/js/main.7ae5631a.chunk.js"
+    "static/js/main.35abf8fb.chunk.js"
   ]
 }
