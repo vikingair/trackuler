@@ -1,0 +1,40 @@
+.tabs {
+  position: relative;
+  overflow: auto hidden;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+
+  > nav {
+    display: flex;
+    z-index: 1;
+
+    > button {
+      text-transform: uppercase;
+      background-color: transparent;
+      color: var(--color-text);
+      border: none;
+      box-shadow: none;
+      cursor: pointer;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 1em 2em;
+      scroll-snap-align: start;
+      display: inline-flex;
+      align-items: center;
+      white-space: nowrap;
+    }
+  }
+
+  .snap-indicator {
+    position: absolute;
+    border-radius: 4px;
+    background-color: var(--color-bg-4);
+    opacity: 0.2;
+    left: var(--left);
+    width: var(--width);
+    bottom: 0.25em;
+    height: 2.25em;
+    transition: left 200ms ease-out, width 200ms ease-out;
+  }
+}

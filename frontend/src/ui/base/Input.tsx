@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { iField } from 'morfi';
 
-type InputType = { type?: 'text' | 'color' } | { type: 'time'; step: number };
+type InputType = { type?: 'text' | 'color' | 'date' } | { type: 'time'; step: number };
 
 type CommonInputProps = {
     onBlur?: (v: string) => void;
@@ -34,6 +34,25 @@ type FormInputProps = CommonInputProps & {
 export const FormInput: React.FC<FormInputProps> = ({ Field, ...rest }) => (
     <Field>{({ onChange, value }) => <Input {...{ onChange, value }} {...rest} />}</Field>
 );
+
+type DateInputProps = CommonTimeInputProps & {
+    value: Date;
+    onChange: (v: Date) => void;
+};
+
+export const DateInput: React.FC<DateInputProps> = ({ value, onChange, onBlur, ...rest }) => {
+    const _onChange = useCallback((v: string) => onChange(new Date(v)), [onChange]);
+    const _onBlur = useMemo(() => (onBlur ? (v: string) => onBlur(new Date(v)) : undefined), [onBlur]);
+    return (
+        <Input
+            value={value.toISOString().substring(0, 10)}
+            onChange={_onChange}
+            onBlur={_onBlur}
+            type={'date'}
+            {...rest}
+        />
+    );
+};
 
 type CommonTimeInputProps = {
     name: string;

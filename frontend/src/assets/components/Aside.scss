@@ -5,7 +5,7 @@ aside {
   }
 
   details {
-    background-color: $colorBg-4;
+    background-color: var(--color-bg-4);
     border-radius: 0.5em;
 
     .tracks {
@@ -18,7 +18,7 @@ aside {
       position: relative;
       padding: 0.5em;
       margin: 0.5em 0;
-      background-color: $colorBg-3;
+      background-color: var(--color-bg-3);
       border-radius: 0.5em;
 
       .summary-title {
@@ -31,7 +31,13 @@ aside {
       }
 
       .summary-subtitle {
-        color: $colorText-3;
+        display: flex;
+        gap: 1em;
+        color: var(--color-text-3);
+
+        svg {
+          width: 1.25em;
+        }
       }
     }
   }

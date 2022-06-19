@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import { IconTimes } from '../icons/icon';
 import { Select, SelectOption } from './base/Select';
 import { TrackService } from '../services/TrackService';
 import { TrackServiceType } from '../services/Types';
@@ -11,9 +10,7 @@ const STORAGE_OPTIONS: SelectOption<TrackServiceType>[] = [
     { label: 'File System Workdir', value: TrackServiceType.FILE_SYSTEM },
 ];
 
-export type SettingsProps = { open: boolean; onClose: () => void };
-
-export const Settings: React.FC<SettingsProps> = ({ open, onClose }) => {
+export const Settings: React.FC = () => {
     const { trackType, language, needsWorkdirAccess, categoryConfig } = useSub(
         ({ trackType, language, workdirAccessGranted, categoryConfig }) => ({
             trackType: trackType || TrackServiceType.LOCAL,
@@ -24,15 +21,8 @@ export const Settings: React.FC<SettingsProps> = ({ open, onClose }) => {
     );
     const languageOptions = useMemo(() => navigator.languages.map((lang) => ({ label: lang, value: lang })), []);
     return (
-        <div className={'settings' + (open ? ' settings--open' : '')}>
+        <div className={'settings'}>
             <h2>Settings</h2>
-            <button
-                className={'settings__close icon-button'}
-                onClick={onClose}
-                title={'close settings'}
-                aria-label={'close settings'}>
-                <IconTimes />
-            </button>
             <p>
                 <strong>Storage: </strong>
                 <Select
@@ -75,7 +65,7 @@ export const Settings: React.FC<SettingsProps> = ({ open, onClose }) => {
                     <tr>
                         <th>Name</th>
                         <th>Color</th>
-                        <th>RegExp</th>
+                        <th className={'th-max-width'}>RegExp</th>
                     </tr>
                 </thead>
                 <tbody>
