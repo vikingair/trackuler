@@ -7,7 +7,9 @@ const _get = async (key: string): Promise<APITrack[]> => {
     if (current) {
         try {
             return JSON.parse(current);
-        } catch {}
+        } catch (e) {
+            // doing nothing
+        }
     }
     return [];
 };
@@ -52,10 +54,12 @@ const getConfig = async (): Promise<Config> => {
     if (current) {
         try {
             return JSON.parse(current);
-        } catch {}
+        } catch (e) {
+            // doing nothing
+        }
     }
     return {};
 };
-const setConfig = async (config: Config) => Persistore.set(CONFIG_KEY, JSON.stringify(config));
+const setConfig = async (config: Config): Promise<void> => Persistore.set(CONFIG_KEY, JSON.stringify(config));
 
 export const LocalService = { current, createOrUpdate, remove, getLatest, getConfig, setConfig };

@@ -10,14 +10,14 @@ import { DescriptionForm } from './forms/DescriptionForm';
 import { Store } from '../store';
 
 const rotateLogoImg = () => {
-    const img = document.getElementById('logo-img')!;
+    const img = document.getElementById('logo-img') as HTMLElement;
     img.classList.add('rotate');
     window.setTimeout(() => {
         img.classList.remove('rotate');
     }, 500);
 };
 
-export const Main: React.VFC = () => {
+export const Main: React.FC = () => {
     const [tracks, setTracks] = useState<Track[]>([]);
     const [started, setStarted] = useState(false);
     const [recording, setRecording] = useState(false);

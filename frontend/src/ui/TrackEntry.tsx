@@ -16,7 +16,7 @@ type TrackEntryProps = {
     onChange?: (track: Track) => Promise<void>;
 };
 
-export const TrackEntry: React.VFC<TrackEntryProps> = ({
+export const TrackEntry: React.FC<TrackEntryProps> = ({
     track: { time, description, ID },
     track,
     onDelete,

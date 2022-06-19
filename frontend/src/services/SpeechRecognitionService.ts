@@ -1,21 +1,23 @@
 import { Store } from '../store';
 
-window.SpeechRecognition = window.SpeechRecognition || (window as any).webkitSpeechRecognition;
+type SpeechRecognition = any;
 
-const state = { running: false, start: () => {}, stop: () => {} };
+(window as any).SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
 
-const startFocusListener = () => {
+const state = { running: false, start: (): void => undefined, stop: (): void => undefined };
+
+const startFocusListener = (): void => {
     state.start();
     window.addEventListener('focus', state.start);
 };
 
-const removeFocusListener = () => {
+const removeFocusListener = (): void => {
     state.stop();
     window.removeEventListener('focus', state.start);
 };
 
 const init = (): SpeechRecognition => {
-    const recognition = new SpeechRecognition();
+    const recognition = new (window as any).SpeechRecognition();
     recognition.continuous = false;
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
@@ -47,7 +49,7 @@ const init = (): SpeechRecognition => {
         state.stop();
     };
 
-    recognition.onerror = (event) => {
+    recognition.onerror = (event: { error: string }) => {
         window.console.error('Error occurred in recognition: ' + event.error);
     };
 
@@ -57,7 +59,7 @@ const init = (): SpeechRecognition => {
 const recognition = init();
 
 const onResult = (cb: (v: string) => void): void => {
-    recognition.onresult = (event) => {
+    recognition.onresult = (event: { results: { transcript: string }[][] }) => {
         cb(event.results[0][0].transcript);
     };
 };

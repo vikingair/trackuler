@@ -5,7 +5,7 @@ import { TrackService } from '../services/TrackService';
 
 export type SettingsCategoryProps = { config: CategoryConfig; ID: string };
 
-export const SettingsCategory: React.VFC<SettingsCategoryProps> = ({ ID, config: { name, regex, color }, config }) => {
+export const SettingsCategory: React.FC<SettingsCategoryProps> = ({ ID, config: { name, regex, color }, config }) => {
     const [_regex, setRegex] = useState(regex);
     useEffect(() => {
         setRegex(regex);

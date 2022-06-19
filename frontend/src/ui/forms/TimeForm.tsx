@@ -7,7 +7,7 @@ const { Fields, Form } = Morfi.create<TimeFormData>({ time: new Date() });
 
 export type TimeFormProps = { time: Date; onChange: (date: Date) => Promise<void> };
 
-export const TimeForm: React.VFC<TimeFormProps> = ({ time, onChange }) => {
+export const TimeForm: React.FC<TimeFormProps> = ({ time, onChange }) => {
     const [data, setData] = useState<FormData<TimeFormData>>({ values: { time }, errors: {} });
     const onSubmit = useCallback(({ time }: TimeFormData) => onChange(time), [onChange]);
 

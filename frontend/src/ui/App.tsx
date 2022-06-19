@@ -8,7 +8,7 @@ import { useSub } from '../store';
 import { TrackServiceType } from '../services/Types';
 import { WorkdirService } from '../services/WorkdirService';
 
-export const App: React.VFC = () => {
+export const App: React.FC = () => {
     const [open, setOpen] = useState(false);
     const onOpen = useCallback(() => setOpen(true), []);
     const onClose = useCallback(() => setOpen(false), []);
@@ -29,14 +29,7 @@ export const App: React.VFC = () => {
         <div className="App" key={currentKey}>
             <header>
                 <h1>
-                    <img
-                        id={'logo-img'}
-                        src={process.env.PUBLIC_URL + '/favicon.svg'}
-                        alt={'logo'}
-                        height={24}
-                        width={24}
-                    />{' '}
-                    Trackuler
+                    <img id={'logo-img'} src={'/favicon.svg'} alt={'logo'} height={24} width={24} /> Trackuler
                 </h1>
                 <button className={'icon-button'} onClick={onOpen} title={'settings'} aria-label={'open settings'}>
                     <IconSettings />

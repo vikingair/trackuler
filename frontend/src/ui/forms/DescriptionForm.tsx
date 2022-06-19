@@ -17,7 +17,7 @@ export type DescriptionFormProps = {
     submitOnBlur?: boolean;
 };
 
-export const DescriptionForm: React.VFC<DescriptionFormProps> = ({ description = '', onChange, submitOnBlur }) => {
+export const DescriptionForm: React.FC<DescriptionFormProps> = ({ description = '', onChange, submitOnBlur }) => {
     const initialData = useRef({ values: { description }, errors: {} });
     const [data, setData] = useSafeState<DescriptionFormData>(initialData.current);
     const onSubmit = useCallback(

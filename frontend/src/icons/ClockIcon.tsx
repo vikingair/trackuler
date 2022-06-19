@@ -17,7 +17,7 @@ const calculatePositions = (date: Date) => {
 
 export type ClockIconProps = { date: Date };
 
-export const ClockIcon: React.VFC<ClockIconProps> = ({ date }) => {
+export const ClockIcon: React.FC<ClockIconProps> = ({ date }) => {
     const { hourX, hourY, minutesX, minutesY } = useMemo(() => calculatePositions(date), [date]);
 
     return (
@@ -51,7 +51,7 @@ const calculateRatePositions = (givenRate: number) => {
 // rate should be between 0 and 1
 export type ClockAmountIconProps = { rate: number };
 
-export const ClockAmountIcon: React.VFC<ClockAmountIconProps> = ({ rate }) => {
+export const ClockAmountIcon: React.FC<ClockAmountIconProps> = ({ rate }) => {
     const { x1, y1, x2, y2, colorBg, colorRate } = useMemo(() => calculateRatePositions(rate), [rate]);
 
     return (

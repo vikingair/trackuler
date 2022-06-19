@@ -9,7 +9,7 @@ export type ChangeableTrackDescriptionProps = {
     title?: string;
 };
 
-export const ChangeableTrackDescription: React.VFC<ChangeableTrackDescriptionProps> = ({
+export const ChangeableTrackDescription: React.FC<ChangeableTrackDescriptionProps> = ({
     value,
     onChange,
     color,
@@ -48,7 +48,7 @@ export type TrackDescriptionProps = {
     title?: string;
 };
 
-export const TrackDescription: React.VFC<TrackDescriptionProps> = ({ value, onChange, color, title }) =>
+export const TrackDescription: React.FC<TrackDescriptionProps> = ({ value, onChange, color, title }) =>
     onChange ? (
         <ChangeableTrackDescription value={value} onChange={onChange} color={color} title={title} />
     ) : (

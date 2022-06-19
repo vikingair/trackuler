@@ -51,7 +51,7 @@ const verifyAccess = async (): Promise<boolean> => {
     return false;
 };
 
-const init = () => verifyAccess().then((workdirAccessGranted) => Store.set({ workdirAccessGranted }));
+const init = (): Promise<void> => verifyAccess().then((workdirAccessGranted) => Store.set({ workdirAccessGranted }));
 
 const pickWorkdir = (): Promise<string | void> =>
     (window as any)
@@ -73,13 +73,13 @@ const _getTracksFromFileHandle = (fileHandle: FileSystemFileHandle): Promise<Tra
     _readJson(fileHandle).then(Utils.convertAPITracks);
 
 const _get = async (key: string): Promise<{ tracks: Track[]; fileHandle: FileSystemFileHandle }> => {
-    const handle = (await IDBService.getWorkdir())!;
+    const handle = await IDBService.forceGetWorkdir();
     try {
         const fileHandle = await handle.getFileHandle(key);
         if (fileHandle) return { fileHandle, tracks: await _getTracksFromFileHandle(fileHandle) };
     } catch (e) {
         // expected error for every new starting day
-        if (!e.message.includes('could not be found')) {
+        if (!(e as Error).message.includes('could not be found')) {
             window.console.error(e);
         }
     }
@@ -93,9 +93,9 @@ const current = (): Promise<Track[]> => _get(_getCurrentKey()).then(({ tracks })
 
 const getLatest = async (): Promise<Track[][]> => {
     const currentKey = _getCurrentKey();
-    const handle = await IDBService.getWorkdir();
+    const handle = await IDBService.forceGetWorkdir();
     const result = [];
-    for await (const entry of handle!.values()) {
+    for await (const entry of handle.values()) {
         if (entry.kind === FileSystemKind.FILE) {
             if (KEY_REGEX.test(entry.name) && entry.name !== currentKey) {
                 const tracks = await _getTracksFromFileHandle(entry);
@@ -133,13 +133,13 @@ const getWorkdir = (): Promise<undefined | string> => IDBService.getWorkdir().th
 const CONFIG_FILENAME = 'trackuler-config.json';
 
 const _getConfig = async (): Promise<{ config: Config; fileHandle: FileSystemFileHandle }> => {
-    const handle = (await IDBService.getWorkdir())!;
+    const handle = await IDBService.forceGetWorkdir();
     try {
         const fileHandle = await handle.getFileHandle(CONFIG_FILENAME);
         if (fileHandle) return { config: await _readJson(fileHandle), fileHandle };
     } catch (e) {
         // expected error for every new starting day
-        if (!e.message.includes('could not be found')) {
+        if (!(e as Error).message.includes('could not be found')) {
             window.console.error(e);
         }
     }
@@ -150,7 +150,7 @@ const _getConfig = async (): Promise<{ config: Config; fileHandle: FileSystemFil
 };
 
 const getConfig = async (): Promise<Config> => _getConfig().then(({ config }) => config);
-const setConfig = async (config: Config) => {
+const setConfig = async (config: Config): Promise<void> => {
     const { fileHandle } = await _getConfig();
     await _write(fileHandle, config);
 };
