@@ -20,17 +20,20 @@ export type DescriptionFormProps = {
 export const DescriptionForm: React.FC<DescriptionFormProps> = ({ description = '', onChange, submitOnBlur }) => {
     const initialData = useRef({ values: { description }, errors: {} });
     const [data, setData] = useSafeState<DescriptionFormData>(initialData.current);
-    const onSubmit = useCallback(
-        ({ description }: DescriptionFormValues) => onChange(description).then(() => setData(initialData.current)),
-        [onChange, setData]
-    );
+    const onSubmit = useCallback(({ description }: DescriptionFormValues) => onChange(description), [onChange]);
     const onBlur = useCallback(
         (description: string) => submitOnBlur && description && onSubmit({ description }),
         [onSubmit, submitOnBlur]
     );
+    const onSubmitFinished = useCallback(() => setData(initialData.current), [setData]);
 
     return (
-        <Form onChange={setData} data={data} onSubmit={onSubmit} validation={DescriptionValidation}>
+        <Form
+            onChange={setData}
+            data={data}
+            onSubmit={onSubmit}
+            onSubmitFinished={onSubmitFinished}
+            validation={DescriptionValidation}>
             <FormInput name={'track-description'} autoFocus onBlur={onBlur} Field={Fields.description} />
             <button style={{ display: 'none' }} />
         </Form>
