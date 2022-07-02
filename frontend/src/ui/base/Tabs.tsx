@@ -5,9 +5,10 @@ export type TabsProps<K extends string> = {
     tabs: Record<K, React.ReactNode>;
     onClick: (value: K) => void;
     current: string;
+    children: React.ReactNode;
 };
 
-export const Tabs = <K extends string>({ tabs, onClick, current }: TabsProps<K>): React.ReactElement => {
+export const Tabs = <K extends string>({ tabs, onClick, current, children }: TabsProps<K>): React.ReactElement => {
     const tabsRef = useRef<HTMLDivElement | null>(null);
     const tabOptions = useMemo(
         () => Object.entries(tabs).map(([value, node]) => ({ value: value as K, node: node as React.ReactNode })),
@@ -30,19 +31,22 @@ export const Tabs = <K extends string>({ tabs, onClick, current }: TabsProps<K>)
     }, [activeTab]);
 
     return (
-        <div className="tabs" ref={tabsRef}>
-            <span className="snap-indicator" />
-            <nav>
-                {tabOptions.map(({ node, value }) => (
-                    <button
-                        key={value}
-                        title={value}
-                        onClick={() => onClick(value)}
-                        className={Utils.classNames(current === value && 'tab-active')}>
-                        {node}
-                    </button>
-                ))}
-            </nav>
-        </div>
+        <>
+            <div className="tabs" ref={tabsRef}>
+                <span className="snap-indicator" />
+                <nav>
+                    {tabOptions.map(({ node, value }) => (
+                        <button
+                            key={value}
+                            title={value}
+                            onClick={() => onClick(value)}
+                            className={Utils.classNames(current === value && 'tab-active')}>
+                            {node}
+                        </button>
+                    ))}
+                </nav>
+            </div>
+            <div className="tabs__content">{children}</div>
+        </>
     );
 };

@@ -5,7 +5,7 @@ import {
     FileSystemKind,
     IDBService,
 } from './IDBService';
-import { Config, Track } from './Types';
+import { Config, Todo, Track, TrackInterface } from './Types';
 import { Utils } from './utils';
 import { Store } from '../store';
 
@@ -155,15 +155,64 @@ const setConfig = async (config: Config): Promise<void> => {
     await _write(fileHandle, config);
 };
 
-export const WorkdirService = {
+const TODOS_FILENAME = 'trackuler-todos.json';
+
+const _getTodos = async (): Promise<{ todos: Todo[]; fileHandle: FileSystemFileHandle }> => {
+    const handle = await IDBService.forceGetWorkdir();
+    try {
+        const fileHandle = await handle.getFileHandle(TODOS_FILENAME);
+        if (fileHandle) return { todos: (await _readJson(fileHandle)).map(Utils.convertAPITodo), fileHandle };
+    } catch (e) {
+        // expected error for every new starting day
+        if (!(e as Error).message.includes('could not be found')) {
+            window.console.error(e);
+        }
+    }
+    const fileHandle = await handle.getFileHandle(TODOS_FILENAME, { create: true });
+    const newTodos: Todo[] = [];
+    await _write(fileHandle, newTodos);
+    return { todos: newTodos, fileHandle };
+};
+
+const getTodos = async (): Promise<Todo[]> => _getTodos().then(({ todos }) => todos);
+
+const createOrUpdateTodo = async (todo: Todo): Promise<Todo[]> => {
+    const { todos, fileHandle } = await _getTodos();
+    let isCreate = true;
+    const nextTodos = todos.map((t) => {
+        if (t.ID !== todo.ID) return t;
+        isCreate = false;
+        return todo;
+    });
+    isCreate && nextTodos.unshift(todo);
+    await _write(fileHandle, nextTodos);
+    return nextTodos;
+};
+
+const removeTodo = async (todo: Todo): Promise<Todo[]> => {
+    const { todos, fileHandle } = await _getTodos();
+    const nextTodos = todos.filter((t) => t.ID !== todo.ID);
+    await _write(fileHandle, nextTodos);
+    return nextTodos;
+};
+
+export const WorkdirService: TrackInterface & {
+    init: typeof init;
+    getWorkdir: typeof getWorkdir;
+    pickWorkdir: typeof pickWorkdir;
+    unlinkWorkdir: typeof unlinkWorkdir;
+} = {
     init,
     getWorkdir,
+    pickWorkdir,
+    unlinkWorkdir,
     current,
     createOrUpdate,
     remove,
     getLatest,
-    pickWorkdir,
-    unlinkWorkdir,
     getConfig,
     setConfig,
+    getTodos,
+    createOrUpdateTodo,
+    removeTodo,
 };

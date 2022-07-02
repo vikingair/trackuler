@@ -1,6 +1,6 @@
 import { CategoryConfigs } from './Types';
 
-export type Category = { ID: string; name: string; color: string };
+export type Category = { ID: string; name: string; color?: string };
 
 const getWithColor = (categoryConfig: CategoryConfigs, description: string): Category => {
     for (const [ID, { name, regex, color }] of Object.entries(categoryConfig)) {
@@ -8,7 +8,7 @@ const getWithColor = (categoryConfig: CategoryConfigs, description: string): Cat
             return { ID, name, color };
         }
     }
-    return { ID: '', name: '', color: 'unset' };
+    return { ID: '', name: '' };
 };
 
 export const CategoryService = { getWithColor };

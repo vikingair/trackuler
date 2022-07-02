@@ -16,10 +16,10 @@ const HistoryItem: React.FC<HistoryItemProps> = ({ tracks }) => {
     return (
         <details>
             <summary>
-                <span className={'summary-title'}>
+                <span className={'history-item-title'}>
                     <span>{tracks[0].time.toLocaleDateString()}</span>
                     {totalTimeMs && (
-                        <span className={'summary-subtitle'}>
+                        <span className={'history-item-subtitle'}>
                             Total: {TrackService.toReadableTimeDiff(totalTimeMs)}
                             {lastRate && <ClockAmountIcon rate={lastRate} />}
                         </span>
@@ -58,11 +58,13 @@ export const History: React.FC<HistoryProps> = ({ tracksList }) => {
                 </label>
             </div>
 
-            {tracksList
-                .filter(([track]) => track.time >= fromDate && track.time <= toDate)
-                .map((tracks, i) => (
-                    <HistoryItem key={i} tracks={tracks} />
-                ))}
+            <div className={'history__list'}>
+                {tracksList
+                    .filter(([track]) => track.time >= fromDate && track.time <= toDate)
+                    .map((tracks, i) => (
+                        <HistoryItem key={i} tracks={tracks} />
+                    ))}
+            </div>
         </div>
     );
 };

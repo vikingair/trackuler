@@ -25,7 +25,7 @@ main {
     }
 
     &--start button {
-      background-color: var(--color-start-recording);
+      background-color: var(--color-success);
     }
 
     &--recording button::after {
@@ -79,6 +79,6 @@ main {
 
   button {
     font-size: 2em;
-    background-color: var(--color-open-workdir);
+    background-color: var(--color-info);
   }
 }

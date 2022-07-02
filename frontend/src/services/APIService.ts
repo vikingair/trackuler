@@ -1,4 +1,4 @@
-import { Config, Track } from './Types';
+import { Config, Todo, Track, TrackInterface } from './Types';
 import { Utils } from './utils';
 
 const getLatest = (): Promise<Track[][]> =>
@@ -7,13 +7,13 @@ const getLatest = (): Promise<Track[][]> =>
 const current = (): Promise<Track[]> =>
     fetch('/api/tracks').then((r) => (r.ok ? r.json().then(Utils.convertAPITracks) : []));
 
-const createOrUpdate = ({ ID, description, time }: Track): Promise<void> =>
+const createOrUpdate = (track: Track): Promise<void> =>
     fetch('/api/track', {
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ID, description, time: time.toISOString() }),
+        body: JSON.stringify(Utils.convertTrack(track)),
     }).then((r) => {
-        if (!r.ok) throw new Error('Creation failed');
+        if (!r.ok) throw new Error('Create or update track failed');
     });
 
 const remove = (ID: string): Promise<void> =>
@@ -35,4 +35,43 @@ const setConfig = (config: Config): Promise<void> =>
         if (!r.ok) throw new Error('Creation failed');
     });
 
-export const APIService = { current, createOrUpdate, remove, getLatest, getConfig, setConfig };
+const createOrUpdateTodo = (todo: Todo): Promise<Todo[]> =>
+    fetch('/api/todo', {
+        method: 'post',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(Utils.convertTodo(todo)),
+    })
+        .then((r) => {
+            if (!r.ok) throw new Error('Create or update todo failed');
+            return r.json();
+        })
+        .then((todos) => todos.map(Utils.convertAPITodo));
+
+const removeTodo = (todo: Todo): Promise<Todo[]> =>
+    fetch('/api/todo', {
+        method: 'post',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(Utils.convertTodo(todo)),
+    })
+        .then((r) => {
+            if (!r.ok) throw new Error('Create or update todo failed');
+            return r.json();
+        })
+        .then((todos) => todos.map(Utils.convertAPITodo));
+
+const getTodos = (): Promise<Todo[]> =>
+    fetch('/api/todos')
+        .then((r) => (r.ok ? r.json() : []))
+        .then((tt) => tt.map(Utils.convertAPITodo));
+
+export const APIService: TrackInterface = {
+    current,
+    createOrUpdate,
+    remove,
+    getLatest,
+    getConfig,
+    setConfig,
+    createOrUpdateTodo,
+    removeTodo,
+    getTodos,
+};

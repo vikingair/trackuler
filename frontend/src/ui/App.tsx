@@ -1,7 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { IconFolderOpen, IconSettings } from '../icons/icon';
+import React, { useEffect } from 'react';
+import { IconFolderOpen } from '../icons/icon';
 import { Main } from './Main';
-import { Settings } from './Settings';
 import { Aside } from './Aside';
 import { TrackService } from '../services/TrackService';
 import { useSub } from '../store';

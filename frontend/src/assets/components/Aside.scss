@@ -1,12 +1,12 @@
 aside {
   @media screen and (min-width: 1000px) {
-    overflow: auto;
-    height: 100%;
+    overflow: hidden;
   }
 
   details {
     background-color: var(--color-bg-4);
     border-radius: 0.5em;
+    position: relative;
 
     .tracks {
       padding: 0.5em;
@@ -15,30 +15,9 @@ aside {
 
     summary {
       cursor: pointer;
-      position: relative;
       padding: 0.5em;
-      margin: 0.5em 0;
       background-color: var(--color-bg-3);
       border-radius: 0.5em;
-
-      .summary-title {
-        position: absolute;
-        width: calc(100% - 3em);
-        top: 0.5em;
-        left: 1.5em;
-        display: flex;
-        justify-content: space-between;
-      }
-
-      .summary-subtitle {
-        display: flex;
-        gap: 1em;
-        color: var(--color-text-3);
-
-        svg {
-          width: 1.25em;
-        }
-      }
     }
   }
 }
