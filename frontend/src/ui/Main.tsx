@@ -6,7 +6,7 @@ import { SpeechRecognitionService } from '../services/SpeechRecognitionService';
 import { Tracks, useTracks } from './Tracks';
 import { CategoryService } from '../services/CategoryService';
 import { IconMicrophone, IconMicrophoneSlash, IconPlus } from '../icons/icon';
-import { DescriptionForm } from './forms/DescriptionForm';
+import { SingleInputForm } from './forms/SingleInputForm';
 import { Store } from '../store';
 
 const rotateLogoImg = () => {
@@ -106,7 +106,7 @@ export const Main: React.FC = () => {
             <Tracks extendedTracks={extendedTracks} onDelete={onDelete} onChange={onChange} />
             <div className="add-track">
                 <IconPlus />
-                <DescriptionForm onChange={addNewContent} />
+                <SingleInputForm onChange={addNewContent} inputName={'track-description'} />
             </div>
             {started ? (
                 <div className={Utils.classNames('microphone microphone--stop', recording && 'microphone--recording')}>

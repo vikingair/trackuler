@@ -83,6 +83,13 @@ input, button, select {
   //filter: invert(1);
 }
 
-input {
+input, textarea {
   color-scheme: dark;
+}
+
+textarea {
+  --_height: 5em;
+  width: 100%;
+  resize: none;
+  height: var(--_height);
 }

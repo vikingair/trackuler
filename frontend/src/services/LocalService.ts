@@ -1,4 +1,4 @@
-import { APITrack, Config, Track } from './Types';
+import { APITrack, Config, Todo, Track, TrackInterface } from './Types';
 import { Utils } from './utils';
 import { Persistore } from 'persistore';
 
@@ -62,4 +62,48 @@ const getConfig = async (): Promise<Config> => {
 };
 const setConfig = async (config: Config): Promise<void> => Persistore.set(CONFIG_KEY, JSON.stringify(config));
 
-export const LocalService = { current, createOrUpdate, remove, getLatest, getConfig, setConfig };
+const TODOS_KEY = 'trackuler-todos';
+
+const getTodos = async (): Promise<Todo[]> => {
+    const current = Persistore.get(TODOS_KEY);
+    if (current) {
+        try {
+            return JSON.parse(current).map(Utils.convertAPITodo);
+        } catch (e) {
+            // doing nothing
+        }
+    }
+    return [];
+};
+
+const createOrUpdateTodo = async (todo: Todo): Promise<Todo[]> => {
+    const todos = await getTodos();
+    let isCreate = true;
+    const nextTodos = todos.map((t) => {
+        if (t.ID !== todo.ID) return t;
+        isCreate = false;
+        return todo;
+    });
+    isCreate && nextTodos.unshift(todo);
+    Persistore.set(TODOS_KEY, JSON.stringify(nextTodos));
+    return nextTodos;
+};
+
+const removeTodo = async (todo: Todo): Promise<Todo[]> => {
+    const todos = await getTodos();
+    const nextTodos = todos.filter((t) => t.ID !== todo.ID);
+    Persistore.set(TODOS_KEY, JSON.stringify(nextTodos));
+    return nextTodos;
+};
+
+export const LocalService: TrackInterface = {
+    current,
+    createOrUpdate,
+    remove,
+    getLatest,
+    getConfig,
+    setConfig,
+    getTodos,
+    createOrUpdateTodo,
+    removeTodo,
+};

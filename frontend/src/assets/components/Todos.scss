@@ -1,0 +1,55 @@
+.todos {
+  .add-todo {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    margin-bottom: 1em;
+
+    form, input {
+      width: 100%;
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+  }
+
+  .todo {
+    &__summary {
+      display: inline-flex;
+      width: calc(100% - 1em);
+      justify-content: space-between;
+    }
+
+    &__sub-summary {
+      display: inline-flex;
+      width: 100%;
+      margin-right: 0.5em;
+      justify-content: space-between;
+    }
+
+    &__content {
+      padding: 1em;
+    }
+
+    &__description {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    &__resolved {
+      margin: 0 0 0.5em 0;
+      padding: 0.5em;
+      background-color: var(--color-success);
+      color: var(--color-bg);
+      border-radius: 0.5em;
+    }
+  }
+
+  button.delete {
+    background-color: var(--color-warn);
+    margin-right: 0.5em;
+  }
+}

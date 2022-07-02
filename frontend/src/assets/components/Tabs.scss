@@ -4,6 +4,7 @@
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
+  box-shadow: 0 6px 4px -4px var(--color-bg-4);
 
   > nav {
     display: flex;
@@ -36,5 +37,14 @@
     bottom: 0.25em;
     height: 2.25em;
     transition: left 200ms ease-out, width 200ms ease-out;
+  }
+
+  &__content {
+    padding: 1em 0;
+
+    @media screen and (min-width: 1000px) {
+      height: calc(100% - 2em);
+      overflow: auto;
+    }
   }
 }

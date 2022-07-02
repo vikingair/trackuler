@@ -6,14 +6,17 @@ import { IconSettings } from '../icons/icon';
 import { Persistore } from 'persistore';
 import { Settings } from './Settings';
 import { History } from './History';
+import { Todos } from './Todos';
 
 enum TabOption {
     HISTORY = 'history',
+    TODOS = 'todos',
     SETTINGS = 'settings',
 }
 
 const TABS: Record<TabOption, React.ReactNode> = {
     [TabOption.HISTORY]: 'History',
+    [TabOption.TODOS]: 'Todos',
     [TabOption.SETTINGS]: <IconSettings className={'big'} />,
 };
 
@@ -41,9 +44,11 @@ export const Aside: React.FC = () => {
 
     return (
         <aside>
-            <Tabs tabs={TABS} onClick={onClickTab} current={activeTab} />
-            {activeTab === TabOption.HISTORY && <History tracksList={tracksList} />}
-            {activeTab === TabOption.SETTINGS && <Settings />}
+            <Tabs tabs={TABS} onClick={onClickTab} current={activeTab}>
+                {activeTab === TabOption.HISTORY && <History tracksList={tracksList} />}
+                {activeTab === TabOption.TODOS && <Todos />}
+                {activeTab === TabOption.SETTINGS && <Settings />}
+            </Tabs>
         </aside>
     );
 };
