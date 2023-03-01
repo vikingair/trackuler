@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Todo } from '../services/Types';
 import { TrackService } from '../services/TrackService';
 import { IconDelete, IconPlus } from '../icons/icon';
@@ -79,17 +79,41 @@ export const Todos: React.FC = () => {
             });
     }, []);
 
+    const [openTodos, resolvedTodos] = useMemo<[Todo[], Todo[]]>(
+        () =>
+            todos.reduce(
+                (red, todo) => {
+                    if (todo.resolvedAt) {
+                        red[1].push(todo);
+                    } else {
+                        red[0].push(todo);
+                    }
+                    return red;
+                },
+                [[], []] as [Todo[], Todo[]]
+            ),
+        [todos]
+    );
+
     return (
-        <div className={'todos'}>
+        <div className="todos">
             <div className="add-todo">
                 <IconPlus />
                 <SingleInputForm onChange={add} inputName={'toto-title'} />
             </div>
             <div className="todos__list">
-                {todos.map((todo) => (
+                {openTodos.map((todo) => (
                     <TodoItem todo={todo} key={todo.ID} onChange={createOrUpdateTodo} onRemove={removeTodo} />
                 ))}
             </div>
+            <details>
+                <summary>Resolved ✔</summary>
+                <div className="todos__list">
+                    {resolvedTodos.map((todo) => (
+                        <TodoItem todo={todo} key={todo.ID} onChange={createOrUpdateTodo} onRemove={removeTodo} />
+                    ))}
+                </div>
+            </details>
         </div>
     );
 };
