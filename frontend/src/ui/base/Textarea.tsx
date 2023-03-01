@@ -27,7 +27,7 @@ export const Textarea: React.FC<TextareaProps> = ({ onChange, onBlur, ...rest })
     useEffect(() => {
         const textarea = ref.current;
         if (!textarea) return;
-        textarea.style.setProperty('--_height', textarea.scrollHeight + 'px');
+        textarea.style.setProperty('--_height', textarea.scrollHeight + 2 + 'px');
     }, [rest.value]);
 
     return <textarea ref={ref} onChange={_onChange} onBlur={_onBlur} {...rest} />;

@@ -10,6 +10,14 @@
     }
   }
 
+  > details {
+    margin-top: 2em;
+
+    summary {
+      color: var(--color-success);
+    }
+  }
+
   &__list {
     display: flex;
     flex-direction: column;
@@ -21,6 +29,21 @@
       display: inline-flex;
       width: calc(100% - 1em);
       justify-content: space-between;
+
+      em span:not(:last-child) {
+        padding: 0.25em;
+        border-radius: 0.25em;
+        margin-right: 0.25em;
+        background-color: rgba(var(--color-info-rgb), 0.5);
+      }
+
+      form {
+        width: 100%;
+
+        input {
+          width: 100%;
+        }
+      }
     }
 
     &__sub-summary {
