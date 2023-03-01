@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { SingleInputForm } from './SingleInputForm';
 import { IconEdit } from '../../icons/icon';
+import { TrackDescriptionText } from '../TrackDescriptionText';
 
 export type EditableInputProps = {
     value: string;
@@ -31,7 +32,7 @@ export const EditableInput: React.FC<EditableInputProps> = ({
                 <SingleInputForm value={value} onChange={_onChange} submitOnBlur inputName={inputName} />
             ) : (
                 <>
-                    <em>{value}</em>
+                    <TrackDescriptionText value={value} />
                     <button
                         onClick={onEdit}
                         className={'icon-button'}

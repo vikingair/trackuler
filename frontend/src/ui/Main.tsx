@@ -8,6 +8,11 @@ import { CategoryService } from '../services/CategoryService';
 import { IconMicrophone, IconMicrophoneSlash, IconPlus } from '../icons/icon';
 import { SingleInputForm } from './forms/SingleInputForm';
 import { Store } from '../store';
+import { Bookings } from './Bookings';
+
+type TrackDescriptionUnit = { timeDiffMs: number; description: string };
+type TrackDescriptionTag = { timeDiffMs: number; description: string; tracks?: TrackDescriptionTags };
+type TrackDescriptionTags = Array<TrackDescriptionTag | TrackDescriptionUnit>;
 
 const rotateLogoImg = () => {
     const img = document.getElementById('logo-img') as HTMLElement;
@@ -58,7 +63,8 @@ export const Main: React.FC = () => {
                     rotateLogoImg();
                     setTracks((c) => c.concat(next));
                     setRecording(false);
-                    if (CategoryService.getWithColor(Store.get().categoryConfig, description).ID === 'end') onStop();
+                    if (CategoryService.isEnd(CategoryService.getWithColor(Store.get().categoryConfig, description)))
+                        onStop();
                 });
         },
         [onStop]
@@ -94,6 +100,8 @@ export const Main: React.FC = () => {
 
     const extendedTracks = useTracks(tracks);
     const { totalTimeMs } = extendedTracks;
+    const lastCategory = extendedTracks.categories.at(-1);
+    const hasEnded = !!lastCategory && CategoryService.isEnd(lastCategory);
 
     return (
         <main>
@@ -104,33 +112,42 @@ export const Main: React.FC = () => {
                 )}
             </h2>
             <Tracks extendedTracks={extendedTracks} onDelete={onDelete} onChange={onChange} />
-            <div className="add-track">
-                <IconPlus />
-                <SingleInputForm onChange={addNewContent} inputName={'track-description'} />
-            </div>
-            {started ? (
-                <div className={Utils.classNames('microphone microphone--stop', recording && 'microphone--recording')}>
-                    <p>Stop automatically starting recordings.</p>
-                    <button
-                        className={'icon-button'}
-                        onClick={onStop}
-                        title={'stop recording'}
-                        aria-label={'stop recording'}>
-                        <IconMicrophoneSlash />
-                    </button>
-                </div>
-            ) : (
-                <div className="microphone microphone--start">
-                    <p>{tracks.length ? 'Continue' : 'Start a new'} session by clicking on the Microphone.</p>
-                    <button
-                        className={'icon-button'}
-                        onClick={onStart}
-                        title={'start recording'}
-                        aria-label={'start recording'}>
-                        <IconMicrophone />
-                    </button>
-                </div>
+            {hasEnded || (
+                <>
+                    <div className="add-track">
+                        <IconPlus />
+                        <SingleInputForm onChange={addNewContent} inputName={'track-description'} />
+                    </div>
+                    {started ? (
+                        <div
+                            className={Utils.classNames(
+                                'microphone microphone--stop',
+                                recording && 'microphone--recording'
+                            )}>
+                            <p>Stop automatically starting recordings.</p>
+                            <button
+                                className={'icon-button'}
+                                onClick={onStop}
+                                title={'stop recording'}
+                                aria-label={'stop recording'}>
+                                <IconMicrophoneSlash />
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="microphone microphone--start">
+                            <p>{tracks.length ? 'Continue' : 'Start a new'} session by clicking on the Microphone.</p>
+                            <button
+                                className={'icon-button'}
+                                onClick={onStart}
+                                title={'start recording'}
+                                aria-label={'start recording'}>
+                                <IconMicrophone />
+                            </button>
+                        </div>
+                    )}
+                </>
             )}
+            {hasEnded && <Bookings extendedTracks={extendedTracks} />}
         </main>
     );
 };

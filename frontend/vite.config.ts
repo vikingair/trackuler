@@ -1,3 +1,5 @@
+/// <reference types="vitest" />
+
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
@@ -12,5 +14,8 @@ export default defineConfig({
         outDir: 'build',
         sourcemap: true, // build "*.map" files for JS sources
         manifest: false, // create a manifest.json for further processing of generated assets
+    },
+    test: {
+        environment: 'jsdom',
     },
 });

@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { IconSearch, IconSpinner } from './icon';
 
 describe('Icon', () => {

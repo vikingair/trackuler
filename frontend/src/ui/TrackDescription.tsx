@@ -1,5 +1,6 @@
 import React from 'react';
 import { EditableInput } from './forms/EditableInput';
+import { TrackDescriptionText } from './TrackDescriptionText';
 
 export type TrackDescriptionProps = {
     value: string;
@@ -20,6 +21,6 @@ export const TrackDescription: React.FC<TrackDescriptionProps> = ({ value, onCha
         />
     ) : (
         <div className={'track__description'} style={{ backgroundColor: color }} title={title}>
-            <em>{value}</em>
+            <TrackDescriptionText value={value} />
         </div>
     );

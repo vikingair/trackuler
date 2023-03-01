@@ -5,6 +5,7 @@ import { TrackService } from '../services/TrackService';
 import { ClockAmountIcon } from '../icons/ClockIcon';
 import { DateInput } from './base/Input';
 import { useSub } from '../store';
+import { Bookings } from './Bookings';
 
 type HistoryItemProps = { tracks: Track[] };
 
@@ -27,6 +28,7 @@ const HistoryItem: React.FC<HistoryItemProps> = ({ tracks }) => {
                 </span>
             </summary>
             <Tracks extendedTracks={extendedTracks} />
+            <Bookings extendedTracks={extendedTracks} />
         </details>
     );
 };

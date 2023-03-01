@@ -1,11 +1,10 @@
 import React, { useCallback, useRef } from 'react';
 import { FormInput } from '../base/Input';
-import { FormData, Morfi } from 'morfi';
+import { Morfi, MorfiData } from 'morfi';
 import { useSafeState } from '../hooks/useSafeState';
 
 type SingleInputFormValues = { value: string };
-type SingleInputFormData = FormData<SingleInputFormValues>;
-const { Fields, Form } = Morfi.create<SingleInputFormValues>({ value: '' });
+type SingleInputFormData = MorfiData<SingleInputFormValues>;
 
 const VALIDATION = {
     value: { onChange: (value?: string) => (value ? undefined : { id: 'At least one character required' }) },
@@ -19,8 +18,9 @@ export type SingleInputFormProps = {
 };
 
 export const SingleInputForm: React.FC<SingleInputFormProps> = ({ value = '', onChange, submitOnBlur, inputName }) => {
-    const initialData = useRef({ values: { value }, errors: {} });
+    const initialData = useRef(Morfi.initialData({ value }));
     const [data, setData] = useSafeState<SingleInputFormData>(initialData.current);
+    const { fields, Form } = Morfi.useForm<SingleInputFormValues>();
     const onSubmit = useCallback(({ value }: SingleInputFormValues) => onChange(value), [onChange]);
     const onBlur = useCallback(
         (value: string) => submitOnBlur && value && onSubmit({ value }),
@@ -35,7 +35,7 @@ export const SingleInputForm: React.FC<SingleInputFormProps> = ({ value = '', on
             onSubmit={onSubmit}
             onSubmitFinished={onSubmitFinished}
             validation={VALIDATION}>
-            <FormInput name={inputName} autoFocus onBlur={onBlur} Field={Fields.value} />
+            <FormInput name={inputName} autoFocus onBlur={onBlur} field={fields.value} />
             <button style={{ display: 'none' }} />
         </Form>
     );

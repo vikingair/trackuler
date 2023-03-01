@@ -1,5 +1,5 @@
-import React, { useCallback, useMemo, KeyboardEvent, useEffect, useRef, ClipboardEvent } from 'react';
-import { iField } from 'morfi';
+import React, { ClipboardEvent, KeyboardEvent, useCallback, useEffect, useMemo, useRef } from 'react';
+import { FormField, Morfi } from 'morfi';
 
 type CommonTextareaProps = {
     onBlur?: (v: string) => void;
@@ -34,9 +34,10 @@ export const Textarea: React.FC<TextareaProps> = ({ onChange, onBlur, ...rest })
 };
 
 type FormTextareaProps = CommonTextareaProps & {
-    Field: iField<string>;
+    field: FormField<string>;
 };
 
-export const FormTextarea: React.FC<FormTextareaProps> = ({ Field, ...rest }) => (
-    <Field>{({ onChange, value }) => <Textarea {...{ onChange, value }} {...rest} />}</Field>
-);
+export const FormTextarea: React.FC<FormTextareaProps> = ({ field, ...rest }) => {
+    const { dirty: _, ...fieldProps } = Morfi.useField(field);
+    return <Textarea {...fieldProps} {...rest} />;
+};

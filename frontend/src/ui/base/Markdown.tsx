@@ -1,11 +1,10 @@
 import React from 'react';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import { markdown } from 'markdown';
+import { marked } from 'marked';
+import DOMPurify from 'dompurify';
 
 const toHTML = (text?: string): string => {
     if (!text) return '';
-    return markdown.toHTML(text.replace(/([^[(])(https?:\/\/\S+)/, `$1[$2]($2)`));
+    return DOMPurify.sanitize(marked.parse(text));
 };
 
 export type MarkdownProps = { text: string; placeholder?: string };

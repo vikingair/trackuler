@@ -5,7 +5,7 @@ import { TrackService } from '../services/TrackService';
 import { TrackEntry } from './TrackEntry';
 import { useSub } from '../store';
 
-type ExtendedTracks = {
+export type ExtendedTracks = {
     tracks: Track[];
     categories: Category[];
     trackDiffs: Array<number | undefined>;
@@ -27,7 +27,7 @@ export const useTracks = (unsortedTracks: Track[]): ExtendedTracks => {
 
         const totalPauseMs = tracks.reduce((cur, red, i) => {
             const nextTime = tracks[i + 1]?.time;
-            if (categories[i].ID === 'pause' && nextTime) {
+            if (CategoryService.isPause(categories[i]) && nextTime) {
                 return cur + (+nextTime - +red.time);
             }
             return cur;
@@ -39,13 +39,13 @@ export const useTracks = (unsortedTracks: Track[]): ExtendedTracks => {
         let totalPause = 0;
         const pauseTime = tracks.map(({ time }, i) => {
             const nextTime = tracks[i + 1]?.time;
-            if (categories[i].ID === 'pause' && nextTime) {
+            if (CategoryService.isPause(categories[i]) && nextTime) {
                 totalPause += +nextTime - +time;
             }
             return totalPause;
         });
         const trackRates = tracks.map((_, i) => {
-            if (categories[i].ID === 'pause') return undefined;
+            if (CategoryService.isPause(categories[i])) return undefined;
             const firstTime = tracks[0].time;
             const nextTime = tracks[i + 1]?.time;
             return nextTime ? TrackService.toRate(+nextTime - +firstTime - +pauseTime[i]) : undefined;
