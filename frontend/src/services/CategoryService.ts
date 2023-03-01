@@ -11,4 +11,7 @@ const getWithColor = (categoryConfig: CategoryConfigs, description: string): Cat
     return { ID: '', name: '' };
 };
 
-export const CategoryService = { getWithColor };
+const isPause = (category: Category) => category.ID === 'pause';
+const isEnd = (category: Category) => category.ID === 'end';
+
+export const CategoryService = { getWithColor, isPause, isEnd };

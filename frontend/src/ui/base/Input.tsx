@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import { iField } from 'morfi';
+import { FormField, Morfi } from 'morfi';
 
 type InputType = { type?: 'text' | 'color' | 'date' } | { type: 'time'; step: number };
 
@@ -28,12 +28,14 @@ export const Input: React.FC<InputProps> = ({ onChange, onBlur, ...rest }) => {
 };
 
 type FormInputProps = CommonInputProps & {
-    Field: iField<string>;
+    field: FormField<string>;
 };
 
-export const FormInput: React.FC<FormInputProps> = ({ Field, ...rest }) => (
-    <Field>{({ onChange, value }) => <Input {...{ onChange, value }} {...rest} />}</Field>
-);
+export const FormInput: React.FC<FormInputProps> = ({ field, ...rest }) => {
+    const { onChange, value, ..._rest } = Morfi.useField(field);
+    // console.log({ fieldProps });
+    return <Input {...{ onChange, value }} {...rest} />;
+};
 
 type DateInputProps = CommonTimeInputProps & {
     value: Date;
@@ -89,9 +91,10 @@ export const TimeInput: React.FC<TimeInputProps> = ({ value, onChange, onBlur, .
 };
 
 type FormTimeInputProps = CommonTimeInputProps & {
-    Field: iField<Date>;
+    field: FormField<Date>;
 };
 
-export const FormTimeInput: React.FC<FormTimeInputProps> = ({ Field, ...rest }) => (
-    <Field>{({ onChange, value }) => <TimeInput {...{ onChange, value }} {...rest} />}</Field>
-);
+export const FormTimeInput: React.FC<FormTimeInputProps> = ({ field, ...rest }) => {
+    const { dirty: _, ...fieldProps } = Morfi.useField(field);
+    return <TimeInput {...fieldProps} {...rest} />;
+};

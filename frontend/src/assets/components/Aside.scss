@@ -2,22 +2,4 @@ aside {
   @media screen and (min-width: 1000px) {
     overflow: hidden;
   }
-
-  details {
-    background-color: var(--color-bg-4);
-    border-radius: 0.5em;
-    position: relative;
-
-    .tracks {
-      padding: 0.5em;
-      margin: 0;
-    }
-
-    summary {
-      cursor: pointer;
-      padding: 0.5em;
-      background-color: var(--color-bg-3);
-      border-radius: 0.5em;
-    }
-  }
 }

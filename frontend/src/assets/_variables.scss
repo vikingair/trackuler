@@ -9,6 +9,7 @@
   --color-text-2: hsl(0 0% 80%);
   --color-text-3: hsl(0 0% 70%);
   --color-warn: lightcoral;
-  --color-info: lightblue;
+  --color-info-rgb: 173, 216, 230;
+  --color-info: rgba(var(--color-info-rgb));
   --color-success: lightgreen;
 }
