@@ -5,7 +5,7 @@
 
   display: grid;
   grid-auto-rows: min-content;
-  grid-template-columns: min-content auto min-content max-content min-content;
+  grid-template-columns: min-content auto min-content min-content max-content min-content;
   grid-row-gap: 1em;
   align-items: center;
 
@@ -41,6 +41,14 @@
         border-radius: 0.25em;
         margin-right: 0.25em;
         background-color: rgba(var(--color-info-rgb), 0.5);
+      }
+    }
+
+    &__resume {
+      margin-right: 0.5em;
+
+      button {
+        background-color: var(--color-success);
       }
     }
 

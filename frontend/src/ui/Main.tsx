@@ -98,6 +98,8 @@ export const Main: React.FC = () => {
         []
     );
 
+    const onResume = useCallback((track: Track) => addNewContent(track.description), [addNewContent]);
+
     const extendedTracks = useTracks(tracks);
     const { totalTimeMs } = extendedTracks;
     const lastCategory = extendedTracks.categories.at(-1);
@@ -111,7 +113,7 @@ export const Main: React.FC = () => {
                     <span className={'subtitle'}>Total: {TrackService.toReadableTimeDiff(totalTimeMs)}</span>
                 )}
             </h2>
-            <Tracks extendedTracks={extendedTracks} onDelete={onDelete} onChange={onChange} />
+            <Tracks extendedTracks={extendedTracks} onDelete={onDelete} onChange={onChange} onResume={onResume} />
             {hasEnded || (
                 <>
                     <div className="add-track">

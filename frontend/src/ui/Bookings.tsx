@@ -4,6 +4,8 @@ import { CategoryService } from '../services/CategoryService';
 import { ExtendedTracks } from './Tracks';
 import { getTagAndTextForDescription } from './TrackDescriptionText';
 
+const FALLBACK_TAG = 'Untagged';
+
 type TaggedTrack = { text: string; tag: string; timeDiffMs: number };
 
 export type BookingsProps = { extendedTracks: ExtendedTracks };
@@ -13,7 +15,7 @@ export const Bookings: React.FC<BookingsProps> = ({ extendedTracks }) => {
         .map((track, i) => {
             const timeDiffMs = extendedTracks.trackDiffs[i] || 0;
             const [tag, text] = getTagAndTextForDescription(track.description);
-            return { text, tag: tag || 'Untagged', timeDiffMs };
+            return { text, tag: tag || FALLBACK_TAG, timeDiffMs };
         })
         .filter(
             (_, i) =>
@@ -37,7 +39,7 @@ export const Bookings: React.FC<BookingsProps> = ({ extendedTracks }) => {
             }
             return red;
         }, {} as Record<string, { timeDiffMs: number; tracks: TaggedTrack[] }>)
-    );
+    ).sort(([tagA], [tagB]) => (tagA === FALLBACK_TAG ? -1 : tagA.localeCompare(tagB)));
 
     return (
         <details>
