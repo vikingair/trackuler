@@ -20,7 +20,7 @@ specifiers:
   jsdom: ^21.1.0
   madge: ^6.0.0
   marked: ^4.2.12
-  morfi: ^2.0.0
+  morfi: 2.0.1-beta.0
   persistore: ^2.0.0
   prettier: ^2.8.4
   react: ^18.2.0
@@ -35,7 +35,7 @@ dependencies:
   dompurify: 3.0.0
   idb-keyval: 6.2.0
   marked: 4.2.12
-  morfi: 2.0.0_react@18.2.0
+  morfi: 2.0.1-beta.0_react@18.2.0
   persistore: 2.0.0
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
@@ -2886,8 +2886,8 @@ packages:
       - supports-color
     dev: true
 
-  /morfi/2.0.0_react@18.2.0:
-    resolution: {integrity: sha512-ep+cRpTSiwpUwNbG69fipsm7eVBmiuFcvcBRBtNTWfLBSYyeLoUoCGuf84fXokRJcy0Qbr8FbU9BqJRzENMCaw==}
+  /morfi/2.0.1-beta.0_react@18.2.0:
+    resolution: {integrity: sha512-srbsa2jInr2EmM8BvI9phfP0F36/VRzQv32DQNz7m9UlqVAyIgdx+7JDa4RxtzNXju3GgOP3LLwd4FEv/Xdj6Q==}
     peerDependencies:
       react: '>= 16.18'
     dependencies:
