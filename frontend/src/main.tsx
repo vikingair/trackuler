@@ -5,9 +5,8 @@ import { App } from './ui/App';
 
 const rootNode = document.getElementById('root') as HTMLDivElement;
 const root = ReactDOM.createRoot(rootNode);
-// FIXME: Morfi broken in React.StrictMode
 root.render(
-    <>
+    <React.StrictMode>
         <App />
-    </>
+    </React.StrictMode>
 );
