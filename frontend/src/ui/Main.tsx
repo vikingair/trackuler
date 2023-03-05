@@ -98,12 +98,15 @@ export const Main: React.FC = () => {
         []
     );
 
-    const onResume = useCallback((track: Track) => addNewContent(track.description), [addNewContent]);
-
     const extendedTracks = useTracks(tracks);
     const { totalTimeMs } = extendedTracks;
     const lastCategory = extendedTracks.categories.at(-1);
     const hasEnded = !!lastCategory && CategoryService.isEnd(lastCategory);
+
+    const onResume = useMemo(
+        () => (hasEnded ? undefined : (track: Track) => addNewContent(track.description)),
+        [hasEnded, addNewContent]
+    );
 
     return (
         <main>

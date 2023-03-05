@@ -1,6 +1,6 @@
 import React, { useCallback, useRef } from 'react';
 import { FormInput } from '../base/Input';
-import { Morfi, MorfiData } from 'morfi';
+import { Morfi, MorfiData, FormRef } from 'morfi';
 import { useSafeState } from '../hooks/useSafeState';
 
 type SingleInputFormValues = { value: string };
@@ -22,14 +22,15 @@ export const SingleInputForm: React.FC<SingleInputFormProps> = ({ value = '', on
     const [data, setData] = useSafeState<SingleInputFormData>(initialData.current);
     const { fields, Form } = Morfi.useForm<SingleInputFormValues>();
     const onSubmit = useCallback(({ value }: SingleInputFormValues) => onChange(value), [onChange]);
-    const onBlur = useCallback(
-        (value: string) => submitOnBlur && value && onSubmit({ value }),
-        [onSubmit, submitOnBlur]
-    );
+    const ref = useRef<FormRef<SingleInputFormValues> | null>(null);
     const onSubmitFinished = useCallback(() => setData(initialData.current), [setData]);
+    const onBlur = useCallback(() => {
+        submitOnBlur && ref.current?.submit();
+    }, [submitOnBlur]);
 
     return (
         <Form
+            ref={ref}
             onChange={setData}
             data={data}
             onSubmit={onSubmit}
