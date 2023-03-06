@@ -1,10 +1,10 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 import { FormField, Morfi } from 'morfi';
 
 type InputType = { type?: 'text' | 'color' | 'date' } | { type: 'time'; step: number };
 
 type CommonInputProps = {
-    onBlur?: (v: string) => void;
+    onBlur?: () => void;
     autoFocus?: boolean;
     name: string;
 };
@@ -15,16 +15,12 @@ type InputProps = InputType &
         onChange: (v: string) => void;
     };
 
-export const Input: React.FC<InputProps> = ({ onChange, onBlur, ...rest }) => {
+export const Input: React.FC<InputProps> = ({ onChange, ...rest }) => {
     const _onChange = useCallback(
         (event: React.ChangeEvent<HTMLInputElement>) => onChange(event.target.value),
         [onChange]
     );
-    const _onBlur = useMemo(
-        () => (onBlur ? (event: React.ChangeEvent<HTMLInputElement>) => onBlur(event.target.value) : undefined),
-        [onBlur]
-    );
-    return <input onChange={_onChange} onBlur={_onBlur} {...rest} />;
+    return <input onChange={_onChange} {...rest} />;
 };
 
 type FormInputProps = CommonInputProps & {
@@ -42,23 +38,14 @@ type DateInputProps = CommonTimeInputProps & {
     onChange: (v: Date) => void;
 };
 
-export const DateInput: React.FC<DateInputProps> = ({ value, onChange, onBlur, ...rest }) => {
+export const DateInput: React.FC<DateInputProps> = ({ value, onChange, ...rest }) => {
     const _onChange = useCallback((v: string) => onChange(new Date(v)), [onChange]);
-    const _onBlur = useMemo(() => (onBlur ? (v: string) => onBlur(new Date(v)) : undefined), [onBlur]);
-    return (
-        <Input
-            value={value.toISOString().substring(0, 10)}
-            onChange={_onChange}
-            onBlur={_onBlur}
-            type={'date'}
-            {...rest}
-        />
-    );
+    return <Input value={value.toISOString().substring(0, 10)} onChange={_onChange} type={'date'} {...rest} />;
 };
 
 type CommonTimeInputProps = {
     name: string;
-    onBlur?: (v: Date) => void;
+    onBlur?: () => void;
     autoFocus?: boolean;
 };
 
@@ -72,22 +59,9 @@ type TimeInputProps = CommonTimeInputProps & {
     onChange: (v: Date) => void;
 };
 
-export const TimeInput: React.FC<TimeInputProps> = ({ value, onChange, onBlur, ...rest }) => {
+export const TimeInput: React.FC<TimeInputProps> = ({ value, onChange, ...rest }) => {
     const _onChange = useCallback((v: string) => onChange(getUpdatedTime(v, value)), [onChange, value]);
-    const _onBlur = useMemo(
-        () => (onBlur ? (v: string) => onBlur(getUpdatedTime(v, value)) : undefined),
-        [onBlur, value]
-    );
-    return (
-        <Input
-            value={value.toLocaleTimeString()}
-            onChange={_onChange}
-            onBlur={_onBlur}
-            step={2}
-            type={'time'}
-            {...rest}
-        />
-    );
+    return <Input value={value.toLocaleTimeString()} onChange={_onChange} step={2} type={'time'} {...rest} />;
 };
 
 type FormTimeInputProps = CommonTimeInputProps & {

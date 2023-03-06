@@ -25,7 +25,9 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo, todo: { title, description, r
     return (
         <details>
             <summary>
-                <div className="todo__summary">
+                <div
+                    className="todo__summary"
+                    onKeyUp={(e) => e.preventDefault() /* prevent collapsing of details on hitting "space" in input */}>
                     <EditableInput
                         value={title}
                         onChange={onChangeTitle}
