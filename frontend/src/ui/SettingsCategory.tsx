@@ -16,12 +16,9 @@ export const SettingsCategory: React.FC<SettingsCategoryProps> = ({ ID, config: 
         },
         [ID, config]
     );
-    const onBlurRegex = useCallback(
-        (regex: string) => {
-            TrackService.setCategoryConfig(ID as any, { ...config, regex });
-        },
-        [ID, config]
-    );
+    const onBlurRegex = useCallback(() => {
+        TrackService.setCategoryConfig(ID as any, { ...config, regex: _regex });
+    }, [ID, config, _regex]);
     return (
         <tr>
             <td>{name}</td>
