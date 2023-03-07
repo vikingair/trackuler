@@ -79,12 +79,12 @@ input, button, select {
   background: var(--color-bg-3);
 }
 
-::-webkit-calendar-picker-indicator {
-  //filter: invert(1);
-}
-
 input, textarea {
   color-scheme: dark;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator{
+  filter: invert(0.25);
 }
 
 textarea {
