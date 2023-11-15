@@ -53,22 +53,20 @@ export const TrackEntry: React.FC<TrackEntryProps> = ({
                 onChange={onChangeDescription}
                 title={name || undefined}
             />
-            <div className={'track__resume'}>
-                {_onResume && (
-                    <button
-                        onClick={_onResume}
-                        className={'icon-button'}
-                        title={'resume track'}
-                        aria-label={'resume track'}>
-                        <IconPlay />
-                    </button>
-                )}
-            </div>
             <div className={'track__rate'} title={rate ? Math.floor(rate * 100) + '%' : undefined}>
                 {rate && <ClockAmountIcon rate={rate} />}
             </div>
             <div className={'track__diff'}>{diff && TrackService.toReadableTimeDiff(diff)}</div>
             <div className={'track__actions'}>
+                {_onResume && (
+                    <button
+                        onClick={_onResume}
+                        className={'icon-button resume'}
+                        title={'resume track'}
+                        aria-label={'resume track'}>
+                        <IconPlay />
+                    </button>
+                )}
                 {_onDelete && (
                     <button
                         onClick={_onDelete}

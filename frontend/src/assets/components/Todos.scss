@@ -27,8 +27,8 @@
   .todo {
     &__summary {
       display: inline-flex;
+      gap: 0.25em;
       width: calc(100% - 1em);
-      justify-content: space-between;
 
       em span:not(:last-child) {
         padding: 0.25em;
@@ -44,13 +44,18 @@
           width: 100%;
         }
       }
+
+      input[type="checkbox"] {
+        scale: 1.5;
+        margin: 0.3em 0 auto 0.25em;
+      }
     }
 
     &__sub-summary {
-      display: inline-flex;
-      width: 100%;
-      margin-right: 0.5em;
+      flex-grow: 1;
+      display: flex;
       justify-content: space-between;
+      gap: 0.25em;
     }
 
     &__description {
@@ -60,7 +65,7 @@
 
     &__resolved {
       margin: 0 0 0.5em 0;
-      padding: 0.5em;
+      padding: 0.25em;
       background-color: var(--color-success);
       color: var(--color-bg);
       border-radius: 0.5em;
@@ -69,6 +74,5 @@
 
   button.delete {
     background-color: var(--color-warn);
-    margin-right: 0.5em;
   }
 }

@@ -1,10 +1,11 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, type KeyboardEvent } from 'react';
 import { FormField, Morfi } from 'morfi';
 
 type InputType = { type?: 'text' | 'color' | 'date' } | { type: 'time'; step: number };
 
 type CommonInputProps = {
     onBlur?: () => void;
+    onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void;
     autoFocus?: boolean;
     name: string;
 };
@@ -29,7 +30,6 @@ type FormInputProps = CommonInputProps & {
 
 export const FormInput: React.FC<FormInputProps> = ({ field, ...rest }) => {
     const { onChange, value, ..._rest } = Morfi.useField(field);
-    // console.log({ fieldProps });
     return <Input {...{ onChange, value }} {...rest} />;
 };
 
@@ -46,6 +46,7 @@ export const DateInput: React.FC<DateInputProps> = ({ value, onChange, ...rest }
 type CommonTimeInputProps = {
     name: string;
     onBlur?: () => void;
+    onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void;
     autoFocus?: boolean;
 };
 
