@@ -12,7 +12,6 @@
   },
   "scripts": {
     "build": "vite build",
-    "build:docs": "pnpm build",
     "test": "vitest --run --color",
     "dev": "vite dev",
     "lint": "pnpm lint:circular-imports && pnpm lint:es && pnpm lint:ts",
