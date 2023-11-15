@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, type KeyboardEvent } from 'react';
 import { FormInput } from '../base/Input';
 import { Morfi, MorfiData, FormRef } from 'morfi';
 import { useSafeState } from '../hooks/useSafeState';
@@ -24,9 +24,12 @@ export const SingleInputForm: React.FC<SingleInputFormProps> = ({ value = '', on
     const onSubmit = useCallback(({ value }: SingleInputFormValues) => onChange(value), [onChange]);
     const ref = useRef<FormRef<SingleInputFormValues> | null>(null);
     const onSubmitFinished = useCallback(() => setData(initialData.current), [setData]);
-    const onBlur = useCallback(() => {
+    const onEscape = useCallback(() => {
         submitOnBlur && ref.current?.submit();
     }, [submitOnBlur]);
+    const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+        if (e.code === 'Escape') onEscape();
+    };
 
     return (
         <Form
@@ -36,7 +39,7 @@ export const SingleInputForm: React.FC<SingleInputFormProps> = ({ value = '', on
             onSubmit={onSubmit}
             onSubmitFinished={onSubmitFinished}
             validation={VALIDATION}>
-            <FormInput name={inputName} autoFocus onBlur={onBlur} field={fields.value} />
+            <FormInput name={inputName} autoFocus onBlur={onEscape} field={fields.value} onKeyDown={onKeyDown} />
             <button style={{ display: 'none' }} />
         </Form>
     );

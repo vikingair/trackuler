@@ -3,15 +3,19 @@
     overflow: auto;
   }
 
+  flex-grow: 1;
   display: grid;
   grid-auto-rows: min-content;
-  grid-template-columns: min-content auto min-content min-content max-content min-content;
-  grid-row-gap: 1em;
+  grid-template-columns: min-content auto min-content max-content min-content;
+  grid-column-gap: 0.25em;
+  grid-row-gap: 0.5em;
   align-items: center;
 
   .track {
     &__rate svg {
       width: 2em;
+      display: flex;
+      align-items: center;
     }
 
     &__time {
@@ -28,9 +32,8 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin: 0 1em;
-      padding: 0.5em 1em;
       border-radius: 0.5em;
+      padding: 0.25em;
 
       form, input {
         width: 100%;
@@ -44,22 +47,16 @@
       }
     }
 
-    &__resume {
-      margin-right: 0.5em;
+    &__actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.25em;
+      margin-right: 0.25em;
 
-      button {
+      .resume {
         background-color: var(--color-success);
       }
-    }
 
-    &__diff {
-      padding: 0 1em;
-    }
-
-    &__actions {
-      button {
-        margin: 0 0.25em;
-      }
       .delete {
         background-color: var(--color-warn);
       }
