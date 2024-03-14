@@ -12,8 +12,10 @@ const current = (): TrackInterface => state.current;
 const _initialType = async (): Promise<TrackServiceType> => {
     const workdirName = await WorkdirService.getWorkdir();
     Store.set({ workdirName });
-    if (workdirName) return TrackServiceType.FILE_SYSTEM;
-    else return TrackServiceType.LOCAL;
+    if (workdirName) {
+        await WorkdirService.tryInit();
+        return TrackServiceType.FILE_SYSTEM;
+    } else return TrackServiceType.LOCAL;
 };
 
 const _change = async (trackType: TrackServiceType) => {
