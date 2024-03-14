@@ -1,10 +1,4 @@
-import {
-    FileAccessMode,
-    FileSystemDirectoryHandle,
-    FileSystemFileHandle,
-    FileSystemKind,
-    IDBService,
-} from './IDBService';
+import { FileAccessMode, FileSystemKind, IDBService } from './IDBService';
 import { Config, Todo, Track, TrackInterface } from './Types';
 import { Utils } from './utils';
 import { Store } from '../store';
@@ -35,32 +29,31 @@ const _writeTracks = async (fileHandle: FileSystemFileHandle, tracks: Track[]): 
 };
 
 // only allowed to call after first user interaction with the site
-const verifyAccess = async (): Promise<boolean> => {
+const verifyAccess = async (noRequest?: boolean): Promise<boolean> => {
     try {
         const handle = await IDBService.getWorkdir();
         if (handle) {
-            if ((await handle.queryPermission(OPTIONS)) === 'granted') {
-                return true;
-            }
+            if ((await handle.queryPermission(OPTIONS)) === 'granted') return true;
             // Request permission. If the user grants permission, return true.
-            return (await handle.requestPermission(OPTIONS)) === 'granted';
+            if (!noRequest) return (await handle.requestPermission(OPTIONS)) === 'granted';
         }
     } catch (e) {
         window.console.error(e);
     }
     return false;
 };
-
+const tryInit = (): Promise<void> =>
+    verifyAccess(true).then((workdirAccessGranted) => Store.set({ workdirAccessGranted }));
 const init = (): Promise<void> => verifyAccess().then((workdirAccessGranted) => Store.set({ workdirAccessGranted }));
 
-const pickWorkdir = (): Promise<string | void> =>
-    (window as any)
+const pickWorkdir = (): Promise<string | undefined> =>
+    window
         .showDirectoryPicker()
         .then(async (workdir: FileSystemDirectoryHandle) => {
             await IDBService.setWorkdir(workdir);
             return workdir.name;
         })
-        .catch();
+        .catch(() => undefined);
 
 const unlinkWorkdir = (): Promise<void> => IDBService.removeWorkdir();
 
@@ -198,11 +191,13 @@ const removeTodo = async (todo: Todo): Promise<Todo[]> => {
 
 export const WorkdirService: TrackInterface & {
     init: typeof init;
+    tryInit: typeof tryInit;
     getWorkdir: typeof getWorkdir;
     pickWorkdir: typeof pickWorkdir;
     unlinkWorkdir: typeof unlinkWorkdir;
 } = {
     init,
+    tryInit,
     getWorkdir,
     pickWorkdir,
     unlinkWorkdir,
