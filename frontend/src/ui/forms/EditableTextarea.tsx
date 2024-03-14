@@ -18,10 +18,11 @@ export const EditableTextarea: React.FC<EditableTextareaProps> = ({ value, onCha
         (description: string) => onChange(description).then(() => setIsEditing(false)),
         [onChange]
     );
+    const onCancel = useCallback(() => setIsEditing(false), []);
     return (
         <div className={className} title={title}>
             {isEditing ? (
-                <SingleTextAreaForm value={value} onChange={_onChange} name={name} />
+                <SingleTextAreaForm value={value} onChange={_onChange} name={name} onCancel={onCancel} />
             ) : (
                 <>
                     <Markdown text={value || 'No description'} placeholder={'No description'} />
