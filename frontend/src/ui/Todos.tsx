@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Todo } from '../services/Types';
 import { TrackService } from '../services/TrackService';
 import { IconDelete, IconPlus } from '../icons/icon';
@@ -8,9 +8,22 @@ import { EditableInput } from './forms/EditableInput';
 import { Checkbox } from './base/Checkbox';
 import { EditableTextarea } from './forms/EditableTextarea';
 
-type TodoItemProps = { todo: Todo; onChange: (todo: Todo) => Promise<void>; onRemove: (todo: Todo) => Promise<void> };
+type TodoItemProps = {
+    todo: Todo;
+    index: number;
+    onChange: (todo: Todo) => Promise<void>;
+    onRemove: (todo: Todo) => Promise<void>;
+    onMove?: (todoID: string, index: number) => Promise<void>;
+};
 
-const TodoItem: React.FC<TodoItemProps> = ({ todo, todo: { title, description, resolvedAt }, onChange, onRemove }) => {
+const TodoItem: React.FC<TodoItemProps> = ({
+    todo,
+    todo: { title, description, resolvedAt },
+    onChange,
+    onRemove,
+    index,
+    onMove,
+}) => {
     const onChangeTitle = useCallback((title: string) => onChange({ ...todo, title }), [onChange, todo]);
     const onChangeDescription = useCallback(
         (description: string) => onChange({ ...todo, description }),
@@ -22,9 +35,39 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo, todo: { title, description, r
     );
     const _onRemove = useCallback(() => onRemove(todo), [onRemove, todo]);
 
+    const ref = useRef<HTMLDetailsElement>(null);
+    const enterCount = useRef(0);
+
+    const onDragEnter = useCallback(() => {
+        if (!enterCount.current) ref.current?.style.setProperty('--todo-color-outline', 'lightblue');
+        enterCount.current++;
+    }, []);
+
+    const onDragLeave = useCallback(() => {
+        enterCount.current--;
+        if (!enterCount.current) ref.current?.style.removeProperty('--todo-color-outline');
+    }, []);
+
+    const onDrop = useCallback(
+        (ev: React.DragEvent) => {
+            // simulate that the drag ended
+            enterCount.current = 1;
+            onDragLeave();
+            onMove!(ev.dataTransfer.getData('todo'), index);
+        },
+        [index, onDragLeave, onMove]
+    );
+
     return (
         <details>
-            <summary>
+            <summary
+                ref={ref}
+                draggable={!!onMove}
+                onDragStart={(e) => e.dataTransfer.setData('todo', todo.ID)}
+                onDragEnter={onDragEnter}
+                onDragLeave={onDragLeave}
+                onDrop={onDrop}
+                onDragOver={(e) => e.preventDefault()}>
                 <div
                     className="todo__summary"
                     onKeyUp={(e) => e.preventDefault() /* prevent collapsing of details on hitting "space" in input */}>
@@ -81,6 +124,11 @@ export const Todos: React.FC = () => {
             });
     }, []);
 
+    const moveTodo = useCallback(
+        (todoID: string, index: number) => TrackService.current().moveTodo(todoID, index).then(setTodos),
+        []
+    );
+
     const [openTodos, resolvedTodos] = useMemo<[Todo[], Todo[]]>(
         () =>
             todos.reduce(
@@ -104,15 +152,28 @@ export const Todos: React.FC = () => {
                 <SingleInputForm onChange={add} inputName={'toto-title'} />
             </div>
             <div className="todos__list">
-                {openTodos.map((todo) => (
-                    <TodoItem todo={todo} key={todo.ID} onChange={createOrUpdateTodo} onRemove={removeTodo} />
+                {openTodos.map((todo, index) => (
+                    <TodoItem
+                        todo={todo}
+                        key={todo.ID}
+                        index={index}
+                        onChange={createOrUpdateTodo}
+                        onRemove={removeTodo}
+                        onMove={moveTodo}
+                    />
                 ))}
             </div>
             <details>
                 <summary>Resolved ✔</summary>
                 <div className="todos__list">
-                    {resolvedTodos.map((todo) => (
-                        <TodoItem todo={todo} key={todo.ID} onChange={createOrUpdateTodo} onRemove={removeTodo} />
+                    {resolvedTodos.map((todo, index) => (
+                        <TodoItem
+                            todo={todo}
+                            key={todo.ID}
+                            onChange={createOrUpdateTodo}
+                            onRemove={removeTodo}
+                            index={index}
+                        />
                     ))}
                 </div>
             </details>

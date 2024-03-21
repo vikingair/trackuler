@@ -189,6 +189,16 @@ const removeTodo = async (todo: Todo): Promise<Todo[]> => {
     return nextTodos;
 };
 
+const moveTodo = async (todoID: string, index: number): Promise<Todo[]> => {
+    const { todos, fileHandle } = await _getTodos();
+    const prevIndex = todos.findIndex(({ ID }) => ID === todoID);
+    if (prevIndex < 0) return todos;
+
+    const nextTodos = todos.toSpliced(prevIndex, 1).toSpliced(index, 0, todos[prevIndex]);
+    await _write(fileHandle, nextTodos);
+    return nextTodos;
+};
+
 export const WorkdirService: TrackInterface & {
     init: typeof init;
     tryInit: typeof tryInit;
@@ -210,4 +220,5 @@ export const WorkdirService: TrackInterface & {
     getTodos,
     createOrUpdateTodo,
     removeTodo,
+    moveTodo,
 };

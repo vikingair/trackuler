@@ -16,6 +16,7 @@ export type TrackInterface = {
     getTodos: () => Promise<Todo[]>;
     createOrUpdateTodo: (todo: Todo) => Promise<Todo[]>;
     removeTodo: (todo: Todo) => Promise<Todo[]>;
+    moveTodo: (todoID: string, index: number) => Promise<Todo[]>;
 };
 
 export enum TrackServiceType {
