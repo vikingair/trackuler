@@ -96,6 +96,16 @@ const removeTodo = async (todo: Todo): Promise<Todo[]> => {
     return nextTodos;
 };
 
+const moveTodo = async (todoID: string, index: number): Promise<Todo[]> => {
+    const todos = await getTodos();
+    const prevIndex = todos.findIndex(({ ID }) => ID === todoID);
+    if (prevIndex < 0) return todos;
+
+    const nextTodos = todos.toSpliced(prevIndex, 1).toSpliced(index, 0, todos[prevIndex]);
+    Persistore.set(TODOS_KEY, JSON.stringify(nextTodos));
+    return nextTodos;
+};
+
 export const LocalService: TrackInterface = {
     current,
     createOrUpdate,
@@ -106,4 +116,5 @@ export const LocalService: TrackInterface = {
     getTodos,
     createOrUpdateTodo,
     removeTodo,
+    moveTodo,
 };

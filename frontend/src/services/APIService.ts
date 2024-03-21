@@ -59,6 +59,18 @@ const removeTodo = (todo: Todo): Promise<Todo[]> =>
         })
         .then((todos) => todos.map(Utils.convertAPITodo));
 
+const moveTodo = (todoID: string, index: number): Promise<Todo[]> =>
+    fetch('/api/todo/move', {
+        method: 'post',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ID: todoID, index }),
+    })
+        .then((r) => {
+            if (!r.ok) throw new Error('Create or update todo failed');
+            return r.json();
+        })
+        .then((todos) => todos.map(Utils.convertAPITodo));
+
 const getTodos = (): Promise<Todo[]> =>
     fetch('/api/todos')
         .then((r) => (r.ok ? r.json() : []))
@@ -74,4 +86,5 @@ export const APIService: TrackInterface = {
     createOrUpdateTodo,
     removeTodo,
     getTodos,
+    moveTodo,
 };
