@@ -34,7 +34,7 @@ function legacyPlugin(name, alias = name) {
 }
 
 export default ts.config(
-  { ignores: ["node_modules", "dist"] },
+  { ignores: ["node_modules", "build"] },
   {
     files: ["**/*.{j,t}s?(x)"],
     extends: [
