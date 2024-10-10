@@ -1,11 +1,11 @@
 main {
-  @media screen and (min-width: 1000px) {
-    height: calc(100vh - 7em);
-  }
-
   display: flex;
   flex-direction: column;
   gap: 2em;
+
+  @media screen and (min-width: 1000px) {
+    height: calc(100vh - 7em);
+  }
 
   h2 {
     display: flex;

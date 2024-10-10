@@ -11,5 +11,7 @@
   --color-warn: lightcoral;
   --color-info-rgb: 173, 216, 230;
   --color-info: rgba(var(--color-info-rgb));
+  --color-group: hsl(278.42deg 60% 37%);
+  --color-group-details: hsl(278deg 60% 37% / 50%);
   --color-success: lightgreen;
 }

@@ -13,13 +13,47 @@ import { Checkbox } from "./base/Checkbox";
 import { EditableInput } from "./forms/EditableInput";
 import { EditableTextarea } from "./forms/EditableTextarea";
 import { SingleInputForm } from "./forms/SingleInputForm";
+import { getTagAndTextForDescription } from "./TrackDescriptionText";
+
+type NestedTodos = { list: Todo[]; nested: Record<string, Todo[]> };
+
+const convertListToNested = (list: Todo[]): NestedTodos =>
+  list.reduce<NestedTodos>(
+    (red, cur) => {
+      const [tag] = getTagAndTextForDescription(cur.title);
+      if (!tag) red.list = [...red.list, cur];
+      else {
+        red.nested[tag] ??= [];
+        red.nested[tag] = [...red.nested[tag], cur];
+      }
+      return red;
+    },
+    { list: [], nested: {} },
+  );
+
+type TodoItemsProps = {
+  todos: Todo[];
+  onChange: (todo: Todo) => Promise<void>;
+  onRemove: (todo: Todo) => Promise<void>;
+  onMove: (todoID: string, index: number) => Promise<void>;
+  noTag?: boolean;
+};
+
+const TodoItems: React.FC<TodoItemsProps> = ({ todos, ...rest }) => (
+  <div className="todos__list">
+    {todos.map((todo, index) => (
+      <TodoItem todo={todo} key={todo.ID} index={index} {...rest} />
+    ))}
+  </div>
+);
 
 type TodoItemProps = {
   todo: Todo;
   index: number;
   onChange: (todo: Todo) => Promise<void>;
   onRemove: (todo: Todo) => Promise<void>;
-  onMove?: (todoID: string, index: number) => Promise<void>;
+  onMove: (todoID: string, index: number) => Promise<void>;
+  noTag?: boolean;
 };
 
 const TodoItem: React.FC<TodoItemProps> = ({
@@ -29,6 +63,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
   onRemove,
   index,
   onMove,
+  noTag,
 }) => {
   const onChangeTitle = useCallback(
     (title: string) => onChange({ ...todo, title }),
@@ -93,6 +128,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
             onChange={onChangeTitle}
             inputName={"todo-title"}
             className={"todo__sub-summary"}
+            hideTag={noTag}
           />
           <button
             onClick={_onRemove}
@@ -160,21 +196,29 @@ export const Todos: React.FC = () => {
     [],
   );
 
-  const [openTodos, resolvedTodos] = useMemo<[Todo[], Todo[]]>(
+  const [openTodos, resolvedTodos] = useMemo<NestedTodos[]>(
     () =>
-      todos.reduce(
-        (red, todo) => {
-          if (todo.resolvedAt) {
-            red[1].push(todo);
-          } else {
-            red[0].push(todo);
-          }
-          return red;
-        },
-        [[], []] as [Todo[], Todo[]],
-      ),
+      todos
+        .reduce<[Todo[], Todo[]]>(
+          (red, todo) => {
+            if (todo.resolvedAt) {
+              red[1].push(todo);
+            } else {
+              red[0].push(todo);
+            }
+            return red;
+          },
+          [[], []],
+        )
+        .map(convertListToNested),
     [todos],
   );
+
+  const handlers = {
+    onChange: createOrUpdateTodo,
+    onRemove: removeTodo,
+    onMove: moveTodo,
+  };
 
   return (
     <div className="todos">
@@ -182,30 +226,23 @@ export const Todos: React.FC = () => {
         <IconPlus />
         <SingleInputForm onChange={add} inputName={"toto-title"} />
       </div>
-      <div className="todos__list">
-        {openTodos.map((todo, index) => (
-          <TodoItem
-            todo={todo}
-            key={todo.ID}
-            index={index}
-            onChange={createOrUpdateTodo}
-            onRemove={removeTodo}
-            onMove={moveTodo}
-          />
-        ))}
-      </div>
-      <details>
+      {Object.entries(openTodos.nested).map(([tag, todos]) => (
+        <details className="todos_group" key={tag}>
+          <summary>{tag}</summary>
+          <TodoItems todos={todos} {...handlers} noTag />
+        </details>
+      ))}
+      <TodoItems todos={openTodos.list} {...handlers} />
+      <details className="todos_resolved">
         <summary>Resolved ✔</summary>
-        <div className="todos__list">
-          {resolvedTodos.map((todo, index) => (
-            <TodoItem
-              todo={todo}
-              key={todo.ID}
-              onChange={createOrUpdateTodo}
-              onRemove={removeTodo}
-              index={index}
-            />
+        <div className="todos_resolved_items">
+          {Object.entries(resolvedTodos.nested).map(([tag, todos]) => (
+            <details className="todos_group" key={tag}>
+              <summary>{tag}</summary>
+              <TodoItems todos={todos} {...handlers} noTag />
+            </details>
           ))}
+          <TodoItems todos={resolvedTodos.list} {...handlers} />
         </div>
       </details>
     </div>

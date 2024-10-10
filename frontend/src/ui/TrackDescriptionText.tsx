@@ -11,15 +11,17 @@ export const getTagAndTextForDescription = (
 
 export type TrackDescriptionTextProps = {
   value: string;
+  hideTag?: boolean;
 };
 
 export const TrackDescriptionText: React.FC<TrackDescriptionTextProps> = ({
   value,
+  hideTag,
 }) => {
   const [tag, text] = getTagAndTextForDescription(value);
   return (
     <em>
-      {tag && <span>{tag}</span>}
+      {!hideTag && tag && <span>{tag}</span>}
       <span>{text}</span>
     </em>
   );

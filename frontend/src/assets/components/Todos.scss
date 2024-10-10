@@ -1,20 +1,38 @@
 .todos {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+
   .add-todo {
     display: flex;
     align-items: center;
     gap: 0.5em;
-    margin-bottom: 1em;
+    margin-bottom: 0.5em;
 
     form, input {
       width: 100%;
     }
   }
 
-  > details {
-    margin-top: 2em;
+  > .todos_resolved {
+    margin-top: 0.5em;
 
     summary {
       color: var(--color-success);
+    }
+  }
+
+  .todos_resolved_items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+  }
+
+  .todos_group {
+    background-color: var(--color-group-details);
+
+    > summary {
+      background-color: var(--color-group);
     }
   }
 
