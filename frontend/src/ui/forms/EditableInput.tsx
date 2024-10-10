@@ -10,6 +10,7 @@ export type EditableInputProps = {
   title?: string;
   className?: string;
   inputName: string;
+  hideTag?: boolean;
 };
 
 export const EditableInput: React.FC<EditableInputProps> = ({
@@ -19,6 +20,7 @@ export const EditableInput: React.FC<EditableInputProps> = ({
   title,
   className,
   inputName,
+  hideTag,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const onEdit = useCallback(() => setIsEditing(true), []);
@@ -38,7 +40,7 @@ export const EditableInput: React.FC<EditableInputProps> = ({
         />
       ) : (
         <>
-          <TrackDescriptionText value={value} />
+          <TrackDescriptionText value={value} hideTag={hideTag} />
           <button
             onClick={onEdit}
             className={"icon-button"}

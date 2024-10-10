@@ -1,8 +1,4 @@
 .tracks {
-  @media screen and (min-width: 1000px) {
-    overflow: auto;
-  }
-
   flex-grow: 1;
   display: grid;
   grid-auto-rows: min-content;
@@ -10,6 +6,10 @@
   grid-column-gap: 0.25em;
   grid-row-gap: 0.5em;
   align-items: center;
+
+  @media screen and (min-width: 1000px) {
+    overflow: auto;
+  }
 
   .track {
     &__rate svg {

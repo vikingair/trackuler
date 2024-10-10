@@ -12,16 +12,13 @@ import ts from "typescript-eslint";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-});
+const compat = new FlatCompat({ baseDirectory: __dirname });
 
 /**
  * source: https://github.com/import-js/eslint-plugin-import/issues/2948#issuecomment-2148832701
  * @param {string} name the pugin name
  * @param {string} alias the plugin alias
- * @returns {import("eslint").ESLint.Plugin}
+ * @returns {import("typescript-eslint").plugin}
  */
 function legacyPlugin(name, alias = name) {
   const plugin = compat.plugins(name)[0]?.plugins?.[alias];
