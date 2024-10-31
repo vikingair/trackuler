@@ -1,11 +1,34 @@
-import React, { useMemo } from "react";
+import React, { useCallback, useMemo, useRef } from "react";
 import { ClockAmountIcon } from "../icons/ClockIcon";
 import { IconDelete, IconPlay } from "../icons/icon";
 import { Category } from "../services/CategoryService";
 import { TrackService } from "../services/TrackService";
 import { Track } from "../services/Types";
+import { EditableInputRef } from "./forms/EditableInput";
 import { TrackDescription } from "./TrackDescription";
-import { TrackTime } from "./TrackTime";
+import { EditableTrackTimeRef, TrackTime } from "./TrackTime";
+
+const navigateFocusOfTrackEntries = (
+  e: React.KeyboardEvent,
+  trackEntry?: HTMLDivElement | null,
+): boolean | undefined => {
+  if (e.code === "ArrowDown" || e.code === "ArrowUp") {
+    const tracks = trackEntry?.parentElement;
+    if (tracks) {
+      const thisIndex = [...tracks.children].indexOf(trackEntry);
+
+      const nextTarget = tracks.children[
+        thisIndex + (e.code === "ArrowDown" ? 1 : -1)
+      ] as HTMLElement;
+
+      if (nextTarget) {
+        e.preventDefault();
+        nextTarget.focus();
+        return true;
+      }
+    }
+  }
+};
 
 type TrackEntryProps = {
   track: Track;
@@ -53,14 +76,37 @@ export const TrackEntry: React.FC<TrackEntryProps> = ({
     [onChange, track],
   );
 
+  const ref = useRef<HTMLDivElement>(null);
+  const trackTimeRef = useRef<EditableTrackTimeRef>(null);
+  const trackDescRef = useRef<EditableInputRef>(null);
+
+  const onKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (navigateFocusOfTrackEntries(e, ref.current)) return;
+      if (e.code === "KeyT") {
+        trackTimeRef.current?.setEdit(true);
+      } else if (e.code === "KeyD") {
+        if (e.shiftKey) {
+          _onDelete?.();
+        } else {
+          trackDescRef.current?.setEdit(true);
+        }
+      } else if (e.code === "KeyR") {
+        _onResume?.();
+      }
+    },
+    [_onResume, _onDelete],
+  );
+
   return (
-    <>
-      <TrackTime time={time} onChange={onChangeTime} />
+    <div className="track-entry" tabIndex={0} onKeyDown={onKeyDown} ref={ref}>
+      <TrackTime time={time} onChange={onChangeTime} ref={trackTimeRef} />
       <TrackDescription
         value={description}
         color={color}
         onChange={onChangeDescription}
         title={name || undefined}
+        ref={trackDescRef}
       />
       <div
         className={"track__rate"}
@@ -93,6 +139,6 @@ export const TrackEntry: React.FC<TrackEntryProps> = ({
           </button>
         )}
       </div>
-    </>
+    </div>
   );
 };

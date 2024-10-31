@@ -15,6 +15,29 @@ import { EditableTextarea } from "./forms/EditableTextarea";
 import { SingleInputForm } from "./forms/SingleInputForm";
 import { getTagAndTextForDescription } from "./TrackDescriptionText";
 
+const navigateFocusOfSummaries = (
+  e: React.KeyboardEvent,
+  summary?: HTMLElement | null,
+): boolean | undefined => {
+  if (e.code === "ArrowDown" || e.code === "ArrowUp") {
+    const details = summary?.parentElement;
+    const detailsContainer = details?.parentElement;
+    if (detailsContainer) {
+      const thisIndex = [...detailsContainer.children].indexOf(details);
+
+      const nextTarget = detailsContainer.children[
+        thisIndex + (e.code === "ArrowDown" ? 1 : -1)
+      ]?.firstChild as HTMLElement;
+
+      if (nextTarget) {
+        e.preventDefault();
+        nextTarget.focus();
+        return true;
+      }
+    }
+  }
+};
+
 type NestedTodos = { list: Todo[]; nested: Record<string, Todo[]> };
 
 const convertListToNested = (list: Todo[]): NestedTodos =>
@@ -80,7 +103,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
   );
   const _onRemove = useCallback(() => onRemove(todo), [onRemove, todo]);
 
-  const ref = useRef<HTMLDetailsElement>(null);
+  const ref = useRef<HTMLElement>(null);
   const enterCount = useRef(0);
 
   const onDragEnter = useCallback(() => {
@@ -96,24 +119,30 @@ const TodoItem: React.FC<TodoItemProps> = ({
   }, []);
 
   const onDrop = useCallback(
-    (ev: React.DragEvent) => {
+    (e: React.DragEvent) => {
       // simulate that the drag ended
       enterCount.current = 1;
       onDragLeave();
-      onMove!(ev.dataTransfer.getData("todo"), index);
+      onMove!(e.dataTransfer.getData("todo"), index);
     },
     [index, onDragLeave, onMove],
   );
+
+  const onKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (navigateFocusOfSummaries(e, ref.current)) return;
+  }, []);
 
   return (
     <details>
       <summary
         ref={ref}
+        tabIndex={0}
         draggable={!!onMove}
         onDragStart={(e) => e.dataTransfer.setData("todo", todo.ID)}
         onDragEnter={onDragEnter}
         onDragLeave={onDragLeave}
         onDrop={onDrop}
+        onKeyDown={onKeyDown}
         onDragOver={(e) => e.preventDefault()}
       >
         <div
@@ -220,6 +249,10 @@ export const Todos: React.FC = () => {
     onMove: moveTodo,
   };
 
+  const onKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (navigateFocusOfSummaries(e, e.target as HTMLElement)) return;
+  }, []);
+
   return (
     <div className="todos">
       <div className="add-todo">
@@ -228,7 +261,7 @@ export const Todos: React.FC = () => {
       </div>
       {Object.entries(openTodos.nested).map(([tag, todos]) => (
         <details className="todos_group" key={tag}>
-          <summary>{tag}</summary>
+          <summary onKeyDown={onKeyDown}>{tag}</summary>
           <TodoItems todos={todos} {...handlers} noTag />
         </details>
       ))}
@@ -238,7 +271,7 @@ export const Todos: React.FC = () => {
         <div className="todos_resolved_items">
           {Object.entries(resolvedTodos.nested).map(([tag, todos]) => (
             <details className="todos_group" key={tag}>
-              <summary>{tag}</summary>
+              <summary onKeyDown={onKeyDown}>{tag}</summary>
               <TodoItems todos={todos} {...handlers} noTag />
             </details>
           ))}

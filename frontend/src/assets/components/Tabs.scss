@@ -11,6 +11,7 @@
     z-index: 1;
 
     > button {
+      --focus-outline-offset: -1px;
       text-transform: uppercase;
       background-color: transparent;
       color: var(--color-text);

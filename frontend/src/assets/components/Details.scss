@@ -9,6 +9,7 @@ details {
   }
 
   summary {
+    --focus-outline-offset: -1px;
     cursor: pointer;
     padding: 0.5em;
     background-color: var(--color-bg-3);

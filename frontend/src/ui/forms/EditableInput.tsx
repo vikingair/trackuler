@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useImperativeHandle, useState } from "react";
 import { IconEdit } from "../../icons/icon";
 import { TrackDescriptionText } from "../TrackDescriptionText";
 import { SingleInputForm } from "./SingleInputForm";
@@ -13,25 +13,24 @@ export type EditableInputProps = {
   hideTag?: boolean;
 };
 
-export const EditableInput: React.FC<EditableInputProps> = ({
-  value,
-  onChange,
-  color,
-  title,
-  className,
-  inputName,
-  hideTag,
-}) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const onEdit = useCallback(() => setIsEditing(true), []);
+export type EditableInputRef = {
+  setEdit: (next: boolean) => void;
+};
+
+export const EditableInput = React.forwardRef<
+  EditableInputRef,
+  EditableInputProps
+>(({ value, onChange, color, title, className, inputName, hideTag }, ref) => {
+  const [edit, setEdit] = useState(false);
+  const onEdit = useCallback(() => setEdit(true), []);
   const _onChange = useCallback(
-    (description: string) =>
-      onChange(description).then(() => setIsEditing(false)),
+    (description: string) => onChange(description).then(() => setEdit(false)),
     [onChange],
   );
+  useImperativeHandle(ref, () => ({ setEdit }));
   return (
     <div className={className} style={{ backgroundColor: color }} title={title}>
-      {isEditing ? (
+      {edit ? (
         <SingleInputForm
           value={value}
           onChange={_onChange}
@@ -53,4 +52,4 @@ export const EditableInput: React.FC<EditableInputProps> = ({
       )}
     </div>
   );
-};
+});
