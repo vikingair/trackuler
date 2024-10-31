@@ -1,5 +1,5 @@
 import React from "react";
-import { EditableInput } from "./forms/EditableInput";
+import { EditableInput, EditableInputRef } from "./forms/EditableInput";
 import { TrackDescriptionText } from "./TrackDescriptionText";
 
 export type TrackDescriptionProps = {
@@ -9,12 +9,10 @@ export type TrackDescriptionProps = {
   title?: string;
 };
 
-export const TrackDescription: React.FC<TrackDescriptionProps> = ({
-  value,
-  onChange,
-  color,
-  title,
-}) =>
+export const TrackDescription = React.forwardRef<
+  EditableInputRef,
+  TrackDescriptionProps
+>(({ value, onChange, color, title }, ref) =>
   onChange ? (
     <EditableInput
       value={value}
@@ -23,6 +21,7 @@ export const TrackDescription: React.FC<TrackDescriptionProps> = ({
       title={title}
       className={"track__description"}
       inputName={"track-description"}
+      ref={ref}
     />
   ) : (
     <div
@@ -32,4 +31,5 @@ export const TrackDescription: React.FC<TrackDescriptionProps> = ({
     >
       <TrackDescriptionText value={value} />
     </div>
-  );
+  ),
+);

@@ -30,19 +30,15 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 
 input, select {
+  --focus-outline-offset: -1px;
   color: var(--color-text);
   background-color: var(--color-bg-2);
   border-color: var(--color-bg-3);
   font-family: inherit;
-  outline: none;
 }
 
 input, button, select {
   outline: none;
-
-  &:focus-within {
-    box-shadow: 0 0 4px var(--color-text-3);
-  }
 }
 
 [role="button"] {
@@ -92,4 +88,9 @@ textarea {
   width: 100%;
   resize: none;
   height: var(--_height);
+}
+
+:focus-visible {
+  outline: 1px solid var(--color-text);
+  outline-offset: var(--focus-outline-offset, 2px);
 }

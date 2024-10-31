@@ -3,12 +3,20 @@
   display: grid;
   grid-auto-rows: min-content;
   grid-template-columns: min-content auto min-content max-content min-content;
-  grid-column-gap: 0.25em;
   grid-row-gap: 0.5em;
-  align-items: center;
 
   @media screen and (min-width: 1000px) {
     overflow: auto;
+  }
+
+  .track-entry {
+    --focus-outline-offset: -1px;
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    align-items: center;
+    grid-column-gap: 0.25em;
+    border-radius: 0.5em;
   }
 
   .track {

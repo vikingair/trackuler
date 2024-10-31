@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useImperativeHandle, useState } from "react";
 import { ClockIcon } from "../icons/ClockIcon";
 import { TimeForm } from "./forms/TimeForm";
 
@@ -16,16 +16,24 @@ export type EditableTrackTimeProps = {
   onChange: (date: Date) => Promise<void>;
 };
 
-export const EditableTrackTime: React.FC<EditableTrackTimeProps> = ({
-  time,
-  onChange,
-}) => {
+export type EditableTrackTimeRef = {
+  setEdit: (next: boolean) => void;
+};
+
+export const EditableTrackTime = React.forwardRef<
+  EditableTrackTimeRef,
+  EditableTrackTimeProps
+>(({ time, onChange }, ref) => {
   const [edit, setEdit] = useState(false);
   const onClick = useCallback(() => setEdit(true), []);
   const _onChange = useCallback(
     (time: Date) => onChange(time).then(() => setEdit(false)),
     [onChange],
   );
+
+  useImperativeHandle(ref, () => ({
+    setEdit,
+  }));
 
   return (
     <strong
@@ -40,18 +48,20 @@ export const EditableTrackTime: React.FC<EditableTrackTimeProps> = ({
       )}
     </strong>
   );
-};
+});
 
 export type TrackTimeProps = {
   time: Date;
   onChange?: (date: Date) => Promise<void>;
 };
 
-export const TrackTime: React.FC<TrackTimeProps> = ({ time, onChange }) =>
-  onChange ? (
-    <EditableTrackTime time={time} onChange={onChange} />
-  ) : (
-    <strong className={"track__time"}>
-      <TimeView time={time} />
-    </strong>
-  );
+export const TrackTime = React.forwardRef<EditableTrackTimeRef, TrackTimeProps>(
+  ({ time, onChange }, ref) =>
+    onChange ? (
+      <EditableTrackTime time={time} onChange={onChange} ref={ref} />
+    ) : (
+      <strong className={"track__time"}>
+        <TimeView time={time} />
+      </strong>
+    ),
+);
