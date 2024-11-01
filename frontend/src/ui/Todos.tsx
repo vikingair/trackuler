@@ -108,7 +108,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
 
   const onDragEnter = useCallback(() => {
     if (!enterCount.current)
-      ref.current?.style.setProperty("--todo-color-outline", "lightblue");
+      ref.current?.style.setProperty("--todo-color-outline", "white");
     enterCount.current++;
   }, []);
 
@@ -129,6 +129,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
   );
 
   const onKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if ((e.target as HTMLElement).tagName?.toLowerCase() === "input") return;
     if (navigateFocusOfSummaries(e, ref.current)) return;
   }, []);
 

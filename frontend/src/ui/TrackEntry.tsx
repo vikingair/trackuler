@@ -65,13 +65,22 @@ export const TrackEntry: React.FC<TrackEntryProps> = ({
     [isLatestOfDescriptions, onResume, track, rate],
   );
   const onChangeTime = useMemo(
-    () => (onChange ? (time: Date) => onChange({ ...track, time }) : undefined),
+    () =>
+      onChange
+        ? async (time: Date) => {
+            await onChange({ ...track, time });
+            ref.current?.focus();
+          }
+        : undefined,
     [onChange, track],
   );
   const onChangeDescription = useMemo(
     () =>
       onChange
-        ? (description: string) => onChange({ ...track, description })
+        ? async (description: string) => {
+            await onChange({ ...track, description });
+            ref.current?.focus();
+          }
         : undefined,
     [onChange, track],
   );
@@ -82,17 +91,24 @@ export const TrackEntry: React.FC<TrackEntryProps> = ({
 
   const onKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
+      if ((e.target as HTMLElement).tagName?.toLowerCase() === "input") return;
       if (navigateFocusOfTrackEntries(e, ref.current)) return;
+      if (e.shiftKey) {
+        if (e.code === "KeyD") {
+          navigateFocusOfTrackEntries({ ...e, code: "ArrowDown" }, ref.current);
+          _onDelete?.();
+        }
+        return;
+      }
       if (e.code === "KeyT") {
         trackTimeRef.current?.setEdit(true);
-      } else if (e.code === "KeyD") {
-        if (e.shiftKey) {
-          _onDelete?.();
-        } else {
-          trackDescRef.current?.setEdit(true);
-        }
+        e.preventDefault();
+      } else if (e.code === "KeyE") {
+        trackDescRef.current?.setEdit(true);
+        e.preventDefault();
       } else if (e.code === "KeyR") {
         _onResume?.();
+        e.preventDefault();
       }
     },
     [_onResume, _onDelete],
