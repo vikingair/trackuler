@@ -5,7 +5,8 @@ import { Track } from "../services/Types";
 import { useSub } from "../store";
 import { DateInput } from "./base/Input";
 import { Bookings } from "./Bookings";
-import { Tracks, useTracks } from "./Tracks";
+import { Tracks } from "./Tracks";
+import { useTracks } from "./useTracks";
 
 type HistoryItemProps = { tracks: Track[] };
 

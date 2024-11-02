@@ -2,7 +2,7 @@ import React from "react";
 import { CategoryService } from "../services/CategoryService";
 import { TrackService } from "../services/TrackService";
 import { getTagAndTextForDescription } from "./TrackDescriptionText";
-import { ExtendedTracks } from "./Tracks";
+import type { ExtendedTracks } from "./useTracks";
 
 const FALLBACK_TAG = "Untagged";
 

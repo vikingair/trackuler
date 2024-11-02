@@ -10,8 +10,11 @@ import { TrackService } from "../services/TrackService";
 import { Todo } from "../services/Types";
 import { Utils } from "../services/utils";
 import { Checkbox } from "./base/Checkbox";
-import { EditableInput } from "./forms/EditableInput";
-import { EditableTextarea } from "./forms/EditableTextarea";
+import { EditableInput, EditableInputRef } from "./forms/EditableInput";
+import {
+  EditableTextarea,
+  EditableTextareaRef,
+} from "./forms/EditableTextarea";
 import { SingleInputForm } from "./forms/SingleInputForm";
 import { getTagAndTextForDescription } from "./TrackDescriptionText";
 
@@ -38,21 +41,32 @@ const navigateFocusOfSummaries = (
   }
 };
 
-type NestedTodos = { list: Todo[]; nested: Record<string, Todo[]> };
+type NestedTodos = {
+  list: Todo[];
+  nested: Array<[tag: string, todos: Todo[]]>;
+};
 
-const convertListToNested = (list: Todo[]): NestedTodos =>
-  list.reduce<NestedTodos>(
+const convertListToNested = (list: Todo[]): NestedTodos => {
+  const { untagged, nested } = list.reduce<{
+    untagged: Todo[];
+    nested: Record<string, Todo[]>;
+  }>(
     (red, cur) => {
       const [tag] = getTagAndTextForDescription(cur.title);
-      if (!tag) red.list = [...red.list, cur];
+      if (!tag) red.untagged = [...red.untagged, cur];
       else {
         red.nested[tag] ??= [];
         red.nested[tag] = [...red.nested[tag], cur];
       }
       return red;
     },
-    { list: [], nested: {} },
+    { untagged: [], nested: {} },
   );
+  return {
+    list: untagged,
+    nested: Object.entries(nested).sort(([a], [b]) => a.localeCompare(b)),
+  };
+};
 
 type TodoItemsProps = {
   todos: Todo[];
@@ -128,10 +142,36 @@ const TodoItem: React.FC<TodoItemProps> = ({
     [index, onDragLeave, onMove],
   );
 
-  const onKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if ((e.target as HTMLElement).tagName?.toLowerCase() === "input") return;
-    if (navigateFocusOfSummaries(e, ref.current)) return;
-  }, []);
+  const titleRef = useRef<EditableInputRef>(null);
+  const descRef = useRef<EditableTextareaRef>(null);
+
+  const onKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if ((e.target as HTMLElement).tagName?.toLowerCase() === "input") return;
+      if (navigateFocusOfSummaries(e, ref.current)) return;
+      if (e.shiftKey) {
+        if (e.code === "KeyD") {
+          navigateFocusOfSummaries({ ...e, code: "ArrowDown" }, ref.current);
+          _onRemove();
+        }
+        return;
+      }
+      if (e.code === "KeyE") {
+        titleRef.current?.setEdit(true);
+        e.preventDefault();
+      } else if (e.code === "KeyR") {
+        navigateFocusOfSummaries({ ...e, code: "ArrowDown" }, ref.current);
+        onChangeResolved(!resolvedAt);
+        e.preventDefault();
+      } else if (e.code === "KeyD") {
+        const details = ref.current?.parentElement as HTMLDetailsElement | null;
+        if (details) details.open = true;
+        descRef.current?.setEdit(true);
+        e.preventDefault();
+      }
+    },
+    [_onRemove, onChangeResolved, resolvedAt],
+  );
 
   return (
     <details>
@@ -139,7 +179,18 @@ const TodoItem: React.FC<TodoItemProps> = ({
         ref={ref}
         tabIndex={0}
         draggable={!!onMove}
-        onDragStart={(e) => e.dataTransfer.setData("todo", todo.ID)}
+        onDragStart={(e) => {
+          e.dataTransfer.setData("todo", todo.ID);
+          // needs to be in another queue process
+          setTimeout(() => {
+            const p = ref.current?.parentElement;
+            if (p) p.style.visibility = "hidden";
+          }, 0);
+        }}
+        onDragEnd={() => {
+          const p = ref.current?.parentElement;
+          if (p) p.style.visibility = "unset";
+        }}
         onDragEnter={onDragEnter}
         onDragLeave={onDragLeave}
         onDrop={onDrop}
@@ -154,6 +205,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
           }
         >
           <EditableInput
+            ref={titleRef}
             value={title}
             onChange={onChangeTitle}
             inputName={"todo-title"}
@@ -182,6 +234,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
           </p>
         )}
         <EditableTextarea
+          ref={descRef}
           className={"todo__description"}
           onChange={onChangeDescription}
           value={description}
@@ -260,7 +313,7 @@ export const Todos: React.FC = () => {
         <IconPlus />
         <SingleInputForm onChange={add} inputName={"toto-title"} />
       </div>
-      {Object.entries(openTodos.nested).map(([tag, todos]) => (
+      {openTodos.nested.map(([tag, todos]) => (
         <details className="todos_group" key={tag}>
           <summary onKeyDown={onKeyDown}>{tag}</summary>
           <TodoItems todos={todos} {...handlers} noTag />
@@ -270,7 +323,7 @@ export const Todos: React.FC = () => {
       <details className="todos_resolved">
         <summary>Resolved ✔</summary>
         <div className="todos_resolved_items">
-          {Object.entries(resolvedTodos.nested).map(([tag, todos]) => (
+          {resolvedTodos.nested.map(([tag, todos]) => (
             <details className="todos_group" key={tag}>
               <summary onKeyDown={onKeyDown}>{tag}</summary>
               <TodoItems todos={todos} {...handlers} noTag />
