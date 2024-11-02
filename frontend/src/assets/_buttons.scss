@@ -3,6 +3,11 @@ button.icon-button {
   border-radius: 1em;
   border: none;
   padding: 0.25em 0.5em;
+  cursor: pointer;
+
+  &:hover {
+    filter: drop-shadow(2px 4px 6px black);
+  }
 }
 
 svg.icon {

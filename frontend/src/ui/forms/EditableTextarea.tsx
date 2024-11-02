@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useImperativeHandle, useState } from "react";
 import { IconEdit } from "../../icons/icon";
 import { Markdown } from "../base/Markdown";
 import { SingleTextAreaForm } from "./SingleTextAreaForm";
@@ -11,24 +11,25 @@ export type EditableTextareaProps = {
   name: string;
 };
 
-export const EditableTextarea: React.FC<EditableTextareaProps> = ({
-  value,
-  onChange,
-  title,
-  className,
-  name,
-}) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const onEdit = useCallback(() => setIsEditing(true), []);
+export type EditableTextareaRef = {
+  setEdit: (next: boolean) => void;
+};
+
+export const EditableTextarea = React.forwardRef<
+  EditableTextareaRef,
+  EditableTextareaProps
+>(({ value, onChange, title, className, name }, ref) => {
+  const [edit, setEdit] = useState(false);
+  const onEdit = useCallback(() => setEdit(true), []);
   const _onChange = useCallback(
-    (description: string) =>
-      onChange(description).then(() => setIsEditing(false)),
+    (description: string) => onChange(description).then(() => setEdit(false)),
     [onChange],
   );
-  const onCancel = useCallback(() => setIsEditing(false), []);
+  const onCancel = useCallback(() => setEdit(false), []);
+  useImperativeHandle(ref, () => ({ setEdit }));
   return (
     <div className={className} title={title}>
-      {isEditing ? (
+      {edit ? (
         <SingleTextAreaForm
           value={value}
           onChange={_onChange}
@@ -53,4 +54,4 @@ export const EditableTextarea: React.FC<EditableTextareaProps> = ({
       )}
     </div>
   );
-};
+});
