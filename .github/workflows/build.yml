@@ -9,14 +9,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/pnpm-install
-        with:
-          target: 'frontend'
       - name: Lint
         run: pnpm lint
-        working-directory: frontend
       - name: Test
         run: pnpm test
-        working-directory: frontend
       - name: Build
         run: pnpm build
-        working-directory: frontend
