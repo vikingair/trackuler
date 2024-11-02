@@ -1,11 +1,6 @@
 name: "PNPM Install"
 description: "Install dependencies with pnpm"
 
-inputs:
-  target:
-    description: "The name of the directory where the install should run"
-    required: true
-
 runs:
   using: "composite"
   steps:
@@ -34,4 +29,3 @@ runs:
     - name: Install dependencies
       shell: bash
       run: pnpm install --frozen-lockfile
-      working-directory: ${{ inputs.target }}

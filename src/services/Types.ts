@@ -36,6 +36,5 @@ export type TrackInterface = {
 
 export enum TrackServiceType {
   LOCAL = "local",
-  API = "API",
   FILE_SYSTEM = "files",
 }

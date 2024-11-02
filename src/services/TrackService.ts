@@ -1,5 +1,4 @@
 import { Store } from "../store";
-import { APIService } from "./APIService";
 import { LocalService } from "./LocalService";
 import {
   CategoryConfig,
@@ -27,8 +26,6 @@ const _initialType = async (): Promise<TrackServiceType> => {
 const _change = async (trackType: TrackServiceType) => {
   if (trackType === TrackServiceType.LOCAL) {
     state.current = LocalService;
-  } else if (trackType === TrackServiceType.API) {
-    state.current = APIService;
   } else {
     state.current = WorkdirService;
   }
