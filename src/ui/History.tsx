@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ClockAmountIcon } from "../icons/ClockIcon";
+import { Track } from "../services/storage/base";
 import { TrackService } from "../services/TrackService";
-import { Track } from "../services/Types";
-import { useSub } from "../store";
 import { DateInput } from "./base/Input";
 import { Bookings } from "./Bookings";
 import { Tracks } from "./Tracks";
@@ -34,21 +33,21 @@ const HistoryItem: React.FC<HistoryItemProps> = ({ tracks }) => {
   );
 };
 
-export type HistoryProps = { tracksList: Track[][] };
-
 const TWO_WEEKS = 2 * 7 * 24 * 60 * 60 * 1000;
 
-export const History: React.FC<HistoryProps> = ({ tracksList }) => {
-  const currentKey = useSub(({ currentKey }) => currentKey);
+export const History: React.FC = () => {
   const [fromDate, setFromDate] = useState(
     () => new Date(Date.now() - TWO_WEEKS),
   );
   const [toDate, setToDate] = useState(() => new Date());
 
+  const [tracksList, setTracksList] = useState<Track[][]>([]);
+
   useEffect(() => {
-    setFromDate(new Date(Date.now() - TWO_WEEKS));
-    setToDate(new Date());
-  }, [currentKey]);
+    TrackService.current()
+      .getHistoryTracks(fromDate, toDate)
+      .then(setTracksList);
+  }, [fromDate, toDate]);
 
   return (
     <div className={"history"}>

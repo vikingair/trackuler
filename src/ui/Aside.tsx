@@ -1,8 +1,7 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Persistore } from "persistore";
 import { IconSettings } from "../icons/icon";
-import { TrackService } from "../services/TrackService";
-import { Track } from "../services/Types";
+import { useSub } from "../store";
 import { Tabs } from "./base/Tabs";
 import { History } from "./History";
 import { Settings } from "./Settings";
@@ -29,11 +28,7 @@ const getActiveTab = (): TabOption => {
 const persistTab = (tab: TabOption) => Persistore.set(ACTIVE_TAB_KEY, tab);
 
 export const Aside: React.FC = () => {
-  const [tracksList, setTracksList] = useState<Track[][]>([]);
-
-  useEffect(() => {
-    TrackService.current().getLatest().then(setTracksList);
-  }, []);
+  const currentKey = useSub(({ currentKey }) => currentKey);
 
   const [activeTab, setActiveTab] = useState(getActiveTab);
 
@@ -45,7 +40,7 @@ export const Aside: React.FC = () => {
   return (
     <aside>
       <Tabs tabs={TABS} onClick={onClickTab} current={activeTab}>
-        {activeTab === TabOption.HISTORY && <History tracksList={tracksList} />}
+        {activeTab === TabOption.HISTORY && <History key={currentKey} />}
         {activeTab === TabOption.TODOS && <Todos />}
         {activeTab === TabOption.SETTINGS && <Settings />}
       </Tabs>

@@ -1,9 +1,4 @@
-import React, {
-  type KeyboardEvent,
-  useCallback,
-  useRef,
-  useState,
-} from "react";
+import React, { type KeyboardEvent, useRef, useState } from "react";
 import { FormRef, Morfi, MorfiData } from "morfi";
 import { FormTimeInput } from "../base/Input";
 
@@ -19,20 +14,22 @@ export const TimeForm: React.FC<TimeFormProps> = ({ time, onChange }) => {
     Morfi.initialData({ time }),
   );
   const { fields, Form } = Morfi.useForm<TimeFormValues>();
-  const onSubmit = useCallback(
-    ({ time }: TimeFormValues) => onChange(time),
-    [onChange],
-  );
+
   const ref = useRef<FormRef<TimeFormValues> | null>(null);
-  const onEscape = useCallback(() => {
+  const onEscape = () => {
     ref.current?.submit();
-  }, []);
+  };
   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.code === "Escape") onEscape();
   };
 
   return (
-    <Form onChange={setData} data={data} onSubmit={onSubmit} ref={ref}>
+    <Form
+      onChange={setData}
+      data={data}
+      onSubmit={({ time }) => onChange(time)}
+      ref={ref}
+    >
       <FormTimeInput
         name={"track-time"}
         autoFocus

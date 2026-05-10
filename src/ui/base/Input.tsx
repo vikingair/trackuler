@@ -1,4 +1,4 @@
-import React, { type KeyboardEvent, useCallback } from "react";
+import { type KeyboardEvent } from "react";
 import { FormField, Morfi } from "morfi";
 
 type InputType =
@@ -18,21 +18,16 @@ type InputProps = InputType &
     onChange: (v: string) => void;
   };
 
-export const Input: React.FC<InputProps> = ({ onChange, ...rest }) => {
-  const _onChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) =>
-      onChange(event.target.value),
-    [onChange],
-  );
-  return <input onChange={_onChange} {...rest} />;
-};
+export const Input: React.FC<InputProps> = ({ onChange, ...rest }) => (
+  <input onChange={(event) => onChange(event.target.value)} {...rest} />
+);
 
 type FormInputProps = CommonInputProps & {
   field: FormField<string>;
 };
 
 export const FormInput: React.FC<FormInputProps> = ({ field, ...rest }) => {
-  const { onChange, value, ..._rest } = Morfi.useField(field);
+  const { onChange, value } = Morfi.useField(field);
   return <Input {...{ onChange, value }} {...rest} />;
 };
 
@@ -45,20 +40,14 @@ export const DateInput: React.FC<DateInputProps> = ({
   value,
   onChange,
   ...rest
-}) => {
-  const _onChange = useCallback(
-    (v: string) => onChange(new Date(v)),
-    [onChange],
-  );
-  return (
-    <Input
-      value={value.toISOString().substring(0, 10)}
-      onChange={_onChange}
-      type={"date"}
-      {...rest}
-    />
-  );
-};
+}) => (
+  <Input
+    value={value.toISOString().substring(0, 10)}
+    onChange={(v) => onChange(new Date(v))}
+    type={"date"}
+    {...rest}
+  />
+);
 
 type CommonTimeInputProps = {
   name: string;
@@ -86,21 +75,15 @@ export const TimeInput: React.FC<TimeInputProps> = ({
   value,
   onChange,
   ...rest
-}) => {
-  const _onChange = useCallback(
-    (v: string) => onChange(getUpdatedTime(v, value)),
-    [onChange, value],
-  );
-  return (
-    <Input
-      value={value.toLocaleTimeString()}
-      onChange={_onChange}
-      step={2}
-      type={"time"}
-      {...rest}
-    />
-  );
-};
+}) => (
+  <Input
+    value={value.toLocaleTimeString()}
+    onChange={(v) => onChange(getUpdatedTime(v, value))}
+    step={2}
+    type={"time"}
+    {...rest}
+  />
+);
 
 type FormTimeInputProps = CommonTimeInputProps & {
   field: FormField<Date>;

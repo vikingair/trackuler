@@ -1,33 +1,33 @@
 import { Store } from "../store";
-import { LocalService } from "./LocalService";
 import {
   CategoryConfig,
   CategoryConfigs,
   Config,
-  TrackInterface,
-  TrackServiceType,
-} from "./Types";
+  StorageAPI,
+  StorageType,
+} from "./storage/base";
+import { LocalStorage } from "./storage/LocalStorage";
+import { WorkdirStorage } from "./storage/WorkdirStorage";
 import { Utils } from "./utils";
-import { WorkdirService } from "./WorkdirService";
 
-const state: { current: TrackInterface } = { current: LocalService };
+const state: { current: StorageAPI } = { current: LocalStorage };
 
-const current = (): TrackInterface => state.current;
+const current = (): StorageAPI => state.current;
 
-const _initialType = async (): Promise<TrackServiceType> => {
-  const workdirName = await WorkdirService.getWorkdir();
+const _initialType = async (): Promise<StorageType> => {
+  const workdirName = await WorkdirStorage.getWorkdir();
   Store.set({ workdirName });
   if (workdirName) {
-    await WorkdirService.tryInit();
-    return TrackServiceType.FILE_SYSTEM;
-  } else return TrackServiceType.LOCAL;
+    await WorkdirStorage.tryInit();
+    return StorageType.FILE_SYSTEM;
+  } else return StorageType.LOCAL;
 };
 
-const _change = async (trackType: TrackServiceType) => {
-  if (trackType === TrackServiceType.LOCAL) {
-    state.current = LocalService;
+const _change = async (trackType: StorageType) => {
+  if (trackType === StorageType.LOCAL) {
+    state.current = LocalStorage;
   } else {
-    state.current = WorkdirService;
+    state.current = WorkdirStorage;
   }
   Store.set({ trackType });
 };
@@ -48,17 +48,17 @@ const init = async (): Promise<void> => {
   return _initialType().then(_change);
 };
 
-const change = async (trackType: TrackServiceType) => {
-  if (trackType === TrackServiceType.FILE_SYSTEM) {
-    const workdirName = await WorkdirService.pickWorkdir();
+const change = async (trackType: StorageType) => {
+  if (trackType === StorageType.FILE_SYSTEM) {
+    const workdirName = await WorkdirStorage.pickWorkdir();
     if (workdirName) {
       Store.set({ workdirName });
-      state.current = WorkdirService;
+      state.current = WorkdirStorage;
     } else {
       return;
     }
-  } else if (state.current === WorkdirService) {
-    await WorkdirService.unlinkWorkdir();
+  } else if (state.current === WorkdirStorage) {
+    await WorkdirStorage.unlinkWorkdir();
   }
   await _change(trackType);
 };

@@ -1,11 +1,4 @@
-import React, {
-  ClipboardEvent,
-  KeyboardEvent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-} from "react";
+import { ClipboardEvent, KeyboardEvent, useEffect, useRef } from "react";
 import { FormField, Morfi } from "morfi";
 
 type CommonTextareaProps = {
@@ -27,26 +20,21 @@ export const Textarea: React.FC<TextareaProps> = ({
   ...rest
 }) => {
   const ref = useRef<HTMLTextAreaElement>(null);
-  const _onChange = useCallback(
-    (event: React.ChangeEvent<HTMLTextAreaElement>) =>
-      onChange(event.target.value),
-    [onChange],
-  );
-  const _onBlur = useMemo(
-    () =>
-      onBlur
-        ? (event: React.ChangeEvent<HTMLTextAreaElement>) =>
-            onBlur(event.target.value)
-        : undefined,
-    [onBlur],
-  );
+
   useEffect(() => {
     const textarea = ref.current;
     if (!textarea) return;
     textarea.style.setProperty("--_height", textarea.scrollHeight + 2 + "px");
   }, [rest.value]);
 
-  return <textarea ref={ref} onChange={_onChange} onBlur={_onBlur} {...rest} />;
+  return (
+    <textarea
+      ref={ref}
+      onChange={(event) => onChange(event.target.value)}
+      onBlur={onBlur ? (event) => onBlur(event.target.value) : undefined}
+      {...rest}
+    />
+  );
 };
 
 type FormTextareaProps = CommonTextareaProps & {

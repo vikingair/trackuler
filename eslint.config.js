@@ -1,52 +1,26 @@
 // @ts-check
 
-import { fixupPluginRules } from "@eslint/compat";
-import { FlatCompat } from "@eslint/eslintrc";
 import js from "@eslint/js";
+import { defineConfig, globalIgnores } from "eslint/config";
 import prettier from "eslint-plugin-prettier";
-import react from "eslint-plugin-react";
+import reactHooks from "eslint-plugin-react-hooks";
+import reactRefresh from "eslint-plugin-react-refresh";
 import simpleImpSort from "eslint-plugin-simple-import-sort";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-import ts from "typescript-eslint";
+import tseslint from "typescript-eslint";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({ baseDirectory: __dirname });
-
-/**
- * source: https://github.com/import-js/eslint-plugin-import/issues/2948#issuecomment-2148832701
- * @param {string} name the pugin name
- * @param {string} alias the plugin alias
- * @returns {import("typescript-eslint").plugin}
- */
-function legacyPlugin(name, alias = name) {
-  const plugin = compat.plugins(name)[0]?.plugins?.[alias];
-
-  if (!plugin) {
-    throw new Error(`Unable to resolve plugin ${name} and/or alias ${alias}`);
-  }
-
-  return fixupPluginRules(plugin);
-}
-
-export default ts.config(
-  { ignores: ["node_modules", "build"] },
+export default defineConfig(
+  globalIgnores(["node_modules", "build"]),
   {
     files: ["**/*.{j,t}s?(x)"],
     extends: [
       js.configs.recommended,
-      ...ts.configs.recommended,
-      react.configs.flat["jsx-runtime"],
+      tseslint.configs.recommended,
+      reactHooks.configs.flat.recommended,
+      reactRefresh.configs.vite,
     ],
     plugins: {
       prettier,
-      // see https://github.com/import-js/eslint-plugin-import/issues/2948
-      import: legacyPlugin("eslint-plugin-import", "import"),
       "simple-import-sort": simpleImpSort,
-      // will be eventually replaced by the new eslint-plugin-react-compiler when React 19 gets released
-      "react-hooks": legacyPlugin("eslint-plugin-react-hooks", "react-hooks"),
-      react,
     },
     rules: {
       "react-hooks/rules-of-hooks": "error",
@@ -65,6 +39,8 @@ export default ts.config(
               "\\.s?css$",
               // side effect (e.g. `import "./foo"`)
               "^\\u0000",
+              // NodeJS internals "node:"
+              "^node:",
               // every import starting with "react"
               "^react",
               // things that start with a letter (or digit or underscore), or `@` followed by a letter
@@ -82,8 +58,7 @@ export default ts.config(
           patterns: ["**/build/*", "**/dist/*"],
         },
       ],
-      "import/no-duplicates": "warn",
-      "import/no-commonjs": "warn",
+      "no-duplicate-imports": "warn",
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-unused-vars": [
         "warn",

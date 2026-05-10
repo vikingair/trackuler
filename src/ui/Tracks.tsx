@@ -1,5 +1,5 @@
 import React from "react";
-import { Track } from "../services/Types";
+import { Track } from "../services/storage/base";
 import { TrackEntry } from "./TrackEntry";
 import { ExtendedTracks } from "./useTracks";
 

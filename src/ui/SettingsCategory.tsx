@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
+import { CategoryConfig } from "../services/storage/base";
 import { TrackService } from "../services/TrackService";
-import { CategoryConfig } from "../services/Types";
 import { Input } from "./base/Input";
 
 export type SettingsCategoryProps = { config: CategoryConfig; ID: string };
@@ -10,19 +10,18 @@ export const SettingsCategory: React.FC<SettingsCategoryProps> = ({
   config: { name, regex, color },
   config,
 }) => {
-  const [_regex, setRegex] = useState(regex);
-  useEffect(() => {
-    setRegex(regex);
-  }, [regex]);
   const onChangeColor = useCallback(
     (color: string) => {
       TrackService.setCategoryConfig(ID as any, { ...config, color });
     },
     [ID, config],
   );
-  const onBlurRegex = useCallback(() => {
-    TrackService.setCategoryConfig(ID as any, { ...config, regex: _regex });
-  }, [ID, config, _regex]);
+  const onChangeRegex = useCallback(
+    (regex: string) => {
+      TrackService.setCategoryConfig(ID as any, { ...config, regex });
+    },
+    [ID, config],
+  );
   return (
     <tr>
       <td>{name}</td>
@@ -35,12 +34,7 @@ export const SettingsCategory: React.FC<SettingsCategoryProps> = ({
         />
       </td>
       <td className={"settings__category-regex"}>
-        <Input
-          name={"category-regex"}
-          value={_regex}
-          onChange={setRegex}
-          onBlur={onBlurRegex}
-        />
+        <Input name={"category-regex"} value={regex} onChange={onChangeRegex} />
       </td>
     </tr>
   );

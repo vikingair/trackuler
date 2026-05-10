@@ -7,12 +7,16 @@ export type TrackDescriptionProps = {
   onChange?: (value: string) => Promise<void>;
   color?: string;
   title?: string;
+  ref?: React.RefObject<EditableInputRef | null>;
 };
 
-export const TrackDescription = React.forwardRef<
-  EditableInputRef,
-  TrackDescriptionProps
->(({ value, onChange, color, title }, ref) =>
+export const TrackDescription: React.FC<TrackDescriptionProps> = ({
+  value,
+  onChange,
+  color,
+  title,
+  ref,
+}) =>
   onChange ? (
     <EditableInput
       value={value}
@@ -31,5 +35,4 @@ export const TrackDescription = React.forwardRef<
     >
       <TrackDescriptionText value={value} />
     </div>
-  ),
-);
+  );

@@ -1,7 +1,11 @@
-import React, { useCallback, useImperativeHandle, useState } from "react";
+import { useImperativeHandle, useState } from "react";
 import { IconEdit } from "../../icons/icon";
 import { TrackDescriptionText } from "../TrackDescriptionText";
 import { SingleInputForm } from "./SingleInputForm";
+
+export type EditableInputRef = {
+  setEdit: (next: boolean) => void;
+};
 
 export type EditableInputProps = {
   value: string;
@@ -11,29 +15,29 @@ export type EditableInputProps = {
   className?: string;
   inputName: string;
   hideTag?: boolean;
+  ref?: React.RefObject<EditableInputRef | null>;
 };
 
-export type EditableInputRef = {
-  setEdit: (next: boolean) => void;
-};
-
-export const EditableInput = React.forwardRef<
-  EditableInputRef,
-  EditableInputProps
->(({ value, onChange, color, title, className, inputName, hideTag }, ref) => {
+export const EditableInput: React.FC<EditableInputProps> = ({
+  value,
+  onChange,
+  color,
+  title,
+  className,
+  inputName,
+  hideTag,
+  ref,
+}) => {
   const [edit, setEdit] = useState(false);
-  const onEdit = useCallback(() => setEdit(true), []);
-  const _onChange = useCallback(
-    (description: string) => onChange(description).then(() => setEdit(false)),
-    [onChange],
-  );
   useImperativeHandle(ref, () => ({ setEdit }));
   return (
     <div className={className} style={{ backgroundColor: color }} title={title}>
       {edit ? (
         <SingleInputForm
           value={value}
-          onChange={_onChange}
+          onChange={(description) =>
+            onChange(description).then(() => setEdit(false))
+          }
           submitOnBlur
           inputName={inputName}
         />
@@ -41,7 +45,7 @@ export const EditableInput = React.forwardRef<
         <>
           <TrackDescriptionText value={value} hideTag={hideTag} />
           <button
-            onClick={onEdit}
+            onClick={() => setEdit(true)}
             className={"icon-button"}
             title={"edit description"}
             aria-label={"edit description"}
@@ -52,4 +56,4 @@ export const EditableInput = React.forwardRef<
       )}
     </div>
   );
-});
+};

@@ -1,4 +1,4 @@
-import { CategoryConfigs } from "./Types";
+import { CategoryConfigs } from "./storage/base";
 
 export type Category = { ID: string; name: string; color?: string };
 

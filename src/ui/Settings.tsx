@@ -1,22 +1,22 @@
 import React, { useMemo } from "react";
+import { StorageType } from "../services/storage/base";
 import { TrackService } from "../services/TrackService";
-import { TrackServiceType } from "../services/Types";
 import { useSub } from "../store";
 import { Select, SelectOption } from "./base/Select";
 import { SettingsCategory } from "./SettingsCategory";
 
-const STORAGE_OPTIONS: SelectOption<TrackServiceType>[] = [
-  { label: "Browser Local Storage", value: TrackServiceType.LOCAL },
-  { label: "File System Workdir", value: TrackServiceType.FILE_SYSTEM },
+const STORAGE_OPTIONS: SelectOption<StorageType>[] = [
+  { label: "Browser Local Storage", value: StorageType.LOCAL },
+  { label: "File System Workdir", value: StorageType.FILE_SYSTEM },
 ];
 
 export const Settings: React.FC = () => {
   const { trackType, language, needsWorkdirAccess, categoryConfig } = useSub(
     ({ trackType, language, workdirAccessGranted, categoryConfig }) => ({
-      trackType: trackType || TrackServiceType.LOCAL,
+      trackType: trackType || StorageType.LOCAL,
       language,
       needsWorkdirAccess:
-        trackType === TrackServiceType.FILE_SYSTEM && !workdirAccessGranted,
+        trackType === StorageType.FILE_SYSTEM && !workdirAccessGranted,
       categoryConfig,
     }),
   );
