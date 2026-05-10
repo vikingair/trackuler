@@ -6,8 +6,8 @@ import React, {
   useState,
 } from "react";
 import { IconDelete, IconPlus } from "../icons/icon";
+import { Todo } from "../services/storage/base";
 import { TrackService } from "../services/TrackService";
-import { Todo } from "../services/Types";
 import { Utils } from "../services/utils";
 import { Checkbox } from "./base/Checkbox";
 import { EditableInput, EditableInputRef } from "./forms/EditableInput";
@@ -16,7 +16,6 @@ import {
   EditableTextareaRef,
 } from "./forms/EditableTextarea";
 import { SingleInputForm } from "./forms/SingleInputForm";
-import { getTagAndTextForDescription } from "./TrackDescriptionText";
 
 const navigateFocusOfSummaries = (
   e: React.KeyboardEvent,
@@ -52,7 +51,7 @@ const convertListToNested = (list: Todo[]): NestedTodos => {
     nested: Record<string, Todo[]>;
   }>(
     (red, cur) => {
-      const [tag] = getTagAndTextForDescription(cur.title);
+      const [tag] = Utils.getTagAndTextForDescription(cur.title);
       if (!tag) red.untagged = [...red.untagged, cur];
       else {
         red.nested[tag] ??= [];
@@ -165,6 +164,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
         e.preventDefault();
       } else if (e.code === "KeyD") {
         const details = ref.current?.parentElement as HTMLDetailsElement | null;
+        // eslint-disable-next-line react-hooks/immutability
         if (details) details.open = true;
         descRef.current?.setEdit(true);
         e.preventDefault();
@@ -189,6 +189,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
         }}
         onDragEnd={() => {
           const p = ref.current?.parentElement;
+          // eslint-disable-next-line react-hooks/immutability
           if (p) p.style.visibility = "unset";
         }}
         onDragEnter={onDragEnter}
@@ -263,7 +264,7 @@ export const Todos: React.FC = () => {
   );
 
   const add = useCallback((title: string) => {
-    const ID = Utils.uuid();
+    const ID = crypto.randomUUID();
     const createdAt = new Date();
     const next: Todo = { ID, title, description: "", createdAt };
     return TrackService.current()

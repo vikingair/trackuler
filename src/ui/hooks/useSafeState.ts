@@ -7,6 +7,7 @@ import {
   useState,
 } from "react";
 
+// TODO: Test if still necessary
 export const useSafeState = <S>(
   initialState: S | (() => S),
 ): [S, Dispatch<SetStateAction<S>>] => {

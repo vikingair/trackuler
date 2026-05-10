@@ -1,8 +1,19 @@
 import { useMemo } from "react";
 import { Category, CategoryService } from "../services/CategoryService";
+import { Track } from "../services/storage/base";
 import { TrackService } from "../services/TrackService";
-import { Track } from "../services/Types";
 import { useSub } from "../store";
+
+const getPauseTime = (tracks: Track[], categories: Category[]) => {
+  let totalPause = 0;
+  return tracks.map(({ time }, i) => {
+    const nextTime = tracks[i + 1]?.time;
+    if (CategoryService.isPause(categories[i]) && nextTime) {
+      totalPause += +nextTime - +time;
+    }
+    return totalPause;
+  });
+};
 
 export type ExtendedTracks = {
   tracks: Track[];
@@ -39,14 +50,7 @@ export const useTracks = (unsortedTracks: Track[]): ExtendedTracks => {
         ? +tracks[tracks.length - 1].time - +tracks[0].time - totalPauseMs
         : undefined;
 
-    let totalPause = 0;
-    const pauseTime = tracks.map(({ time }, i) => {
-      const nextTime = tracks[i + 1]?.time;
-      if (CategoryService.isPause(categories[i]) && nextTime) {
-        totalPause += +nextTime - +time;
-      }
-      return totalPause;
-    });
+    const pauseTime = getPauseTime(tracks, categories);
     const trackRates = tracks.map((_, i) => {
       if (CategoryService.isPause(categories[i])) return undefined;
       const firstTime = tracks[0].time;

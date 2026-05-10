@@ -1,8 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { IconFolderOpen } from "../icons/icon";
-import { TrackService } from "../services/TrackService";
-import { TrackServiceType } from "../services/Types";
-import { WorkdirService } from "../services/WorkdirService";
+import { StorageType } from "../services/storage/base";
+import { WorkdirStorage } from "../services/storage/WorkdirStorage";
 import { useSub } from "../store";
 import { Aside } from "./Aside";
 import { Main } from "./Main";
@@ -16,10 +15,6 @@ export const App: React.FC = () => {
       currentKey,
     }),
   );
-
-  useEffect(() => {
-    TrackService.init();
-  }, []);
 
   return (
     <div className="App" key={currentKey}>
@@ -35,13 +30,13 @@ export const App: React.FC = () => {
           Trackuler
         </h1>
       </header>
-      {!trackType ? null : trackType === TrackServiceType.FILE_SYSTEM &&
+      {!trackType ? null : trackType === StorageType.FILE_SYSTEM &&
         !workdirAccessGranted ? (
         <div className={"workdir-access"}>
           <p>Grant read & write access to workdir: "{workdirName}"</p>
           <button
             className={"icon-button"}
-            onClick={WorkdirService.init}
+            onClick={WorkdirStorage.init}
             title={"open workdir"}
             aria-label={"open workdir"}
           >

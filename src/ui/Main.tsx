@@ -8,8 +8,8 @@ import React, {
 import { IconMicrophone, IconMicrophoneSlash, IconPlus } from "../icons/icon";
 import { CategoryService } from "../services/CategoryService";
 import { SpeechRecognitionService } from "../services/SpeechRecognitionService";
+import { Track } from "../services/storage/base";
 import { TrackService } from "../services/TrackService";
-import { Track } from "../services/Types";
 import { Utils } from "../services/utils";
 import { Store } from "../store";
 import { Bookings } from "./Bookings";
@@ -65,7 +65,7 @@ export const Main: React.FC = () => {
 
   const addNewContent = useCallback(
     (description: string) => {
-      const ID = Utils.uuid();
+      const ID = crypto.randomUUID();
       const time = new Date();
       const next = { ID, description, time };
       return TrackService.current()

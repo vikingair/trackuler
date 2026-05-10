@@ -1,5 +1,5 @@
 import { createStore } from "react-use-sub";
-import { CategoryConfigs, TrackServiceType } from "./services/Types";
+import { CategoryConfigs, StorageType } from "./services/storage/base";
 import { Utils } from "./services/utils";
 
 const getLanguage = () =>
@@ -8,7 +8,7 @@ const getLanguage = () =>
     : navigator.language;
 
 type State = {
-  trackType?: TrackServiceType;
+  trackType?: StorageType;
   workdirAccessGranted: boolean;
   workdirName?: string;
   currentKey: string;

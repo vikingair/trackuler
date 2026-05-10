@@ -1,7 +1,7 @@
 import React from "react";
 import { CategoryService } from "../services/CategoryService";
 import { TrackService } from "../services/TrackService";
-import { getTagAndTextForDescription } from "./TrackDescriptionText";
+import { Utils } from "../services/utils";
 import type { ExtendedTracks } from "./useTracks";
 
 const FALLBACK_TAG = "Untagged";
@@ -14,7 +14,7 @@ export const Bookings: React.FC<BookingsProps> = ({ extendedTracks }) => {
   const taggedTracks: TaggedTrack[] = extendedTracks.tracks
     .map((track, i) => {
       const timeDiffMs = extendedTracks.trackDiffs[i] || 0;
-      const [tag, text] = getTagAndTextForDescription(track.description);
+      const [tag, text] = Utils.getTagAndTextForDescription(track.description);
       return { text, tag: tag || FALLBACK_TAG, timeDiffMs };
     })
     .filter(

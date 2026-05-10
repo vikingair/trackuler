@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Utils } from "../../services/utils";
 
 export type TabsProps<K extends string> = {

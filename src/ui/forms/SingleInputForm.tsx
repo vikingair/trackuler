@@ -1,4 +1,4 @@
-import React, { type KeyboardEvent, useCallback, useRef } from "react";
+import { type KeyboardEvent, useRef, useState } from "react";
 import { FormRef, Morfi, MorfiData } from "morfi";
 import { FormInput } from "../base/Input";
 import { useSafeState } from "../hooks/useSafeState";
@@ -26,23 +26,13 @@ export const SingleInputForm: React.FC<SingleInputFormProps> = ({
   submitOnBlur,
   inputName,
 }) => {
-  const initialData = useRef(Morfi.initialData({ value }));
-  const [data, setData] = useSafeState<SingleInputFormData>(
-    initialData.current,
-  );
+  const [initialData] = useState(() => Morfi.initialData({ value }));
+  const [data, setData] = useSafeState<SingleInputFormData>(initialData);
   const { fields, Form } = Morfi.useForm<SingleInputFormValues>();
-  const onSubmit = useCallback(
-    ({ value }: SingleInputFormValues) => onChange(value),
-    [onChange],
-  );
   const ref = useRef<FormRef<SingleInputFormValues> | null>(null);
-  const onSubmitFinished = useCallback(
-    () => setData(initialData.current),
-    [setData],
-  );
-  const onEscape = useCallback(() => {
+  const onEscape = () => {
     if (submitOnBlur) ref.current?.submit();
-  }, [submitOnBlur]);
+  };
   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.code === "Escape") onEscape();
   };
@@ -52,8 +42,8 @@ export const SingleInputForm: React.FC<SingleInputFormProps> = ({
       ref={ref}
       onChange={setData}
       data={data}
-      onSubmit={onSubmit}
-      onSubmitFinished={onSubmitFinished}
+      onSubmit={({ value }) => onChange(value)}
+      onSubmitFinished={() => setData(initialData)}
       validation={VALIDATION}
     >
       <FormInput

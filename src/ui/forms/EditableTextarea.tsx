@@ -1,7 +1,11 @@
-import React, { useCallback, useImperativeHandle, useState } from "react";
+import { useImperativeHandle, useState } from "react";
 import { IconEdit } from "../../icons/icon";
 import { Markdown } from "../base/Markdown";
 import { SingleTextAreaForm } from "./SingleTextAreaForm";
+
+export type EditableTextareaRef = {
+  setEdit: (next: boolean) => void;
+};
 
 export type EditableTextareaProps = {
   value: string;
@@ -9,32 +13,29 @@ export type EditableTextareaProps = {
   title?: string;
   className?: string;
   name: string;
+  ref?: React.RefObject<EditableTextareaRef | null>;
 };
 
-export type EditableTextareaRef = {
-  setEdit: (next: boolean) => void;
-};
-
-export const EditableTextarea = React.forwardRef<
-  EditableTextareaRef,
-  EditableTextareaProps
->(({ value, onChange, title, className, name }, ref) => {
+export const EditableTextarea: React.FC<EditableTextareaProps> = ({
+  value,
+  onChange,
+  title,
+  className,
+  name,
+  ref,
+}) => {
   const [edit, setEdit] = useState(false);
-  const onEdit = useCallback(() => setEdit(true), []);
-  const _onChange = useCallback(
-    (description: string) => onChange(description).then(() => setEdit(false)),
-    [onChange],
-  );
-  const onCancel = useCallback(() => setEdit(false), []);
   useImperativeHandle(ref, () => ({ setEdit }));
   return (
     <div className={className} title={title}>
       {edit ? (
         <SingleTextAreaForm
           value={value}
-          onChange={_onChange}
+          onChange={(description) =>
+            onChange(description).then(() => setEdit(false))
+          }
           name={name}
-          onCancel={onCancel}
+          onCancel={() => setEdit(false)}
         />
       ) : (
         <>
@@ -43,7 +44,7 @@ export const EditableTextarea = React.forwardRef<
             placeholder={"No description"}
           />
           <button
-            onClick={onEdit}
+            onClick={() => setEdit(true)}
             className={"icon-button"}
             title={"edit description"}
             aria-label={"edit description"}
@@ -54,4 +55,4 @@ export const EditableTextarea = React.forwardRef<
       )}
     </div>
   );
-});
+};

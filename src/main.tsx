@@ -1,12 +1,15 @@
 import "./assets/index.scss";
-import React from "react";
+import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
+import { TrackService } from "./services/TrackService";
 import { App } from "./ui/App";
+
+await TrackService.init();
 
 const rootNode = document.getElementById("root") as HTMLDivElement;
 const root = ReactDOM.createRoot(rootNode);
 root.render(
-  <React.StrictMode>
+  <StrictMode>
     <App />
-  </React.StrictMode>,
+  </StrictMode>,
 );

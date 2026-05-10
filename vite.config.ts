@@ -1,11 +1,12 @@
-/// <reference types="vitest" />
+/// <reference types="vitest/config" />
 
-import react from "@vitejs/plugin-react";
+import babel from "@rolldown/plugin-babel";
+import react, { reactCompilerPreset } from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), babel({ presets: [reactCompilerPreset()] })],
   base: "/trackuler/",
   server: {
     port: 7776,

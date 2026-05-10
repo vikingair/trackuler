@@ -7,9 +7,9 @@
       "dom.iterable",
       "esnext"
     ],
+    "types": ["wicg-file-system-access"],
     "allowJs": false,
     "skipLibCheck": false,
-    "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
@@ -18,7 +18,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "preserve"
+    "jsx": "react-jsx",
   },
   "include": ["src", "setupTests.ts"]
 }
