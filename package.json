@@ -4,11 +4,11 @@
   "private": true,
   "license": "MIT",
   "type": "module",
-  "homepage": "https://fdc-viktor-luft.github.io/trackuler/",
+  "homepage": "https://vikingair.github.io/trackuler/",
   "proxy": "http://localhost:7777",
   "repository": {
     "type": "git",
-    "url": "https://github.com/fdc-viktor-luft/trackuler"
+    "url": "https://github.com/vikingair/trackuler"
   },
   "scripts": {
     "build": "vite build",
