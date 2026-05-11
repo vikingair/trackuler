@@ -39,13 +39,6 @@ export const DateInput: React.FC<DateInputProps> = ({
   />
 );
 
-type CommonTimeInputProps = {
-  name: string;
-  onBlur?: () => void;
-  onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void;
-  autoFocus?: boolean;
-};
-
 const getUpdatedTime = (v: string, date: Date): Date => {
   const timeChunks = v.split(":").map(Number);
   return new Date(
