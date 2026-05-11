@@ -1,37 +1,27 @@
 import { type KeyboardEvent } from "react";
-import { FormField, Morfi } from "morfi";
 
 type InputType =
   | { type?: "text" | "color" | "date" }
   | { type: "time"; step: number };
 
-type CommonInputProps = {
+type InputProps = InputType & {
   onBlur?: () => void;
   onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void;
   autoFocus?: boolean;
   name: string;
+  value: string;
+  onChange: (v: string) => void;
 };
-
-type InputProps = InputType &
-  CommonInputProps & {
-    value: string;
-    onChange: (v: string) => void;
-  };
 
 export const Input: React.FC<InputProps> = ({ onChange, ...rest }) => (
   <input onChange={(event) => onChange(event.target.value)} {...rest} />
 );
 
-type FormInputProps = CommonInputProps & {
-  field: FormField<string>;
-};
-
-export const FormInput: React.FC<FormInputProps> = ({ field, ...rest }) => {
-  const { onChange, value } = Morfi.useField(field);
-  return <Input {...{ onChange, value }} {...rest} />;
-};
-
-type DateInputProps = CommonTimeInputProps & {
+type DateInputProps = {
+  onBlur?: () => void;
+  onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void;
+  autoFocus?: boolean;
+  name: string;
   value: Date;
   onChange: (v: Date) => void;
 };
@@ -49,13 +39,6 @@ export const DateInput: React.FC<DateInputProps> = ({
   />
 );
 
-type CommonTimeInputProps = {
-  name: string;
-  onBlur?: () => void;
-  onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void;
-  autoFocus?: boolean;
-};
-
 const getUpdatedTime = (v: string, date: Date): Date => {
   const timeChunks = v.split(":").map(Number);
   return new Date(
@@ -66,7 +49,11 @@ const getUpdatedTime = (v: string, date: Date): Date => {
   );
 };
 
-type TimeInputProps = CommonTimeInputProps & {
+type TimeInputProps = {
+  name: string;
+  onBlur?: () => void;
+  onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void;
+  autoFocus?: boolean;
   value: Date;
   onChange: (v: Date) => void;
 };
@@ -84,15 +71,3 @@ export const TimeInput: React.FC<TimeInputProps> = ({
     {...rest}
   />
 );
-
-type FormTimeInputProps = CommonTimeInputProps & {
-  field: FormField<Date>;
-};
-
-export const FormTimeInput: React.FC<FormTimeInputProps> = ({
-  field,
-  ...rest
-}) => {
-  const { dirty: _, ...fieldProps } = Morfi.useField(field);
-  return <TimeInput {...fieldProps} {...rest} />;
-};
