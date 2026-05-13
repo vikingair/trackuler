@@ -33,7 +33,10 @@ export const DateInput: React.FC<DateInputProps> = ({
 }) => (
   <Input
     value={value.toISOString().substring(0, 10)}
-    onChange={(v) => onChange(new Date(v))}
+    onChange={(v) => {
+      // in case an invalid date got entered v === ""
+      if (v) onChange(new Date(v));
+    }}
     type={"date"}
     {...rest}
   />

@@ -19,7 +19,8 @@ export const SingleInputForm: React.FC<SingleInputFormProps> = ({
   const onSubmit = () => {
     if (input) {
       onChange(input);
-      setInput(value);
+      // to avoid double submission for values that are not cleared by default
+      setInput("");
     }
   };
   const onEscape = () => {
