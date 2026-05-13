@@ -88,7 +88,7 @@ export const createStorage = ({
     const result: Track[][] = [];
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
-    const toMax = Math.max(+yesterday, +to);
+    const toMax = Math.min(+yesterday, +to);
     const current = new Date(toMax);
     while (current > from) {
       const currentApiString = Utils.toApiString(current);

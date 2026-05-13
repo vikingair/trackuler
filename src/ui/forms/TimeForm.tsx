@@ -1,4 +1,4 @@
-import React, { type KeyboardEvent, useState } from "react";
+import React, { type KeyboardEvent, useRef, useState } from "react";
 import { TimeInput } from "../base/Input";
 
 export type TimeFormProps = {
@@ -9,11 +9,12 @@ export type TimeFormProps = {
 export const TimeForm: React.FC<TimeFormProps> = ({ time, onChange }) => {
   const [value, setValue] = useState(time);
 
+  const wasSubmitted = useRef(false);
   const onSubmit = () => {
-    if (value) {
+    if (!wasSubmitted.current) {
       onChange(value);
-      setValue(time);
     }
+    wasSubmitted.current = true;
   };
   const onEscape = () => {
     onSubmit();
