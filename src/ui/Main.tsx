@@ -167,7 +167,7 @@ export const Main: React.FC = () => {
             >
               <p>Stop automatically starting recordings.</p>
               <button
-                className={"icon-button"}
+                className={"btn"}
                 onClick={onStop}
                 title={"stop recording"}
                 aria-label={"stop recording"}
@@ -182,7 +182,7 @@ export const Main: React.FC = () => {
                 on the Microphone.
               </p>
               <button
-                className={"icon-button"}
+                className={"btn btn--success"}
                 onClick={onStart}
                 title={"start recording"}
                 aria-label={"start recording"}

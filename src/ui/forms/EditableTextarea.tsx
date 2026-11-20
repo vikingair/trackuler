@@ -45,7 +45,7 @@ export const EditableTextarea: React.FC<EditableTextareaProps> = ({
           />
           <button
             onClick={() => setEdit(true)}
-            className={"icon-button"}
+            className={"btn"}
             title={"edit description"}
             aria-label={"edit description"}
           >
