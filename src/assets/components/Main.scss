@@ -28,10 +28,6 @@ main {
       position: relative;
     }
 
-    &--start button {
-      background-color: var(--color-success);
-    }
-
     &--recording button::after {
       content: ' ';
       height: 100%;
@@ -72,8 +68,11 @@ main {
 .workdir-access {
   text-align: center;
 
-  button {
+  > .btn {
     font-size: 2em;
-    background-color: var(--color-info);
+  }
+
+  .reselect {
+    margin-left: 0.5em;
   }
 }

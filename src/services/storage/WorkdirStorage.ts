@@ -6,12 +6,25 @@ import { FileAccessMode, IDBService } from "./IDBService";
 
 const OPTIONS = { mode: FileAccessMode.READ_WRITE };
 
+// Some browser versions never settle "queryPermission" for persisted handles.
+// Treat a pending query as "not granted", so the user can grant access manually.
+const QUERY_PERMISSION_TIMEOUT_MS = 2_000;
+const queryPermission = (
+  handle: FileSystemDirectoryHandle,
+): Promise<PermissionState | "timeout"> =>
+  Promise.race([
+    handle.queryPermission(OPTIONS),
+    new Promise<"timeout">((resolve) =>
+      setTimeout(() => resolve("timeout"), QUERY_PERMISSION_TIMEOUT_MS),
+    ),
+  ]);
+
 // only allowed to call after first user interaction with the site
 const verifyAccess = async (noRequest?: boolean): Promise<boolean> => {
   try {
     const handle = await IDBService.getWorkdir();
     if (handle) {
-      if ((await handle.queryPermission(OPTIONS)) === "granted") return true;
+      if ((await queryPermission(handle)) === "granted") return true;
       // Request permission. If the user grants permission, return true.
       if (!noRequest)
         return (await handle.requestPermission(OPTIONS)) === "granted";
@@ -32,12 +45,19 @@ const init = (): Promise<void> =>
 
 const pickWorkdir = (): Promise<string | undefined> =>
   window
-    .showDirectoryPicker()
+    .showDirectoryPicker(OPTIONS)
     .then(async (workdir: FileSystemDirectoryHandle) => {
       await IDBService.setWorkdir(workdir);
       return workdir.name;
     })
     .catch(() => undefined);
+
+// Fallback for browsers where the permission APIs of persisted handles never settle:
+// picking the folder again yields a fresh handle that has read & write access already.
+const reselectWorkdir = (): Promise<void> =>
+  pickWorkdir().then((workdirName) => {
+    if (workdirName) Store.set({ workdirName, workdirAccessGranted: true });
+  });
 
 const unlinkWorkdir = (): Promise<void> => IDBService.removeWorkdir();
 
@@ -99,12 +119,14 @@ export const WorkdirStorage: StorageAPI & {
   tryInit: typeof tryInit;
   getWorkdir: typeof getWorkdir;
   pickWorkdir: typeof pickWorkdir;
+  reselectWorkdir: typeof reselectWorkdir;
   unlinkWorkdir: typeof unlinkWorkdir;
 } = {
   init,
   tryInit,
   getWorkdir,
   pickWorkdir,
+  reselectWorkdir,
   unlinkWorkdir,
   ...storage,
 };

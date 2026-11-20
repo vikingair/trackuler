@@ -35,13 +35,22 @@ export const App: React.FC = () => {
         <div className={"workdir-access"}>
           <p>Grant read & write access to workdir: "{workdirName}"</p>
           <button
-            className={"icon-button"}
+            className={"btn btn--info"}
             onClick={WorkdirStorage.init}
             title={"open workdir"}
             aria-label={"open workdir"}
           >
             <IconFolderOpen />
           </button>
+          <p>
+            Nothing happens?
+            <button
+              className={"btn reselect"}
+              onClick={WorkdirStorage.reselectWorkdir}
+            >
+              Select the workdir again
+            </button>
+          </p>
         </div>
       ) : (
         <div className="content">

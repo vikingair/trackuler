@@ -137,7 +137,7 @@ export const TrackEntry: React.FC<TrackEntryProps> = ({
         {_onResume && (
           <button
             onClick={_onResume}
-            className={"icon-button resume"}
+            className={"btn btn--success"}
             title={"resume track"}
             aria-label={"resume track"}
           >
@@ -147,7 +147,7 @@ export const TrackEntry: React.FC<TrackEntryProps> = ({
         {_onDelete && (
           <button
             onClick={_onDelete}
-            className={"icon-button delete"}
+            className={"btn btn--warn"}
             title={"delete track"}
             aria-label={"delete track"}
           >

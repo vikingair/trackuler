@@ -46,7 +46,7 @@ export const EditableInput: React.FC<EditableInputProps> = ({
           <TrackDescriptionText value={value} hideTag={hideTag} />
           <button
             onClick={() => setEdit(true)}
-            className={"icon-button"}
+            className={"btn"}
             title={"edit description"}
             aria-label={"edit description"}
           >

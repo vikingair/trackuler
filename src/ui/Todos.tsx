@@ -215,7 +215,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
           />
           <button
             onClick={_onRemove}
-            className={"icon-button delete"}
+            className={"btn btn--warn"}
             title={"delete todo"}
             aria-label={"delete todo"}
           >
