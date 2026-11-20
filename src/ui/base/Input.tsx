@@ -1,8 +1,7 @@
 import { type KeyboardEvent } from "react";
 
 type InputType =
-  | { type?: "text" | "color" | "date" }
-  | { type: "time"; step: number };
+  { type?: "text" | "color" | "date" } | { type: "time"; step: number };
 
 type InputProps = InputType & {
   onBlur?: () => void;
