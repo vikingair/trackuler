@@ -5,6 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { ClockAmountIcon } from "../icons/ClockIcon";
 import { IconMicrophone, IconMicrophoneSlash, IconPlus } from "../icons/icon";
 import { CategoryService } from "../services/CategoryService";
 import { SpeechRecognitionService } from "../services/SpeechRecognitionService";
@@ -139,6 +140,9 @@ export const Main: React.FC = () => {
         <span>{now}</span>
         {totalTimeMs && (
           <span className={"subtitle"}>
+            {extendedTracks.trackRates.at(-2) && (
+              <ClockAmountIcon rate={extendedTracks.trackRates.at(-2)!} />
+            )}
             Total: {TrackService.toReadableTimeDiff(totalTimeMs)}
           </span>
         )}

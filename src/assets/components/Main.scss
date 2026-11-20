@@ -12,7 +12,14 @@ main {
     justify-content: space-between;
 
     .subtitle {
+      display: flex;
+      align-items: center;
       color: var(--color-text-3);
+
+      svg {
+        height: 1em;
+        margin-right: 0.25em;
+      }
     }
   }
 
