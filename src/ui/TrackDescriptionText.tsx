@@ -13,7 +13,12 @@ export const TrackDescriptionText: React.FC<TrackDescriptionTextProps> = ({
   const [tag, text] = Utils.getTagAndTextForDescription(value);
   return (
     <em>
-      {!hideTag && tag && <span>{tag}</span>}
+      {!hideTag && tag && (
+        <span>
+          {tag}
+          <span className="hide">: </span>
+        </span>
+      )}
       <span>{text}</span>
     </em>
   );

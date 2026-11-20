@@ -1,7 +1,6 @@
 import { type KeyboardEvent } from "react";
 
-type InputType =
-  { type?: "text" | "color" | "date" } | { type: "time"; step: number };
+type InputType = { type?: "text" | "color" | "date" } | { type: "time" };
 
 type InputProps = InputType & {
   onBlur?: () => void;
@@ -66,9 +65,8 @@ export const TimeInput: React.FC<TimeInputProps> = ({
   ...rest
 }) => (
   <Input
-    value={value.toLocaleTimeString()}
+    value={`${String(value.getHours()).padStart(2, "0")}:${String(value.getMinutes()).padStart(2, "0")}`}
     onChange={(v) => onChange(getUpdatedTime(v, value))}
-    step={2}
     type={"time"}
     {...rest}
   />

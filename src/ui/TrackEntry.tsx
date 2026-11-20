@@ -1,5 +1,4 @@
 import React, { useCallback, useMemo, useRef } from "react";
-import { ClockAmountIcon } from "../icons/ClockIcon";
 import { IconDelete, IconPlay } from "../icons/icon";
 import { Category } from "../services/CategoryService";
 import { Track } from "../services/storage/base";
@@ -51,18 +50,14 @@ export const TrackEntry: React.FC<TrackEntryProps> = ({
   category: { color, name },
   rate,
   diff,
-  isLatestOfDescriptions,
 }) => {
   const _onDelete = useMemo(
     () => (onDelete ? () => onDelete(ID) : undefined),
     [onDelete, ID],
   );
   const _onResume = useMemo(
-    () =>
-      onResume && rate && isLatestOfDescriptions
-        ? () => onResume(track)
-        : undefined,
-    [isLatestOfDescriptions, onResume, track, rate],
+    () => (onResume && rate ? () => onResume(track) : undefined),
+    [onResume, track, rate],
   );
   const onChangeTime = useMemo(
     () =>
@@ -124,26 +119,7 @@ export const TrackEntry: React.FC<TrackEntryProps> = ({
         title={name || undefined}
         ref={trackDescRef}
       />
-      <div
-        className={"track__rate"}
-        title={rate ? Math.floor(rate * 100) + "%" : undefined}
-      >
-        {rate && <ClockAmountIcon rate={rate} />}
-      </div>
-      <div className={"track__diff"}>
-        {diff && TrackService.toReadableTimeDiff(diff)}
-      </div>
       <div className={"track__actions"}>
-        {_onResume && (
-          <button
-            onClick={_onResume}
-            className={"btn btn--success"}
-            title={"resume track"}
-            aria-label={"resume track"}
-          >
-            <IconPlay />
-          </button>
-        )}
         {_onDelete && (
           <button
             onClick={_onDelete}
@@ -154,6 +130,19 @@ export const TrackEntry: React.FC<TrackEntryProps> = ({
             <IconDelete />
           </button>
         )}
+        {_onResume && (
+          <button
+            onClick={_onResume}
+            className={"btn btn--success"}
+            title={"resume track"}
+            aria-label={"resume track"}
+          >
+            <IconPlay />
+          </button>
+        )}
+        <div className={"track__diff"}>
+          {diff && TrackService.toReadableTimeDiff(diff)}
+        </div>
       </div>
     </div>
   );

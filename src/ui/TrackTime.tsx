@@ -1,15 +1,19 @@
 import React, { useCallback, useImperativeHandle, useState } from "react";
 import { ClockIcon } from "../icons/ClockIcon";
 import { TimeForm } from "./forms/TimeForm";
+import { useI18n } from "./hooks/useI18n";
 
-export type TimeViewProps = { time: Date };
+export type TimeViewProps = { time: Date; noClock?: boolean };
 
-export const TimeView: React.FC<TimeViewProps> = ({ time }) => (
-  <>
-    <ClockIcon date={time} />
-    {time.toLocaleTimeString()}
-  </>
-);
+export const TimeView: React.FC<TimeViewProps> = ({ time, noClock }) => {
+  const { t } = useI18n();
+  return (
+    <>
+      {noClock || <ClockIcon date={time} />}
+      {t(time)}
+    </>
+  );
+};
 
 export type EditableTrackTimeProps = {
   time: Date;
@@ -61,7 +65,7 @@ export const TrackTime = React.forwardRef<EditableTrackTimeRef, TrackTimeProps>(
       <EditableTrackTime time={time} onChange={onChange} ref={ref} />
     ) : (
       <strong className={"track__time"}>
-        <TimeView time={time} />
+        <TimeView time={time} noClock />
       </strong>
     ),
 );

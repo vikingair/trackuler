@@ -15,25 +15,19 @@ export const Tracks: React.FC<TracksProps> = ({
   onDelete,
   onChange,
   onResume,
-}) => {
-  const allDescriptions = tracks.map(({ description }) => description);
-  return (
-    <div className={"tracks"}>
-      {tracks.map((track, i) => (
-        <TrackEntry
-          track={track}
-          category={categories[i]}
-          key={track.ID}
-          rate={trackRates[i]}
-          diff={trackDiffs[i]}
-          onDelete={onDelete}
-          onChange={onChange}
-          onResume={onResume}
-          isLatestOfDescriptions={
-            allDescriptions.lastIndexOf(track.description) === i
-          }
-        />
-      ))}
-    </div>
-  );
-};
+}) => (
+  <div className={"tracks"}>
+    {tracks.map((track, i) => (
+      <TrackEntry
+        track={track}
+        category={categories[i]}
+        key={track.ID}
+        rate={trackRates[i]}
+        diff={trackDiffs[i]}
+        onDelete={onDelete}
+        onChange={onChange}
+        onResume={onResume}
+      />
+    ))}
+  </div>
+);

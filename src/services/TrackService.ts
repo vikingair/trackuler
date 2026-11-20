@@ -64,17 +64,14 @@ const change = async (trackType: StorageType) => {
 };
 
 const toReadableTimeDiff = (ms: number): string => {
-  const s = Math.floor(ms / 1_000);
-  const m = Math.floor(s / 60);
+  const m = Math.floor(ms / 60_000);
   const h = Math.floor(m / 60);
 
   const mm = m % 60;
-  const sm = s % 60;
 
   const r = [];
   if (h) r.push(h + "h");
   if (mm) r.push(mm + "m");
-  if (sm) r.push(sm + "s");
   return r.join(" ");
 };
 
